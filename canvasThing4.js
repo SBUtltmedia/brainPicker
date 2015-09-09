@@ -20,6 +20,8 @@ var sagitalAreaPercent=100;
 var inter;
 var previousScores;
 var leaderBoard;
+var previousX;
+var previousY;
 $(function() {
     
     $("#tourSelector").joyride({
@@ -49,7 +51,7 @@ $(function() {
   	})
   
   
-    $.getJSON("structures0.json", function(data) {
+    $.getJSON("structuressep1.json", function(data) {
         globalPoly = data;
 
 
@@ -66,7 +68,15 @@ $(function() {
 });
 
 
+
+
 function showQuestionButtons() {
+
+/*
+$( "#settingsToggle" ).click(function() {
+  $( ".settings" ).toggle();
+});
+*/
 
 for(i=0;i<globalQuestion.length;i++)
 {
@@ -141,7 +151,8 @@ function loadCurrentQuestion() {
      
     
     $("#gridTable").remove();
-    drawOp = 0;
+    //MasterOpacity
+    drawOp = 0.5;
     totalReqPoints = globalQuestion[currentQuestionNum].pointsPerLayer * globalQuestion[currentQuestionNum].requestLayers;
     drawSlider(); // output
 
@@ -172,10 +183,13 @@ function loadCurrentQuestion() {
         contentType: 'html',
         resetCallback: function() { loadCurrentQuestion(); }
     });
+    
+  
+  drawGrid();
   var activeR = leaderBoard[globalQuestion[currentQuestionNum]["region"]];  
   $("#leaderB").addClass( "fs-19");
   $("#leaderB").html(" ");
-  $("#leaderB").append("<table><caption class='fs-21'>LeaderBoard</caption><tbody><tr><th>NetID</th><th>Score</th></tr><tr><td>" + activeR[0] + "</td><td>" + activeR[1] + "</td></tr></tbody></table>");
+  if(activeR) $("#leaderB").append("<table><caption class='fs-21'>LeaderBoard</caption><tbody><tr><th>NetID</th><th>Score</th></tr><tr><td>" + activeR[0] + "</td><td>" + activeR[1] + "</td></tr></tbody></table>");
   
   
    
@@ -183,7 +197,7 @@ function loadCurrentQuestion() {
     
     //$("#questionText").html(questionText)
 
-    drawGrid();
+    console.log(selectionMarker);
     if (selectionMarker) updateWidgets(selectionMarker["layers"][0])
     else updateWidgets(totalLayers);
 }
@@ -200,8 +214,8 @@ function drawSlider() { // 1 Call by $(document).ready
             updateWidgets(ui.value);
         }
     });
-    $('.ui-slider-handle').css("height", "2.2%");
-    $('.ui-slider-handle').css("width", "210%");
+    $('.ui-slider-handle').css("height", "3.8%");
+    $('.ui-slider-handle').css("width", "285%");
     $('.ui-slider-handle').css("margin-bottom", "-.125em");
     $('.ui-slider-vertical').css("height", "96.6%");
     $('.ui-slider-vertical').css("width", "10%");
@@ -322,7 +336,33 @@ function changePic(i) {
     $('#brainPic')[0].src = "images/" + i + ".png";
 }
 
+function drawWrongClicks()
+{
+
+var canvasWidth = parseFloat($("#brainDisplay").css("width"))
+    $("#theCanvas").attr("width", canvasWidth);
+    $("#theCanvas").attr("height", parseFloat($("#brainDisplay").css("height")));
+
+    obj = {
+        name: "wrongLayer",
+        layer: true,
+        width: canvasWidth * 2,
+        height: canvasWidth * 2,
+        click: function(e) {
+            addToClickList(e._eventX, e._eventY, false);
+        }
+    }
+    $('canvas').removeLayer("wrongLayer");
+    $('canvas').drawRect(obj);
+    scaleFactor = imageWidth / canvasWidth;
+
+}
+
+
+
+
 function drawMultiPoly() {
+    drawWrongClicks()
     layerIndex = $("#sliderDiv").slider("value");
     $('canvas').removeLayerGroup("group" + layerIndex);
 
@@ -373,10 +413,11 @@ function drawMultiPoly() {
             }).drawLayers();
         }
     }
+
 }
 
 function drawPoly(layerIndex, polyIndex, curPoly) {
-drawOp=.5
+
     var obj = {
         strokeWidth: 3,
         rounded: true,
@@ -437,12 +478,16 @@ function addToClickList(ex, ey, isCorrect) { // 2 calls from canvasClearing, dra
 
 
     //clickList.push({"regionName":which,"left":ex, "top":ey,"layerNum":currentLayer,"isCorrect":isCorrect} )
-    var idName = "point_" + currentLayer + "_" + availableSpace
-
-    pointsLayer = currentElement.length;
-    console.log(isCorrect);
-    $("#brainDisplay").append("<div onclick='$(this).remove();drawGrid();checkPointCount(currentRegion);' isCorrect='" + isCorrect + "' class='" + currentLayer + " " + currentRegion + " pointerImage picked' style='position:absolute; left:" + percentX + "%; top: " + percentY + "%;' id='" + idName + "'><img src='images/BrainPointer.svg'/></div>");
-
+    //Makes sure you can't like, click on the same point a bunch of times in a row, which was a thing that happened.
+    if ((percentX != previousX) && (percentY != previousY))
+    {
+    	var idName = "point_" + currentLayer + "_" + availableSpace
+    	pointsLayer = currentElement.length;
+    	
+    	$("#brainDisplay").append("<div onclick='$(this).remove();drawGrid();checkPointCount(currentRegion);' isCorrect='" + isCorrect + "' class='" + currentLayer + " " + currentRegion + " pointerImage picked' style='position:absolute; left:" + percentX + "%; top: " + percentY + "%;' id='" + idName + "'><img src='images/BrainPointer.svg'/></div>");
+    	previousX = percentX;
+    	previousY = percentY;
+	}
 
     /*
 	   $("#" + idName).css({
@@ -490,7 +535,7 @@ function checkPointCount(region) {
         $("#helpText").append("<button id='y' >Submit</button>");
         $('#y').click(function() {
             //colorPoints();
-            drawOp = 100;
+            drawOp = 0.5;
             playbackTheatre(currentRegion);
 
         })
@@ -772,25 +817,10 @@ function resizeWindow() {
 
         top: stageTop + "px"
     });
-    var canvasWidth = parseFloat($("#brainDisplay").css("width"))
-    $("#theCanvas").attr("width", canvasWidth);
-    $("#theCanvas").attr("height", parseFloat($("#brainDisplay").css("height")));
-    console.log(canvasWidth)
-    obj = {
-        name: "wrongLayer",
-        layer: true,
-        width: canvasWidth * 2,
-        height: canvasWidth * 2,
-        click: function(e) {
-            addToClickList(e._eventX, e._eventY, false);
-        }
-    }
-    $('canvas').removeLayer("wrongLayer");
-    $('canvas').drawRect(obj);
-    scaleFactor = imageWidth / canvasWidth;
+    
     // Resize corner border radii based on stage height
 
-    console.log(scaleFactor)
+
     var cornerSize = .025 * stageHeight;
     $(".rounded").css({
         '-webkit-border-radius': cornerSize + "px",

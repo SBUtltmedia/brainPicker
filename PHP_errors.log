@@ -4816,3 +4816,226 @@
 [13-Aug-2015 18:37:30] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
 [13-Aug-2015 18:37:30] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
 [13-Aug-2015 18:37:30] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 13:46:14] PHP Warning:  file_get_contents(rawdata/smalmquist) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[20-Aug-2015 13:46:40] PHP Warning:  file_get_contents(rawdata/smalmquist) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[20-Aug-2015 15:24:41] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:24:41] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:24:41] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:24:41] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:29:16] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:29:16] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:29:16] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:29:16] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 17
+[20-Aug-2015 15:31:57] PHP Parse error:  syntax error, unexpected T_IF in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 18
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 18
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 18
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 18
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:32:06] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 18
+[20-Aug-2015 15:42:20] PHP Parse error:  syntax error, unexpected ';' in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 13
+[20-Aug-2015 15:42:57] PHP Parse error:  syntax error, unexpected ';' in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 13
+[20-Aug-2015 15:43:52] PHP Parse error:  syntax error, unexpected ';' in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 13
+[20-Aug-2015 15:44:35] PHP Parse error:  syntax error, unexpected ';' in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 13
+[20-Aug-2015 15:46:07] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:46:07] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 18
+[20-Aug-2015 15:47:51] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:47:51] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 18
+[20-Aug-2015 15:50:00] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:00] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:00] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:50:00] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:00] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:03] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:03] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:03] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 16
+[20-Aug-2015 15:50:03] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:03] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 20
+[20-Aug-2015 15:50:59] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:50:59] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:50:59] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:50:59] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:52:38] PHP Warning:  Invalid argument supplied for foreach() in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 15
+[20-Aug-2015 15:56:39] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:56:39] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:56:39] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:56:39] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:57:50] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:57:50] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:57:50] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 15:57:50] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[20-Aug-2015 17:24:43] PHP Warning:  file_get_contents(rawdata/pstdenis) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[20-Aug-2015 17:24:51] PHP Warning:  file_get_contents(rawdata/pstdenis) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[20-Aug-2015 17:26:43] PHP Warning:  file_get_contents(rawdata/pstdenis) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[31-Aug-2015 16:09:14] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:09:14] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:09:14] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:09:14] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:10:16] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:10:16] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:10:16] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:10:16] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:11:09] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:11:09] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:11:09] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[31-Aug-2015 16:11:09] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[01-Sep-2015 17:56:52] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[01-Sep-2015 17:56:52] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[01-Sep-2015 17:56:52] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[01-Sep-2015 17:56:52] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[01-Sep-2015 18:31:32] PHP Parse error:  syntax error, unexpected ')' in /home/tltsecure/apache2/htdocs/brainPickerDev/getScores.php on line 23
+[02-Sep-2015 14:26:31] PHP Warning:  file_get_contents(rawdata/pstdenis) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[02-Sep-2015 14:27:14] PHP Warning:  file_get_contents(rawdata/pstdenis) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[02-Sep-2015 14:27:16] PHP Warning:  file_get_contents(rawdata/pstdenis) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 6
+[02-Sep-2015 18:43:47] PHP Warning:  file_get_contents(rawdata/pstdenis) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 8
+[02-Sep-2015 18:48:46] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:48:46] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:48:46] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:48:46] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:50:55] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:50:55] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:50:55] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:50:55] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:53:07] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:53:07] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:53:07] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:53:07] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:55:38] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:55:38] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:55:38] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:55:38] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:57:05] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:57:05] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:57:05] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 18:57:05] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined property: stdClass::$area medial and caudal to the green point in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined property: stdClass::$Cerebellum in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:04:21] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:08:53] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:08:53] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:08:53] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:08:53] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:08:53] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:09:05] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:09:05] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:09:05] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:09:05] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:09:05] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:10:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:21] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:21] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:21] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:10:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:54] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:10:54] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:11:42] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:11:42] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:11:42] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:11:42] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:11:42] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:12:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:12:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:12:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:12:24] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:12:24] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:13:51] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:13:51] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:13:51] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:13:51] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:13:51] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:35:57] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:35:57] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:35:57] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:35:57] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:35:57] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 19:41:12] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:41:12] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:41:12] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:41:12] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 19:41:12] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 20:02:13] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:02:13] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:02:13] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:02:13] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:02:13] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[02-Sep-2015 20:37:39] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:37:39] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:37:39] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:37:39] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[02-Sep-2015 20:37:39] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[03-Sep-2015 18:34:49] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:34:49] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:34:49] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:34:49] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:34:49] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[03-Sep-2015 18:36:35] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:36:35] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:36:35] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:36:35] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[03-Sep-2015 18:36:35] PHP Notice:  Undefined variable: firstTime in /home/tltsecure/apache2/htdocs/brainPickerDev/save.php on line 21
+[09-Sep-2015 11:55:07] PHP Warning:  file_get_contents(rawdata/smalmquist): failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 8
+[09-Sep-2015 13:04:21] PHP Warning:  file_get_contents(rawdata/keabarry): failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 8
+[09-Sep-2015 13:23:23] PHP Warning:  file_get_contents(rawdata/keabarry): failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 8
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined property: stdClass::$area medial and caudal to the green point in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined property: stdClass::$Cerebellum in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:08:54] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined property: stdClass::$Cerebellum in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:09:36] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:15:48] PHP Warning:  file_get_contents(rawdata/keabarry): failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 8
+[09-Sep-2015 14:18:12] PHP Warning:  file_get_contents(rawdata/keabarry): failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 8
+[09-Sep-2015 14:18:33] PHP Warning:  file_get_contents(rawdata/keabarry): failed to open stream: No such file or directory in /home/tltsecure/apache2/htdocs/brainPickerDev/getUserJSON.php on line 8
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined property: stdClass::$area medial and caudal to the green point in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined property: stdClass::$Cerebellum in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:19:24] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined property: stdClass::$area medial and caudal to the green point in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined property: stdClass::$Cerebellum in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:24:36] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined property: stdClass::$area medial and caudal to the green point in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined variable: keys in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
+[09-Sep-2015 14:50:36] PHP Notice:  Undefined property: stdClass::$Medulla Oblongata in /home/tltsecure/apache2/htdocs/brainPickerDev/saveHighScores.php on line 19
