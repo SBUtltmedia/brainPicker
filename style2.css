@@ -288,6 +288,20 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     border:1px solid blue;
 }
 
+#settingsToggle {
+	position: absolute;
+    top: 38%;
+    right: 31%;
+    height: 2%;
+    width: 21%;
+    border: 1px solid black;
+    font-family: 'Electrolize', sans-serif;
+    color: black;
+    background-color: B0C4DE;
+    padding: 1%;
+
+}
+
 
 #skeuomorph {
     position: absolute;
@@ -432,9 +446,47 @@ height:3%;
 }
 
 .ui-slider .ui-slider-handle {
-      background: url(images/LayerSelect.png);
-       background-size: 15px 15px;
+	background: url(images/LayerSelect.png);
+    background-size: 30px 30px;
     background-repeat: no-repeat;
+    
+    
+   
+   
+
+    text-decoration: none;
+    
+    border: medium none;
+    border-radius: 0 0 0 0;
+    display: block;
+    font-size: 14px;
+
+}
+
+.jquerySliderActive
+      {
+        overflow:hidden !important;
+      }
+
+
+.settings {
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    margin: auto;
+    width: 19%;
+    height: 14%;
+    z-index:200;
+    display:none;
+    background: #f0f0fd;
+    background: rgba(240,240,253,0.90);
+    padding: 22px 32px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    -moz-box-shadow: 0 0 18px rgba(0, 0, 0, 0.9);
+    -webkit-box-shadow: 0 0 18px rgba(0, 0, 0, 0.9);
+    -box-shadow: 0 0 18px rgba(0, 0, 0, 0.9);
+    text-align:center;
 }
 
 
