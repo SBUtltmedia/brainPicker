@@ -1,0 +1,125 @@
+[	
+
+
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "area medial and caudal to the green point",
+		"selectionMarker":{"location":[295,251],"layers":[14,14]} 
+	}
+	,
+	{
+		"requestLayers": 2,
+		"pointsPerLayer": 2,
+		"region": "Spinal Cord"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 2,
+		"region": "Medulla Oblongata"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "Pons"
+	}
+	,
+	{
+		"requestLayers": 4,
+		"pointsPerLayer": 4,
+		"region": "Cerebellum"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "Lateral Ventricle"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "Midbrain"
+	}
+	,
+	{
+		"requestLayers": 5,
+		"pointsPerLayer": 4,
+		"region": "Frontal Lobe"
+	}
+	,
+	{
+		"requestLayers": 5,
+		"pointsPerLayer": 4,
+		"region": "Temporal Lobe"
+	}
+	,
+	{
+		"requestLayers": 5,
+		"pointsPerLayer": 4,
+		"region": "Parietal Lobe"
+	}
+	,
+	{
+		"requestLayers": 5,
+		"pointsPerLayer": 4,
+		"region": "Occipital Lobe"
+	}
+	,
+	{
+		"requestLayers": 1,
+		"pointsPerLayer": 2,
+		"region": "Optic Chiasm"
+	}
+	,
+	{
+		"requestLayers": 2,
+		"pointsPerLayer": 3,
+		"region": "Optic Nerves"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 2,
+		"region": "Thalamus"
+	}
+	,
+	{
+		"requestLayers": 2,
+		"pointsPerLayer": 2,
+		"region": "Hypothalamus"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "Caudate Nucleus"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "Putamen"
+	}
+	,
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "Corpus Callosum"
+	}
+	,
+	{
+		"requestLayers": 2,
+		"pointsPerLayer": 2,
+		"region": "Amygdala"
+	}
+	,
+	{
+		"requestLayers": 2,
+		"pointsPerLayer": 2,
+		"region": "Superior Colliculus"
+	}
+		
+]

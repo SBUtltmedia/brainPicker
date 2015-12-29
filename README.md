@@ -1,10 +1,15 @@
-Setup instructions:
+# webpack-es6-starter
 
-    npm install
-    gulp
+A minimal ES6 starter project that uses webpack, gulp and livereload. 
 
-Then in another terminal:
+## Installation
 
-    ws 5000
+* Install  [node](https://nodejs.org)
+* run `npm install`
 
-Then navigate to [http://localhost:5000](http://localhost:5000)
+## Usage
+
+* `gulp` to start Webpack in watch mode as well as trigger livereload when bundle.js or index.html changes.
+* open `index.html` in a browser. 
+* Change or add files in `es6` folder. `main.js` is the entry point.
+
