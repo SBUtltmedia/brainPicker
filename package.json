@@ -1,21 +1,26 @@
 {
-  "name": "webpack-es6-starter",
-  "version": "1.1.1",
-  "description": "A minimal ES6 starter project that uses webpack, gulp and livereload.",
+  "name": "brainPicker",
+  "version": "0.0.1",
+  "description": "An HTML / Javascript Game for learning the regions of the brain physiology",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:dev": "webpack --config webpack.dev.config.js",
+    "build:prod": "webpack --config webpack.prod.config.js",
+    "build": "npm run build:dev && npm run build:prod"
+  },
   "devDependencies": {
     "babel-core": "^5.8.22",
     "babel-loader": "^5.3.2",
+    "css-loader": "^0.23.0",
     "eslint": "^1.10.1",
     "eslint-config-eslint": "^1.0.1",
-    "gulp": "^3.9.0",
-    "gulp-livereload": "^3.8.1",
-    "gulp-util": "^3.0.7",
-    "node-libs-browser": "^0.5.3",
-    "webpack": "^1.12.9",
-    "css-loader": "^0.23.0",
     "file-loader": "^0.8.5",
+    "node-libs-browser": "^0.5.3",
+    "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
-    "style-loader": "^0.13.0"
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
   },
   "main": "src/main.js",
   "dependencies": {
@@ -26,12 +31,9 @@
     "jquery.joyride": "^2.2.0",
     "typed": "^0.3.3"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phparkle/webpack-es6-starter.git"
+    "url": "git+https://github.com/SBUtltmedia/brainPicker.git"
   },
   "keywords": [
     "webpack",
@@ -39,7 +41,5 @@
     "gulp",
     "livereload",
     "starter"
-  ],
-  "author": "Parkle Lee <phparkle@gmail.com>",
-  "license": "MIT"
+  ]
 }
