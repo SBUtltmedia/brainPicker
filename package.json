@@ -1,0 +1,45 @@
+{
+  "name": "webpack-es6-starter",
+  "version": "1.1.1",
+  "description": "A minimal ES6 starter project that uses webpack, gulp and livereload.",
+  "devDependencies": {
+    "babel-core": "^5.8.22",
+    "babel-loader": "^5.3.2",
+    "eslint": "^1.10.1",
+    "eslint-config-eslint": "^1.0.1",
+    "gulp": "^3.9.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-util": "^3.0.7",
+    "node-libs-browser": "^0.5.3",
+    "webpack": "^1.12.9",
+    "css-loader": "^0.23.0",
+    "file-loader": "^0.8.5",
+    "url-loader": "^0.5.7",
+    "style-loader": "^0.13.0"
+  },
+  "main": "src/main.js",
+  "dependencies": {
+    "jcanvas": "^15.12.12",
+    "jquery": "^2.1.4",
+    "jquery-ui": "^1.10.5",
+    "jquery-ui-touch-punch": "^0.2.3",
+    "jquery.joyride": "^2.2.0",
+    "typed": "^0.3.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phparkle/webpack-es6-starter.git"
+  },
+  "keywords": [
+    "webpack",
+    "es6",
+    "gulp",
+    "livereload",
+    "starter"
+  ],
+  "author": "Parkle Lee <phparkle@gmail.com>",
+  "license": "MIT"
+}
