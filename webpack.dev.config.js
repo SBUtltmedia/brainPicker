@@ -10,10 +10,4 @@ config.entry = [
     './src/main'
 ];
 
-config.module.loaders.push({
-    test: /\.(png|jpe?g|gif)?$/,
-    exclude: /node_modules/,
-    loader: "url?limit=100000000"
-});
-
 module.exports = config;
