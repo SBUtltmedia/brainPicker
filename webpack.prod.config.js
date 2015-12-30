@@ -22,12 +22,4 @@ config.plugins = [
     })
 ];
 
-config.module.loaders.push({
-    test: /\.(png|jpe?g|gif)?$/,
-    loaders: [
-        'url?limit=100000000',
-        'image-webpack?bypassOnDebug&interlaced=false&optimizationLevel=0&speed=10&quality=10'
-    ]
-});
-
 module.exports = config;
