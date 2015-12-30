@@ -12,6 +12,7 @@ config.entry = [
 
 config.module.loaders.push({
     test: /\.(png|jpe?g|gif)?$/,
+    exclude: /node_modules/,
     loader: "url?limit=100000000"
 });
 

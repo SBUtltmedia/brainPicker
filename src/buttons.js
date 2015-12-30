@@ -2,26 +2,19 @@ import $ from "jquery";
 
 export function showQuestionButtons(question) {
 
-    var infoShown = false;
+
 
     $("#infoToggle").click(function() {
-        if (infoShown == false) {
-            infoShown = true;
-            $("#info").toggle(infoShown);
+
+            $("#info").toggle();
             $("#info").draggable();
-            useMousewheel(false);
-        } else {
-            infoShown = false;
-            $("#info").toggle(infoShown);
-            useMousewheel(true);
-        }
-        resizeWindow();
+
     });
 
 
     $("#infoClose").click(function() {
-        infoShown = false;
-        $("#info").toggle(infoShown);
+
+        $("#info").toggle();
         useMousewheel(true);
     });
 
