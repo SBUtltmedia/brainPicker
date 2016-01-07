@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+// TODO: Implement
+
 var UserSchema = new mongoose.Schema({
   name: {
     type: String
