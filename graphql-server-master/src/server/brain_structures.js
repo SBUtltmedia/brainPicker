@@ -1,17 +1,32 @@
 import mongoose from 'mongoose';
 
-// TODO: Implement
-
-var UserSchema = new mongoose.Schema({
-  name: {
-    type: String
-  },
-  friends: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }]
+var RegionSchema = new mongoose.Schema({
+    _id: {
+        type: Number,
+        index: true,
+        required: true,
+        unique: true
+    },
+    points: {
+        type: [[Number]]
+    }
 });
 
-var User = mongoose.model('User', UserSchema);
+var Regions = mongoose.model('Region', RegionSchema);
 
-export default User;
+var BrainStructureSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        unique: true,
+        index: true,
+        required: true
+    },
+    regions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Regions'
+    }]
+});
+
+var BrainStructure = mongoose.model('BrainStructure', BrainStructureSchema);
+
+export default BrainStructure;
