@@ -2,22 +2,20 @@ import request from 'superagent';
 import Debug from 'debug';
 
 var debug = new Debug('client:query');
-var userId = '559645cd1a38532d14349246';
 
 request
   .get('http://localhost:3000/data')
   .query({
     query: `{
-      hello,
-      user(id: "${userId}") {
+      brainStructure(name: "Corpus Callosum") {
         name
-        friends {
-          name
+        regions {
+          id
         }
       }
     }`
   })
   .end(function (err, res) {
     debug(err || res.body);
-    debug('friends', res.body.data.user.friends);
+    debug('regions', res.body.data.brainStructure.regions);
   });

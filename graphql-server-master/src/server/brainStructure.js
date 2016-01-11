@@ -1,19 +1,5 @@
 import mongoose from 'mongoose';
 
-var RegionSchema = new mongoose.Schema({
-    _id: {
-        type: Number,
-        index: true,
-        required: true,
-        unique: true
-    },
-    points: {
-        type: [[Number]]
-    }
-});
-
-var Regions = mongoose.model('Region', RegionSchema);
-
 var BrainStructureSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -22,8 +8,15 @@ var BrainStructureSchema = new mongoose.Schema({
         required: true
     },
     regions: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Regions'
+        _id: {
+            type: Number,
+            index: true,
+            required: true,
+            unique: true
+        },
+        points: {
+            type: mongoose.Schema.Types.Mixed
+        }
     }]
 });
 
