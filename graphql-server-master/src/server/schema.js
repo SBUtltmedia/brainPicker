@@ -7,7 +7,7 @@ import {
 } from 'graphql/type';
 
 import co from 'co';
-import User from './user';
+import BrainStructure from './brainStructure';
 
 /**
  * generate projection object for mongoose
@@ -22,27 +22,27 @@ function getProjection (fieldASTs) {
   }, {});
 }
 
-var userType = new GraphQLObjectType({
-  name: 'User',
-  description: 'User creator',
+var brainStructureType = new GraphQLObjectType({
+  name: 'BrainStructure',
+  description: 'BrainStructure creator',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'The id of the user.',
+      description: 'The id of the brainStructure.',
     },
     name: {
       type: GraphQLString,
-      description: 'The name of the user.',
+      description: 'The name of the brainStructure.',
     },
-    friends: {
-      type: new GraphQLList(userType),
-      description: 'The friends of the user, or an empty list if they have none.',
-      resolve: (user, params, source, fieldASTs) => {
+    regions: {
+      type: new GraphQLList(brainStructureType),
+      description: 'The friends of the brainStructure, or an empty list if they have none.',
+      resolve: (brainStructure, params, source, fieldASTs) => {
         var projections = getProjection(fieldASTs);
-        return User.find({
+        return BrainStructure.find({
           _id: {
             // to make it easily testable
-            $in: user.friends.map((id) => id.toString())
+            $in: brainStructure.friends.map((id) => id.toString())
           }
         }, projections);
       },
@@ -60,8 +60,8 @@ var schema = new GraphQLSchema({
           return 'world';
         }
       },
-      user: {
-        type: userType,
+      brainStructure: {
+        type: brainStructureType,
         args: {
           id: {
             name: 'id',
@@ -70,73 +70,8 @@ var schema = new GraphQLSchema({
         },
         resolve: (root, {id}, source, fieldASTs) => {
           var projections = getProjection(fieldASTs);
-          return User.findById(id, projections);
+          return BrainStructure.findById(id, projections);
         }
-      }
-    }
-  }),
-
-  // mutation
-  mutation: new GraphQLObjectType({
-    name: 'Mutation',
-    fields: {
-      createUser: {
-        type: userType,
-        args: {
-          name: {
-            name: 'name',
-            type: GraphQLString
-          }
-        },
-        resolve: (obj, {name}, source, fieldASTs) => co(function *() {
-          var projections = getProjection(fieldASTs);
-
-          var user = new User();
-          user.name = name;
-
-
-          return yield user.save();
-        })
-      },
-      deleteUser: {
-        type: userType,
-        args: {
-          id: {
-            name: 'id',
-            type: new GraphQLNonNull(GraphQLString)
-          }
-        },
-        resolve: (obj, {id}, source, fieldASTs) => co(function *() {
-          var projections = getProjection(fieldASTs);
-          console.log(id);
-          return yield User.findOneAndRemove({_id: id});
-        })
-      },
-      updateUser: {
-        type: userType,
-        args: {
-          id: {
-            name: 'id',
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          name: {
-            name: 'name',
-            type: GraphQLString
-          }
-        },
-        resolve: (obj, {id, name}, source, fieldASTs) => co(function *() {
-          var projections = getProjection(fieldASTs);
-
-          yield User.update({
-            _id: id
-          }, {
-            $set: {
-              name: name
-            }
-          });
-
-          return yield User.findById(id, projections);
-        })
       }
     }
   })
