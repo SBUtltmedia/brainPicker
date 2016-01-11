@@ -22,6 +22,22 @@ function getProjection (fieldASTs) {
   }, {});
 }
 
+var regionType = new GraphQLObjectType({
+    name: 'Region',
+    description: 'region',
+    fields: () => ({
+      id: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'The id of the brainStructure.',
+      },
+      points: {
+        type: new GraphQLList(new GraphQLList(GraphQLFloat)),
+        description: 'points',
+      }
+    })
+});
+
+
 var brainStructureType = new GraphQLObjectType({
   name: 'BrainStructure',
   description: 'BrainStructure creator',
@@ -35,17 +51,8 @@ var brainStructureType = new GraphQLObjectType({
       description: 'The name of the brainStructure.',
     },
     regions: {
-      type: new GraphQLList(brainStructureType),
+      type: new GraphQLList(regionType),
       description: 'The friends of the brainStructure, or an empty list if they have none.',
-      resolve: (brainStructure, params, source, fieldASTs) => {
-        var projections = getProjection(fieldASTs);
-        return BrainStructure.find({
-          _id: {
-            // to make it easily testable
-            $in: brainStructure.friends.map((id) => id.toString())
-          }
-        }, projections);
-      },
     }
   })
 });
@@ -63,14 +70,18 @@ var schema = new GraphQLSchema({
       brainStructure: {
         type: brainStructureType,
         args: {
-          id: {
-            name: 'id',
+            id: {
+                name: 'id',
+          //name: {
+            //name: 'name',
             type: new GraphQLNonNull(GraphQLString)
           }
         },
         resolve: (root, {id}, source, fieldASTs) => {
+        //resolve: (root, {name}, source, fieldASTs) => {
           var projections = getProjection(fieldASTs);
           return BrainStructure.findById(id, projections);
+          //return BrainStructure.find({name: name}, projections);
         }
       }
     }
