@@ -3,7 +3,8 @@ import {
   GraphQLNonNull,
   GraphQLSchema,
   GraphQLString,
-  GraphQLList
+  GraphQLList,
+  GraphQLFloat
 } from 'graphql/type';
 
 import co from 'co';
@@ -70,18 +71,17 @@ var schema = new GraphQLSchema({
       brainStructure: {
         type: brainStructureType,
         args: {
-            id: {
-                name: 'id',
-          //name: {
-            //name: 'name',
+          name: {
+            name: 'name',
             type: new GraphQLNonNull(GraphQLString)
           }
         },
-        resolve: (root, {id}, source, fieldASTs) => {
-        //resolve: (root, {name}, source, fieldASTs) => {
+        resolve: (root, {name}, source, fieldASTs) => {
+
+            console.log("name", name);
+
           var projections = getProjection(fieldASTs);
-          return BrainStructure.findById(id, projections);
-          //return BrainStructure.find({name: name}, projections);
+          return BrainStructure.find({name: name}, projections);
         }
       }
     }
