@@ -17,6 +17,9 @@ request
     }`
   })
   .end(function (err, res) {
+
+      console.log(err);
+
     debug(err || res.body);
 
     console.log(res.body.data);
