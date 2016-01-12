@@ -20,10 +20,6 @@ if (process.env.NODE_ENV !== 'test') {
 routes.get('/data', function* () {
   var query = this.query.query;
   var params = this.query.params;
-
-  console.log(query);
-  console.log(params);
-
   var resp = yield graphql(schema, query, '', params);
 
   if (resp.errors) {
