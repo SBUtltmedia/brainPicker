@@ -77,11 +77,8 @@ var schema = new GraphQLSchema({
           }
         },
         resolve: (root, {name}, source, fieldASTs) => {
-
-            console.log("name", name);
-
           var projections = getProjection(fieldASTs);
-          return BrainStructure.find({name: name}, projections);
+          return BrainStructure.findOne({name: name}, projections);
         }
       }
     }
