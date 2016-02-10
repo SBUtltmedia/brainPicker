@@ -1,5 +1,5 @@
 import React from 'react';
-import BrainRegion from './region.jsx';
+import BrainRegion from './Region.jsx';
 
 
 class Main extends React.Component {
