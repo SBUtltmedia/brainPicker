@@ -10,7 +10,7 @@ const style = {
 
 export default ({actions, currentQuestion}) => (
   <svg style={style} width={500} height={500}>
-    <polygon onclick="console.log('hit')"
+    <polygon onClick={() => console.log('hit')}
     points={currentQuestion.points[currentQuestion.layer]}/>
   </svg>
 );
