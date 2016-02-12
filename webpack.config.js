@@ -2,8 +2,12 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './main.js',
+  entry: './index',
+  devtool: 'cheap-module-eval-source-map',
   output: { path: __dirname, filename: 'bundle.js' },
+  plugins: [
+    new webpack.ProvidePlugin({ 'React': 'react'})
+  ],
   module: {
     loaders: [
       {
