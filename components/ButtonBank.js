@@ -1,7 +1,7 @@
 import ButtonObj from './Button';
-export default ({buttons}) => (
+export default ({actions, buttons}) => (
 	<div>
-		{ buttons.map((d,i) =>
-			<ButtonObj id={i} key={i} clickFunc={i => console.log(d.region)} />) }
+		{ buttons.map((question,i) =>
+			<ButtonObj id={i} key={i} clickFunc={() => actions.showQuestion(question.region)} />) }
 	</div>
 );

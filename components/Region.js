@@ -1,6 +1,4 @@
- 
-
-export default class BrainRegion {
+ export default class BrainRegion {
 
   render() {
   console.log(this.props.points);
