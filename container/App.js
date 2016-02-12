@@ -19,7 +19,6 @@ class App extends React.Component {
 
   render() {
     const { questions, structures, currentQuestion } = this.props;
-    console.log("render", currentQuestion);
     return <div>
       <ButtonBank actions={this.actions} buttons={questions} />
       <Question actions={this.actions} currentQuestion={currentQuestion} />
