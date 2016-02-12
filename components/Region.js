@@ -1,21 +1,16 @@
- export default class BrainRegion {
+import _ from 'lodash';
 
-  render() {
-  console.log(this.props.points);
-let style =
-{
-   fill: 'orange',
+const style = {
+   fill: 'blue',
    stroke: "green",
-   fillOpacity:0,
+   fillOpacity: 0.5,
+   strokeOpacity: 0.5,
    strokeWidth: "10px"
  };
 
-    return (
-    <svg width={500} height={500}>
-    <polygon onclick="console.log('hit')" points={this.props.points}/>
-
+export default ({actions, currentQuestion}) => (
+  <svg style={style} width={500} height={500}>
+    <polygon onclick="console.log('hit')"
+    points={_.values(currentQuestion.points)[0]}/>
   </svg>
-
-  )
-  }
-}
+);
