@@ -1,5 +1,5 @@
 import ReactDom  from 'react-dom';
-//import BrainRegion from '../components/Region';
+import Region from '../components/Region';
 import ButtonBank from '../components/ButtonBank';
 import Question from '../components/Question';
 import { connect } from 'react-redux';
@@ -21,6 +21,7 @@ class App extends React.Component {
     return <div>
       <ButtonBank actions={this.actions} buttons={questions} />
       <Question actions={this.actions} currentQuestion={currentQuestion} />
+      <Region actions={this.actions} currentQuestion={currentQuestion} />
     </div>;
   }
 }
