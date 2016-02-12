@@ -1,5 +1,6 @@
 import ReactDom  from 'react-dom';
 import Region from '../components/Region';
+import LayerChanger from '../components/LayerChanger';
 import ButtonBank from '../components/ButtonBank';
 import Question from '../components/Question';
 import { connect } from 'react-redux';
@@ -18,9 +19,11 @@ class App extends React.Component {
 
   render() {
     const { questions, structures, currentQuestion } = this.props;
+    console.log("render", currentQuestion);
     return <div>
       <ButtonBank actions={this.actions} buttons={questions} />
       <Question actions={this.actions} currentQuestion={currentQuestion} />
+      <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
       <Region actions={this.actions} currentQuestion={currentQuestion} />
     </div>;
   }
