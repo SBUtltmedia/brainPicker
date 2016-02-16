@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const style = {
    fill: 'blue',
    stroke: "green",
