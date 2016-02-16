@@ -16,6 +16,10 @@ module.exports = {
         exclude: /node_modules/,
         include: __dirname,
         query: { 'presets': ['react', 'es2015', 'stage-0']}
+      },
+      {
+        test: /\.scss$/,
+        loaders: ["style", "css-loader?sourceMap", "sass-loader?sourceMap"]
       }
     ]
   },

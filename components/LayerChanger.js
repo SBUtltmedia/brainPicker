@@ -1,7 +1,9 @@
-import _ from 'lodash';
+import ReactSlider from 'react-slider';
+import './LayerChanger.scss';
+
 export default ({actions, currentQuestion}) => (
-	<div>
-		{ _.keys(currentQuestion.points).map(layer =>
-			<button key={layer} onClick={() => actions.changeLayer(layer)}>{layer}</button>) }
-	</div>
+	<ReactSlider withBars min={0} max={20} value={currentQuestion.layer}
+	orientation="vertical" onChange={value => actions.changeLayer(value)}>
+		<div className="my-handle">1</div>
+	</ReactSlider>
 );
