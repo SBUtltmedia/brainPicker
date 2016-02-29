@@ -30,7 +30,7 @@ export default ({actions, currentQuestion}) => {
 if(currentQuestion.points[currentQuestion.layer]){
 
 return(
-  <div style={style}>
+  <div>
 
   <Catscan currentQuestion={currentQuestion}  style={styleCatscat}/>
   <svg style={style} >
@@ -47,9 +47,12 @@ return(
 }
 else {
   return(
-    <svg style={style} width={500} height={500}>
+    <div>
+    <Catscan currentQuestion={currentQuestion}  style={styleCatscat}/>
 
+    <svg style={style} width={500} height={500}>
     </svg>
+    </div>
   )
 
 
