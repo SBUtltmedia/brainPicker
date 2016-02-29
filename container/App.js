@@ -1,5 +1,6 @@
 import ReactDom  from 'react-dom';
 import Region from '../components/Region';
+import Catscan from '../components/Catscan';
 import LayerChanger from '../components/LayerChanger';
 import ButtonBank from '../components/ButtonBank';
 import Question from '../components/Question';
@@ -24,6 +25,7 @@ class App extends React.Component {
       <Question actions={this.actions} currentQuestion={currentQuestion} />
       <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
       <Region actions={this.actions} currentQuestion={currentQuestion} />
+      <Catscan currentQuestion={currentQuestion} />
     </div>;
   }
 }
