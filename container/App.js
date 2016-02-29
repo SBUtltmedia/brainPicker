@@ -1,12 +1,15 @@
 import ReactDom  from 'react-dom';
 import Region from '../components/Region';
-import Catscan from '../components/Catscan';
 import LayerChanger from '../components/LayerChanger';
 import ButtonBank from '../components/ButtonBank';
 import Question from '../components/Question';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as Actions from '../actions/actions';
+const style={
+  position : 'relative'
+
+};
 
 class App extends React.Component {
 
@@ -21,11 +24,15 @@ class App extends React.Component {
   render() {
     const { questions, structures, currentQuestion } = this.props;
     return <div>
+
+      <div>
+      <Region actions={this.actions} currentQuestion={currentQuestion} />
+      </div>
+      <div style={style}>
       <ButtonBank actions={this.actions} buttons={questions} />
       <Question actions={this.actions} currentQuestion={currentQuestion} />
       <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
-      <Region actions={this.actions} currentQuestion={currentQuestion} />
-      <Catscan currentQuestion={currentQuestion} />
+      </div>
     </div>;
   }
 }
