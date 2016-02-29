@@ -1,0 +1,3 @@
+Tar ‘brainPicker’ except for node_modules and uncompress at a specific place
+
+tar --exclude='./node_modules' -cf - * | ( cd /Users/danpark/Documents/brainPicker ; tar xfp -)
