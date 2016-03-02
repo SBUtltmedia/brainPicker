@@ -1,5 +1,3 @@
-// mocha --compilers js:babel-core/register --watch tests/reducers/currentQuestion.test.js
-
 import { expect } from 'chai';
 import * as currentQuestion from '../../reducers/currentQuestion';
 
