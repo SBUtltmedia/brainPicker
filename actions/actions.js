@@ -32,3 +32,13 @@ export function changeLayer(layer) {
     layer: layer
   }
 }
+
+export function putMarker(layer,position){
+
+  return{
+    type : types.ADD_MARKER,
+    marker: {layer:layer, position: position},
+    layer:layer
+
+  }
+}
