@@ -33,11 +33,18 @@ export function changeLayer(layer) {
   }
 }
 
+
 export function putMarker(layer,position){
 
+  var e = position.target;
+  var dim = e.getBoundingClientRect();
+  var x = ((position.clientX - dim.left)/dim.width)*500;
+  var y = ((position.clientY- dim.top)/dim.height)*500 ;
+
+  console.log(e +" "+dim.left+" "+dim.top+" "+x+" "+y+" "+layer);
   return{
     type : types.ADD_MARKER,
-    marker: {layer:layer, position: position},
+    marker: {layer:layer, position: [x,y]},
     layer:layer
 
   }

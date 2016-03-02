@@ -11,10 +11,10 @@ function addMarkerToLayer(layer, markers, marker) {
 
   var retMarker=markers[layer]||[];
   retMarker=[...retMarker,marker];
+var newMarkers= [...markers.slice(0,layer),retMarker,...markers.slice(layer+1)]
+console.log("markers",JSON.stringify(newMarkers))
 
-
-
-  return [...markers.slice(0,layer),retMarker,...markers.slice(layer+1)]
+  return newMarkers
 }
 
 export default function currentQuestion(state = initialState, action) {
