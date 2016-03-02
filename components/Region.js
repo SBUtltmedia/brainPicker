@@ -1,62 +1,39 @@
-import Catscan from '../components/Catscan';
 
-const style = {
+import Marker from '../components/Marker';
+
+const styleSVG = {
    fill: 'blue',
    stroke: "green",
    fillOpacity: 0.5,
    strokeOpacity: 0.5,
    strokeWidth: "10px",
-  margin : 0 ,
-  padding: 0,
-   width:500,
-   height : 500,
-   position : 'absolute',
-   left : 0,
-   top : 0,
- };
-
- const styleCatscat = {
    margin : 0 ,
    padding: 0,
-   position : 'absolute',
-   left: 0,
-   width:'inherit',
-   height : 'inherit',
-   top : 0
+   width:'100%',
+   height : '100%',
 
  };
 
 export default ({actions, currentQuestion}) => {
-if(currentQuestion.points[currentQuestion.layer]){
+  const src = "data/images/catscan/"+(currentQuestion.layer+1)+".png";
+  const points = currentQuestion.points[currentQuestion.layer] || [];
+  const markers = currentQuestion.markers[currentQuestion.layer] || [];
 
-return(
-  <div>
+  console.log("markers", markers);
 
-  <Catscan currentQuestion={currentQuestion}  style={styleCatscat}/>
-  <svg style={style} >
+  return <div>
+    <svg id="brainImage" xmlns="http://www.w3.org/2000/svg" style={styleSVG} viewBox="0 0 500 500" >
+      <image x="0" y="0" width="100%" height="100%" xlinkHref={src}
+      onClick={(e)=>actions.putMarker(currentQuestion.layer,[e.clientX,e.clientY])}/>
 
+      {points.map((contiguousPoints, i) =>
+        <polygon key={i}  onClick={() => console.log('hit')}
+        points={contiguousPoints}/>)}
 
-  {currentQuestion.points[currentQuestion.layer].map((contiguousPoints,i) =>
-    <polygon key={i} onClick={() => console.log('hit')}
-    points={contiguousPoints}/>)}
-
-  </svg>
-
-</div>
-)
-}
-else {
-  return(
-    <div>
-    <Catscan currentQuestion={currentQuestion}  style={styleCatscat}/>
-
-    <svg style={style} width={500} height={500}>
+      {markers.map((marker, i) =>
+        <Marker color={"#93268f"} position={marker.position} key={i} />)}
     </svg>
-    </div>
-  )
 
 
+  </div>;
 }
-
-}
-;
