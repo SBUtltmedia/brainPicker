@@ -7,13 +7,17 @@ const initialState={
   markers: []
 };
 
-function addMarkerToLayer(layer, markers, marker) {
-
-  var retMarker=markers[layer]||[];
-  retMarker=[...retMarker,marker];
-var newMarkers= [...markers.slice(0,layer),retMarker,...markers.slice(layer+1)]
-console.log("markers",JSON.stringify(newMarkers))
-
+export function addMarkerToLayer(layer, markers, marker) {
+  const layerIndex = layer - 1;
+  var retMarker = markers[layerIndex]||[];
+  retMarker = [...retMarker,marker];
+  const pad = [];
+  const padLength = layerIndex - markers.length;
+  if (padLength > 0) {
+    pad[padLength - 1] = undefined;
+  }
+  const newMarkers = [...markers.slice(0,layerIndex),...pad,retMarker,...markers.slice(layerIndex+1)]
+  //console.log("markers",JSON.stringify(newMarkers))
   return newMarkers
 }
 
