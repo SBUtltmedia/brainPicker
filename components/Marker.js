@@ -5,7 +5,7 @@ var pathStyle={
   opacity:0.9
 }
 
-console.log("position", position);
+//console.log("position", position);
 
 return(
 	<path style={pathStyle} transform={"translate(" + position[0] + "," + position[1] + ")"}

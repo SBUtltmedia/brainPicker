@@ -15,7 +15,7 @@ const styleSVG = {
  };
 
 export default ({actions, currentQuestion}) => {
-  const src = "data/images/catscan/"+(currentQuestion.layer+1)+".png";
+  const src = "data/images/catscan/"+(currentQuestion.layer)+".png";
   const points = currentQuestion.points[currentQuestion.layer] || [];
   const markers = currentQuestion.markers[currentQuestion.layer] || [];
 
@@ -24,7 +24,7 @@ export default ({actions, currentQuestion}) => {
   return <div>
     <svg id="brainImage" xmlns="http://www.w3.org/2000/svg" style={styleSVG} viewBox="0 0 500 500" >
       <image x="0" y="0" width="100%" height="100%" xlinkHref={src}
-      onClick={(e)=>actions.putMarker(currentQuestion.layer,[e.clientX,e.clientY])}/>
+     onClick={(e)=>actions.putMarker(currentQuestion.layer,e)}/>
 
       {points.map((contiguousPoints, i) =>
         <polygon key={i}  onClick={() => console.log('hit')}
