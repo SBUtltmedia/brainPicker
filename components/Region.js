@@ -27,11 +27,12 @@ export default ({actions, currentQuestion}) => {
      onClick={(e)=>actions.putMarker(currentQuestion.layer,e)}/>
 
       {points.map((contiguousPoints, i) =>
-        <polygon key={i}  onClick={() => console.log('hit')}
+        <polygon key={i} onClick={() => console.log('hit')}
         points={contiguousPoints}/>)}
 
       {markers.map((marker, i) =>
-        <Marker color={"#93268f"} position={marker.position} key={i} />)}
+        <Marker actions={actions} color={"#93268f"} layer={currentQuestion.layer}
+          position={marker.position} index={i} key={i} />)}
     </svg>
 
 
