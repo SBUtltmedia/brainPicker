@@ -23,7 +23,7 @@ class App extends React.Component {
     this.actions = bindActionCreators(Actions, dispatch);
     this.actions.loadQuestions();
     this.actions.loadStructures();
-    this.actions.showQuestion("area medial and caudal to the green point");
+    this.actions.showQuestion(0);
   }
 
   render() {
