@@ -7,10 +7,10 @@ const initialState = {
   markers: []
 };
 
-export function addMarkerToLayer(layer, markers, marker) {
+export function addMarkerToLayer(layer, markers, marker,maxPoints) {
   const layerIndex = layer - 1;
   var layerMarkers = markers[layerIndex] || [];
-  layerMarkers = [...layerMarkers, marker];
+  layerMarkers[Math.min(layerMarkers.length,maxPoints-1)]  = marker
   const pad = [];
   const padLength = layerIndex - markers.length;
   if (padLength > 0) {
@@ -34,7 +34,7 @@ export default function currentQuestion(state = initialState, action) {
       return Object.assign({}, state, {layer: action.layer});
     case types.ADD_MARKER:
       const marker = { position: action.position }
-      return Object.assign({}, state, {markers: addMarkerToLayer(state.layer, state.markers, marker)});
+        return Object.assign({}, state, {markers: addMarkerToLayer(state.layer, state.markers, marker,state.pointsPerLayer)});
     case types.REMOVE_MARKER:
       return Object.assign({}, state, {markers: removeMarkerFromLayer(state.layer, state.markers, action.index)})
     case types.CLEAR_MARKERS:

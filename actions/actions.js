@@ -16,17 +16,18 @@ export function loadStructures() {
   };
 }
 
-export function showQuestion(question) {
+export function showQuestion(index) {
   return {
     type: types.SHOW_QUESTION,
     question: {
-      region: question,
-      points: structures[question]
+      ...questions[index],
+      points: structures[questions[index].region]
     }
   };
 }
 
 export function changeLayer(layer) {
+  console.log("CHANGE LAYER");
   return {
     type: types.CHANGE_LAYER,
     layer: layer
