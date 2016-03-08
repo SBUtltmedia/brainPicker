@@ -1,8 +1,8 @@
-**Setup
+## Setup
 `npm install`
 
-**Running in development
+## Running in development
 `npm start`
 
-**Running tests
+## Running tests
 `mocha --compilers js:babel-core/register --watch tests/**/*.test.js`
