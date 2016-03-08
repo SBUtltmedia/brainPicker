@@ -33,9 +33,7 @@ export function changeLayer(layer) {
   }
 }
 
-
 export function putMarker(position) {
-
   var e = position.target;
   var dim = e.getBoundingClientRect();
   var x = 500 * (position.clientX - dim.left) / dim.width;
@@ -43,14 +41,18 @@ export function putMarker(position) {
   return{
     type : types.ADD_MARKER,
     position: [x, y]
-
   }
 }
 
-export function removeMarker(layer, index) {
+export function removeMarker(index) {
   return {
     type: types.REMOVE_MARKER,
-    layer: layer,
     index: index
+  }
+}
+
+export function clearMarkers() {
+  return {
+    type: types.CLEAR_MARKERS
   }
 }
