@@ -15,7 +15,6 @@ const styleSVG = {
  };
 
 export default ({actions, currentQuestion}) => {
-  console.log(currentQuestion);
   const src = "data/images/catscan/"+(currentQuestion.layer)+".png";
   const points = currentQuestion.points[currentQuestion.layer] || [];
   const markers = currentQuestion.markers[currentQuestion.layer - 1] || [];

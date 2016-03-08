@@ -10,7 +10,7 @@ const initialState = {
 export function addMarkerToLayer(layer, markers, marker,maxPoints) {
   const layerIndex = layer - 1;
   var layerMarkers = markers[layerIndex] || [];
-  layerMarkers[Math.min(layerMarkers.length,maxPoints-1)]  = marker
+  layerMarkers[Math.min(layerMarkers.length,maxPoints-1)] = marker
   const pad = [];
   const padLength = layerIndex - markers.length;
   if (padLength > 0) {
@@ -29,7 +29,7 @@ export function removeMarkerFromLayer(layer, markers, index) {
 export default function currentQuestion(state = initialState, action) {
   switch (action.type) {
     case types.SHOW_QUESTION:
-      return Object.assign({}, state, {...action.question, layer: DEFAULT_LAYER});
+      return Object.assign({}, state, {...action.question, layer: DEFAULT_LAYER, markers: []});
     case types.CHANGE_LAYER:
       return Object.assign({}, state, {layer: action.layer});
     case types.ADD_MARKER:

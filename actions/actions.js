@@ -27,7 +27,6 @@ export function showQuestion(index) {
 }
 
 export function changeLayer(layer) {
-  console.log("CHANGE LAYER");
   return {
     type: types.CHANGE_LAYER,
     layer: layer

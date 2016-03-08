@@ -7,15 +7,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as Actions from '../actions/actions';
 import Marker from '../components/Marker';
-const regionStyle={
-  width:"95%",
-  float :"left"
+
+const regionStyle = {
+  width: "95%",
+  float: "left"
 };
-const changerStyle={
-  width:"5%",
-  height : "100%",
-  float:"right"
+const changerStyle = {
+  width: "5%",
+  height: "100%",
+  float: "right"
 };
+
 class App extends React.Component {
 
   componentWillMount() {
@@ -29,17 +31,15 @@ class App extends React.Component {
   render() {
     const { questions, structures, currentQuestion } = this.props;
     return <div>
-
-      <div >
-      <ButtonBank actions={this.actions} buttons={questions} />
-      <Question actions={this.actions} currentQuestion={currentQuestion} />
+      <div>
+        <ButtonBank actions={this.actions} buttons={questions} />
+        <Question actions={this.actions} currentQuestion={currentQuestion} />
       </div>
-
       <div style={regionStyle}>
-      <Region actions={this.actions} currentQuestion={currentQuestion} />
+        <Region actions={this.actions} currentQuestion={currentQuestion} />
       </div>
       <div style={changerStyle}>
-      <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
+        <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
       </div>
     </div>;
   }
