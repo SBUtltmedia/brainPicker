@@ -7,10 +7,10 @@ const initialState = {
   markers: []
 };
 
-export function addMarkerToLayer(layer, markers, marker,maxPoints) {
+export function addMarkerToLayer(layer, markers, marker, maxPoints=Number.MAX_VALUE) {
   const layerIndex = layer - 1;
   var layerMarkers = markers[layerIndex] || [];
-  layerMarkers[Math.min(layerMarkers.length,maxPoints-1)] = marker
+  layerMarkers[Math.min(layerMarkers.length, maxPoints - 1)] = marker
   const pad = [];
   const padLength = layerIndex - markers.length;
   if (padLength > 0) {
