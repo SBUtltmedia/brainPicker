@@ -1,21 +1,14 @@
 import ReactDom  from 'react-dom';
-import Region from '../components/Region';
-import LayerChanger from '../components/LayerChanger';
 import ButtonBank from '../components/ButtonBank';
 import Question from '../components/Question';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as Actions from '../actions/actions';
 import Marker from '../components/Marker';
-const regionStyle={
-  width:"95%",
-  float :"left"
-};
-const changerStyle={
-  width:"5%",
-  height : "100%",
-  float:"right"
-};
+import Monitor from '../components/Monitor'
+
+
+
 class App extends React.Component {
 
   componentWillMount() {
@@ -23,24 +16,22 @@ class App extends React.Component {
     this.actions = bindActionCreators(Actions, dispatch);
     this.actions.loadQuestions();
     this.actions.loadStructures();
-    this.actions.showQuestion("area medial and caudal to the green point");
+    this.actions.showQuestion(0);
+
   }
 
   render() {
     const { questions, structures, currentQuestion } = this.props;
+
     return <div>
-
-      <div >
-      <ButtonBank actions={this.actions} buttons={questions} />
-      <Question actions={this.actions} currentQuestion={currentQuestion} />
+      <div>
+        <ButtonBank actions={this.actions} buttons={questions} />
+        <Question actions={this.actions} currentQuestion={currentQuestion} />
+      </div>
+      <div>
+        <Monitor actions={this.actions} currentQuestion={currentQuestion} />
       </div>
 
-      <div style={regionStyle}>
-      <Region actions={this.actions} currentQuestion={currentQuestion} />
-      </div>
-      <div style={changerStyle}>
-      <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
-      </div>
     </div>;
   }
 }

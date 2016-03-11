@@ -16,29 +16,60 @@ export function loadStructures() {
   };
 }
 
-export function showQuestion(question) {
+export function showQuestion(index) {
   return {
     type: types.SHOW_QUESTION,
     question: {
-      region: question,
-      points: structures[question]
+      ...questions[index],
+      points: structures[questions[index].region]
     }
   };
 }
 
+
 export function changeLayer(layer) {
+
   return {
     type: types.CHANGE_LAYER,
     layer: layer
   }
 }
 
-export function putMarker(layer,position){
 
+export function wheelChangeLayer(layer,e) {
+var newLayer= parseInt(e.deltaY/10+layer);
+
+newLayer = Math.min(Math.max(1,newLayer),21);
+return {
+  type: types.WHEEL_CHANGE,
+  layer: newLayer
+}
+
+}
+
+
+
+
+export function putMarker(position) {
+  var e = position.target;
+  var dim = e.getBoundingClientRect();
+  var x = 500 * (position.clientX - dim.left) / dim.width;
+  var y = 500 * (position.clientY- dim.top) / dim.height;
   return{
     type : types.ADD_MARKER,
-    marker: {layer:layer, position: position},
-    layer:layer
+    position: [x, y]
+  }
+}
 
+export function removeMarker(index) {
+  return {
+    type: types.REMOVE_MARKER,
+    index: index
+  }
+}
+
+export function clearMarkers() {
+  return {
+    type: types.CLEAR_MARKERS
   }
 }
