@@ -1,3 +1,5 @@
-export default ({actions, currentQuestion}) => (
-	<div>{currentQuestion.region}</div>
-);
+export default ({actions, currentQuestion}) => {
+console.log(currentQuestion)
+	 return (<div>{currentQuestion.region}</div>)
+ }
+;
