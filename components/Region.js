@@ -30,6 +30,4 @@ export default ({actions, currentQuestion}) => {
         <Marker color={"#93268f"} position={marker.position} key={i} onClick={() => actions.removeMarker(i)} />)}
     </svg>
   </div>;
-
-
 }

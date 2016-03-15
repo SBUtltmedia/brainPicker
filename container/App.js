@@ -6,8 +6,18 @@ import { bindActionCreators } from 'redux';
 import * as Actions from '../actions/actions';
 import Marker from '../components/Marker';
 import Monitor from '../components/Monitor'
+import Region from '../components/Region'
+import LayerChanger from '../components/LayerChanger'
 
-
+const regionStyle = {
+  width: "95%",
+  float: "left"
+};
+const changerStyle = {
+  width: "5%",
+  height: "100%",
+  float: "right"
+};
 
 class App extends React.Component {
 
@@ -17,12 +27,10 @@ class App extends React.Component {
     this.actions.loadQuestions();
     this.actions.loadStructures();
     this.actions.showQuestion(0);
-
   }
 
   render() {
     const { questions, structures, currentQuestion } = this.props;
-
     return <div>
       <div>
         <ButtonBank actions={this.actions} buttons={questions} />
@@ -31,7 +39,12 @@ class App extends React.Component {
       <div>
         <Monitor actions={this.actions} currentQuestion={currentQuestion} />
       </div>
-
+      <div style={regionStyle}>
+        <Region actions={this.actions} currentQuestion={currentQuestion} />
+      </div>
+      <div style={changerStyle}>
+        <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
+      </div>
     </div>;
   }
 }
