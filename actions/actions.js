@@ -28,27 +28,20 @@ export function showQuestion(index) {
 
 
 export function changeLayer(layer) {
-
   return {
     type: types.CHANGE_LAYER,
     layer: layer
   }
 }
 
-
 export function wheelChangeLayer(layer,e) {
-var newLayer= parseInt(e.deltaY/10+layer);
-
-newLayer = Math.min(Math.max(1,newLayer),21);
-return {
-  type: types.WHEEL_CHANGE,
-  layer: newLayer
+  var newLayer= parseInt(e.deltaY/10+layer);
+  newLayer = Math.min(Math.max(1,newLayer),21);
+  return {
+    type: types.WHEEL_CHANGE,
+    layer: newLayer
+  }
 }
-
-}
-
-
-
 
 export function putMarker(position) {
   var e = position.target;

@@ -16,9 +16,7 @@ export function addMarkerToLayer(layer, markers, marker, maxPoints=Number.MAX_VA
   if (padLength > 0) {
     pad[padLength - 1] = undefined;
   }
-  var retData=[...markers.slice(0, layerIndex), ...pad, layerMarkers, ...markers.slice(layerIndex + 1)]
-  console.log(retData)
-  return retData;
+  return [...markers.slice(0, layerIndex), ...pad, layerMarkers, ...markers.slice(layerIndex + 1)]
 }
 
 export function removeMarkerFromLayer(layer, markers, index) {
