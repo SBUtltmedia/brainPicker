@@ -1,27 +1,25 @@
 import * as types from '../constants/ActionTypes';
-const questions = require('json!../data/question.json');
-const structures = require ('json!../data/structure.json');
 
-export function loadQuestions() {
-  return {
-    type: types.LOAD_QUESTIONS,
-    questions: questions
+var questionDots;
+
+export function findQuestionDot(){
+
+  return{
+    type: types.LOAD_QUESTION_DOTS,
+    questionDots : questionDots
   };
 }
 
-export function loadStructures() {
-  return {
-    type: types.LOAD_STRUCTURES,
-    structures: structures
-  };
-}
+export function showQuestion(question, structures) {
 
-export function showQuestion(index) {
+  console.log("QUESTION", question);
+
   return {
     type: types.SHOW_QUESTION,
     question: {
-      ...questions[index],
-      points: structures[questions[index].region]
+      questionText : "",
+      ...question,
+      points: structures[question.region]
     }
   };
 }
@@ -36,7 +34,8 @@ export function changeLayer(layer) {
 
 export function wheelChangeLayer(layer,e) {
   var newLayer= parseInt(e.deltaY/10+layer);
-  newLayer = Math.min(Math.max(1,newLayer),21);
+  //var localImages=struc ||[];
+  newLayer = Math.min(Math.max(1,newLayer),structures["images"].length-1);
   return {
     type: types.WHEEL_CHANGE,
     layer: newLayer
