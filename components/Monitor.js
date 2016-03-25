@@ -15,18 +15,16 @@ const changerStyle = {
 
 
 
-export default ({actions, currentQuestion}) => {
-  const src = "data/images/catscan/"+(currentQuestion.layer)+".png";
-  const points = currentQuestion.points[currentQuestion.layer] || [];
-  const markers = currentQuestion.markers[currentQuestion.layer - 1] || [];
+export default ({actions, currentQuestion, images, value}) => {
+
   return (
-  <div onWheel={e=>actions.wheelChangeLayer(currentQuestion.layer,e)}>
+  <div onWheel={e=>actions.wheelChangeLayer(currentQuestion.layer, e)}>
 
   <div style={regionStyle}>
-    <Region actions={actions} currentQuestion={currentQuestion} />
+    <Region actions={actions} currentQuestion={currentQuestion} images={images} />
   </div>
   <div style={changerStyle}>
-    <LayerChanger layer={currentQuestion.layer} actions={actions}  currentQuestion={currentQuestion} />
+    <LayerChanger layer={currentQuestion.layer} actions={actions} value={value} max={images.length} currentQuestion={currentQuestion} />
   </div>
   </div>)
 }

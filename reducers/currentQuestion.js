@@ -1,6 +1,9 @@
 import * as types from '../constants/ActionTypes';
 const DEFAULT_LAYER = '1';
 const initialState = {
+  requestLayers : '',
+  pointsPerLayer : '',
+  questionText : '',
   region: '',
   points: [],
   layer: DEFAULT_LAYER,

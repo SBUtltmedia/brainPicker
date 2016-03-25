@@ -1,7 +1,8 @@
 import QuestionButton from './QuestionButton';
-export default ({actions, buttons}) => (
-	<div>
-		{ buttons.map((question, i) =>
-			<QuestionButton key={i} questionNumber={i} clickFunc={() => actions.showQuestion(i)} />) }
+export default ({actions, questions, structures}) => {
+
+	return <div>
+		{ questions.map((question, i) =>
+			<QuestionButton key={i} questionNumber={i} clickFunc={() => actions.showQuestion(question, structures)} />) }
 	</div>
-);
+};

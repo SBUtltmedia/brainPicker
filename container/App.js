@@ -22,28 +22,21 @@ const changerStyle = {
 class App extends React.Component {
 
   componentWillMount() {
-    const { dispatch } = this.props;
+    const { dispatch, questions, structures, images } = this.props;
     this.actions = bindActionCreators(Actions, dispatch);
-    this.actions.loadQuestions();
-    this.actions.loadStructures();
-    this.actions.showQuestion(0);
+    this.actions.showQuestion(questions[0], structures);
+    console.log("DOT",this.actions.findQuestionDot());
   }
 
   render() {
-    const { questions, structures, currentQuestion } = this.props;
+    const { questions, structures, currentQuestion, images } = this.props;
     return <div>
       <div>
-        <ButtonBank actions={this.actions} buttons={questions} />
+        <ButtonBank actions={this.actions} questions={questions} structures={structures} />
         <Question actions={this.actions} currentQuestion={currentQuestion} />
       </div>
       <div>
-        <Monitor actions={this.actions} currentQuestion={currentQuestion} />
-      </div>
-      <div style={regionStyle}>
-        <Region actions={this.actions} currentQuestion={currentQuestion} />
-      </div>
-      <div style={changerStyle}>
-        <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
+        <Monitor actions={this.actions} currentQuestion={currentQuestion} value={this.actions.findQuestionDot()}  images={images} />
       </div>
     </div>;
   }
