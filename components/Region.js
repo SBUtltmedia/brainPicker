@@ -13,11 +13,19 @@ const styleSVG = {
    height : '100%',
  };
 
-export default ({actions, currentQuestion}) => {
-  const src = "data/images/catscan/"+(currentQuestion.layer)+".png";
+export default ({actions, currentQuestion,images}) => {
+//  const i = currentQuestion.layer;
+
+var localImages=images ||[];
+
+ const src = "data/images/catscan/"+localImages[currentQuestion.layer];
+
+// src = "data/images/catscan/001.png"
+//  const src = "data/images/catscan/"+Array(3-i.toString().length).fill("0").join("")+i+".png";
   const points = currentQuestion.points[currentQuestion.layer] || [];
   const markers = currentQuestion.markers[currentQuestion.layer - 1] || [];
-
+  const questionDots = actions.findQuestionDot();
+  console.log("QU",questionDots.layers);
   return <div>
     <svg id="brainImage" xmlns="http://www.w3.org/2000/svg" style={styleSVG} viewBox="0 0 500 500" >
       <image x="0" y="0" width="100%" height="100%" xlinkHref={src} onClick={actions.putMarker}/>
@@ -28,6 +36,8 @@ export default ({actions, currentQuestion}) => {
 
       {markers.map((marker, i) =>
         <Marker color={"#93268f"} position={marker.position} key={i} onClick={() => actions.removeMarker(i)} />)}
+
+
     </svg>
   </div>;
 }
