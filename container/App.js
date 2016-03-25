@@ -22,29 +22,30 @@ const changerStyle = {
 class App extends React.Component {
 
   componentWillMount() {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props; // Spongebob
     this.actions = bindActionCreators(Actions, dispatch);
     this.actions.loadQuestions();
     this.actions.loadStructures();
-    this.actions.showQuestion(0);
+    //this.actions.showQuestion();
+    console.log("DOT",this.actions.findQuestionDot());
   }
 
   render() {
     const { questions, structures, currentQuestion } = this.props;
+  //  this.actions.findQuestionDot();
+
+    var images = structures["images"];
+    console.log("PROPS",this.props);
+
     return <div>
       <div>
         <ButtonBank actions={this.actions} buttons={questions} />
         <Question actions={this.actions} currentQuestion={currentQuestion} />
       </div>
       <div>
-        <Monitor actions={this.actions} currentQuestion={currentQuestion} />
+        <Monitor actions={this.actions} currentQuestion={currentQuestion} value={this.actions.findQuestionDot()}  images={images} />
       </div>
-      <div style={regionStyle}>
-        <Region actions={this.actions} currentQuestion={currentQuestion} />
-      </div>
-      <div style={changerStyle}>
-        <LayerChanger actions={this.actions} currentQuestion={currentQuestion} />
-      </div>
+
     </div>;
   }
 }

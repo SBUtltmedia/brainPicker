@@ -2,14 +2,16 @@
 	{
 		"requestLayers": 3,
 		"pointsPerLayer": 3,
-		"region": "area medial and caudal to the green point",
-		"selectionMarker":{"location":[295,251],"layers":[14,14]}
+		"region": "area medial and caudal to the green dot",
+		"questionDot":{"location":[295,251],"layers":[13,14]}
 	}
 	,
 	{
 		"requestLayers": 2,
 		"pointsPerLayer": 2,
-		"region": "Spinal Cord"
+		"region": "Spinal Cord",
+		"questionText": "234"
+
 	}
 	,
 	{
