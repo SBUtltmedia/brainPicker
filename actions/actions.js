@@ -1,21 +1,6 @@
 import * as types from '../constants/ActionTypes';
-const questions = require('json!../data/question.json');
-const structures = require ('json!../data/structure.json');
 
-var questionDots  ;
-
-export function loadQuestions() {
-
-  questions.map((i,j)=>{if(i.questionDot){
-                        questionDots=i.questionDot;
-                        }
-                      });
-
-  return{
-    type: types.LOAD_QUESTIONS,
-    questions: questions
-  };
-}
+var questionDots;
 
 export function findQuestionDot(){
 
@@ -23,28 +8,18 @@ export function findQuestionDot(){
     type: types.LOAD_QUESTION_DOTS,
     questionDots : questionDots
   };
-
-
 }
 
-export function loadStructures() {
-  return {
-    type: types.LOAD_STRUCTURES,
+export function showQuestion(question, structures) {
 
-    regions: structures["region"],
-    images     :  structures["images"]
-
-  };
-}
-
-export function showQuestion(index) {
+  console.log("QUESTION", question);
 
   return {
     type: types.SHOW_QUESTION,
     question: {
       questionText : "",
-      ...questions[index],
-      points: structures["region"][questions[index].region]
+      ...question,
+      points: structures[question.region]
     }
   };
 }

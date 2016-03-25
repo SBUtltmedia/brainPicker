@@ -13,12 +13,8 @@ const styleSVG = {
    height : '100%',
  };
 
-export default ({actions, currentQuestion,images}) => {
-//  const i = currentQuestion.layer;
-
-var localImages=images ||[];
-
- const src = "data/images/catscan/"+localImages[currentQuestion.layer];
+export default ({actions, currentQuestion, images}) => {
+  const src = "data/images/catscan/" + images[currentQuestion.layer];
 
 // src = "data/images/catscan/001.png"
 //  const src = "data/images/catscan/"+Array(3-i.toString().length).fill("0").join("")+i+".png";
