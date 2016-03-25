@@ -15,18 +15,16 @@ const changerStyle = {
 
 
 
-export default ({actions, currentQuestion,images, value}) => {
-//console.log(max)
-var localImages=images ||[];
+export default ({actions, currentQuestion, images, value}) => {
 
   return (
-  <div onWheel={e=>actions.wheelChangeLayer(currentQuestion.layer,e)}>
+  <div onWheel={e=>actions.wheelChangeLayer(currentQuestion.layer, e)}>
 
   <div style={regionStyle}>
     <Region actions={actions} currentQuestion={currentQuestion} images={images} />
   </div>
   <div style={changerStyle}>
-    <LayerChanger layer={currentQuestion.layer} actions={actions} value={value} max={localImages.length} currentQuestion={currentQuestion} />
+    <LayerChanger layer={currentQuestion.layer} actions={actions} value={value} max={images.length} currentQuestion={currentQuestion} />
   </div>
   </div>)
 }
