@@ -24,8 +24,7 @@ class App extends React.Component {
   componentWillMount() {
     const { dispatch, questions, structures, images } = this.props;
     this.actions = bindActionCreators(Actions, dispatch);
-    this.actions.showQuestion(questions[0], structures);
-    console.log("DOT",this.actions.findQuestionDot());
+    //this.actions.showQuestion(questions[0], structures);
   }
 
   render() {
@@ -36,7 +35,7 @@ class App extends React.Component {
         <Question actions={this.actions} currentQuestion={currentQuestion} />
       </div>
       <div>
-        <Monitor actions={this.actions} currentQuestion={currentQuestion} value={this.actions.findQuestionDot()}  images={images} />
+        <Monitor actions={this.actions} currentQuestion={currentQuestion} value={this.actions.findQuestionDot()} images={images} />
       </div>
     </div>;
   }

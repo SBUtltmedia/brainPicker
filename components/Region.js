@@ -20,8 +20,7 @@ export default ({actions, currentQuestion, images}) => {
 //  const src = "data/images/catscan/"+Array(3-i.toString().length).fill("0").join("")+i+".png";
   const points = currentQuestion.points[currentQuestion.layer] || [];
   const markers = currentQuestion.markers[currentQuestion.layer - 1] || [];
-  const questionDots = actions.findQuestionDot();
-  console.log("QU",questionDots.layers);
+
   return <div>
     <svg id="brainImage" xmlns="http://www.w3.org/2000/svg" style={styleSVG} viewBox="0 0 500 500" >
       <image x="0" y="0" width="100%" height="100%" xlinkHref={src} onClick={actions.putMarker}/>

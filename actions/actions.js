@@ -10,17 +10,10 @@ export function findQuestionDot(){
   };
 }
 
-export function showQuestion(question, structures) {
-
-  console.log("QUESTION", question);
-
+export function showQuestion(question) {
   return {
     type: types.SHOW_QUESTION,
-    question: {
-      questionText : "",
-      ...question,
-      points: structures[question.region]
-    }
+    question: question
   };
 }
 
@@ -32,13 +25,10 @@ export function changeLayer(layer) {
   }
 }
 
-export function wheelChangeLayer(layer,e) {
-  var newLayer= parseInt(e.deltaY/10+layer);
-  //var localImages=struc ||[];
-  newLayer = Math.min(Math.max(1,newLayer),structures["images"].length-1);
+export function wheelChangeLayer(deltaY) {
   return {
     type: types.WHEEL_CHANGE,
-    layer: newLayer
+    layerDelta: parseInt(deltaY / 10)
   }
 }
 
