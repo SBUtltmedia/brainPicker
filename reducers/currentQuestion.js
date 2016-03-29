@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes';
-const DEFAULT_LAYER = '1';
+const DEFAULT_LAYER = 1;
 const initialState = {
   requestLayers : '',
   pointsPerLayer : '',
@@ -7,7 +7,8 @@ const initialState = {
   region: '',
   points: [],
   layer: DEFAULT_LAYER,
-  markers: []
+  markers: [],
+  questionDot: null
 };
 
 export function addMarkerToLayer(layer, markers, marker, maxPoints=Number.MAX_VALUE) {
@@ -32,7 +33,8 @@ export function removeMarkerFromLayer(layer, markers, index) {
 export default function currentQuestion(state = initialState, action) {
   switch (action.type) {
     case types.SHOW_QUESTION:
-      return Object.assign({}, state, {...action.question, layer: DEFAULT_LAYER, markers: []});
+      const layer = action.question.questionDot ? action.question.questionDot.layers[0] : DEFAULT_LAYER;
+      return Object.assign({}, state, {questionText:'', ...action.question, markers: [], layer: layer});
     case types.WHEEL_CHANGE:
       return Object.assign({}, state, {layer: action.layer});
     case types.CHANGE_LAYER:

@@ -1,7 +1,5 @@
 
 export default ({actions, currentQuestion}) => {
-	console.log("CURTEXT",currentQuestion.questionText);
-	console.log("REGION",currentQuestion.region);
 	var result;
 	if(currentQuestion.questionText == ""){
 		result =  (<div>

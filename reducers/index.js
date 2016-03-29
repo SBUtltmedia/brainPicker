@@ -6,6 +6,8 @@ const questions = require('json!../data/questions.json');
 const structures = require('json!../data/structures.json');
 const images = require('json!../data/images.json');
 
+
+
 const initialState = {
   questions: questions,
   structures: structures,
@@ -18,12 +20,12 @@ const initialState = {
   })
 };
 
+
 export default function mainReducer(state = initialState, action) {
   switch (action.type) {
     case types.SHOW_QUESTION:
       return Object.assign({}, state, {currentQuestion: currentQuestion(state.currentQuestion, {
         ...action,
-        questionText: '',
         points: state.structures[action.question.region]
       })});
     case types.WHEEL_CHANGE:
