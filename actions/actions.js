@@ -17,6 +17,11 @@ export function showQuestion(question) {
   };
 }
 
+export function submitAnswers() {
+  return {
+    type: types.SUBMIT_ANSWERS
+  };
+}
 
 export function changeLayer(layer) {
   return {
