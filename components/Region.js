@@ -1,5 +1,7 @@
 
 import Marker from '../components/Marker';
+import QuestionDot from '../components/QuestionDot';
+import _ from 'lodash';
 
 const styleSVG = {
    fill: 'blue',
@@ -20,7 +22,7 @@ export default ({actions, currentQuestion, images}) => {
 //  const src = "data/images/catscan/"+Array(3-i.toString().length).fill("0").join("")+i+".png";
   const points = currentQuestion.points[currentQuestion.layer] || [];
   const markers = currentQuestion.markers[currentQuestion.layer - 1] || [];
-
+  const dot = currentQuestion.questionDot;
   return <div>
     <svg id="brainImage" xmlns="http://www.w3.org/2000/svg" style={styleSVG} viewBox="0 0 500 500" >
       <image x="0" y="0" width="100%" height="100%" xlinkHref={src} onClick={actions.putMarker}/>
@@ -28,6 +30,8 @@ export default ({actions, currentQuestion, images}) => {
       {points.map((contiguousPoints, i) =>
         <polygon  key={i} onClick={() => console.log('hit')}
         points={contiguousPoints.map((eachP, i) => i % 2 === 0 ? eachP - 5 : eachP) } />)}
+
+      {dot && _.includes(dot.layers, currentQuestion.layer) ? <QuestionDot color="green" position={dot.location} /> : ''}
 
       {markers.map((marker, i) =>
         <Marker color={"#93268f"} position={marker.position} key={i} onClick={() => actions.removeMarker(i)} />)}

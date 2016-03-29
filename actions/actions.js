@@ -21,7 +21,7 @@ export function showQuestion(question) {
 export function changeLayer(layer) {
   return {
     type: types.CHANGE_LAYER,
-    layer: layer
+    layer: parseInt(layer)
   }
 }
 
