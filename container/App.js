@@ -19,6 +19,7 @@ const changerStyle = {
   float: "right"
 };
 
+
 class App extends React.Component {
 
   componentWillMount() {
@@ -31,8 +32,10 @@ class App extends React.Component {
     const { questions, structures, currentQuestion, images } = this.props;
     return <div>
       <div>
-        <ButtonBank actions={this.actions} questions={questions} structures={structures} />
-        <Question actions={this.actions} currentQuestion={currentQuestion} />
+
+          <ButtonBank actions={this.actions} questions={questions} structures={structures} />
+          <Question actions={this.actions} currentQuestion={currentQuestion} />
+
       </div>
       <div>
         <Monitor actions={this.actions} currentQuestion={currentQuestion} value={this.actions.findQuestionDot()} images={images} />
