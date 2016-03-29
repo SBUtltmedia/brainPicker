@@ -46,6 +46,8 @@ export default function currentQuestion(state = initialState, action) {
       return Object.assign({}, state, {markers: removeMarkerFromLayer(state.layer, state.markers, action.index)})
     case types.CLEAR_MARKERS:
       return Object.assign({}, state, {markers: []})
+    case types.SUBMIT_ANSWERS:
+      return state;  // TODO: Clear makers and show next question? What about animation?
     default:
       return state;
     }
