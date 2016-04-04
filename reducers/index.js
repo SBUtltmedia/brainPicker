@@ -24,10 +24,12 @@ const initialState = {
 export default function mainReducer(state = initialState, action) {
   switch (action.type) {
     case types.SHOW_QUESTION:
-      return Object.assign({}, state, {currentQuestion: currentQuestion(state.currentQuestion, {
+      var retObj = Object.assign({}, state, {currentQuestion: currentQuestion(state.currentQuestion, {
         ...action,
         points: state.structures[action.question.region]
       })});
+      console.log(retObj);
+      return retObj;
     case types.WHEEL_CHANGE:
       return Object.assign({}, state, {currentQuestion: currentQuestion(state.currentQuestion, {
         ...action,
