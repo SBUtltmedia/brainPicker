@@ -31,10 +31,11 @@ export function removeMarkerFromLayer(layer, markers, index) {
 }
 
 export default function currentQuestion(state = initialState, action) {
+
   switch (action.type) {
     case types.SHOW_QUESTION:
       const layer = action.question.questionDot ? action.question.questionDot.layers[0] : DEFAULT_LAYER;
-      return Object.assign({}, state, {questionText:'', ...action.question, markers: [], layer: layer});
+      return Object.assign({}, state, {questionText:'', ...action.question, markers: [], layer: layer, points: action.points});
     case types.WHEEL_CHANGE:
       return Object.assign({}, state, {layer: action.layer});
     case types.CHANGE_LAYER:

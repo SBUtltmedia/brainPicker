@@ -33,7 +33,7 @@ class App extends React.Component {
     return <div>
       <div>
 
-          <ButtonBank actions={this.actions} questions={questions} structures={structures} />
+          <ButtonBank actions={this.actions} questions={questions}/>
           <Question actions={this.actions} currentQuestion={currentQuestion} />
 
       </div>
