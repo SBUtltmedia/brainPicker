@@ -48,7 +48,7 @@ export default function currentQuestion(state = initialState, action) {
     case types.CLEAR_MARKERS:
       return Object.assign({}, state, {markers: []})
     case types.SUBMIT_ANSWERS:
-      return state;  // TODO: Clear makers and show next question? What about animation?
+      return state;  // TODO: Implement
     default:
       return state;
     }

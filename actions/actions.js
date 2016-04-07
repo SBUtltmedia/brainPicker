@@ -2,7 +2,7 @@ import * as types from '../constants/ActionTypes';
 
 var questionDots;
 
-export function findQuestionDot(){
+export function findQuestionDot() {
 
   return{
     type: types.LOAD_QUESTION_DOTS,
@@ -18,8 +18,19 @@ export function showQuestion(question) {
 }
 
 export function submitAnswers() {
-  return {
-    type: types.SUBMIT_ANSWERS
+  const NUM_LAYERS = 25;  // TODO: Remove magic number
+  return dispatch => {
+    var i = 1;
+    const interval = setInterval(() => {
+        dispatch(changeLayer(i));
+        i += 1;
+        if (i > NUM_LAYERS) {
+          clearInterval(interval);
+          dispatch({
+            type: types.SUBMIT_ANSWERS
+          });
+        }
+    }, 300);
   };
 }
 
