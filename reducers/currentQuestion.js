@@ -41,7 +41,7 @@ export default function currentQuestion(state = initialState, action) {
     case types.CHANGE_LAYER:
       return Object.assign({}, state, {layer: action.layer});
     case types.ADD_MARKER:
-      const marker = { position: action.position }
+      const marker = { position: action.position, isHit: action.isHit }
         return Object.assign({}, state, {markers: addMarkerToLayer(state.layer, state.markers, marker,state.pointsPerLayer)});
     case types.REMOVE_MARKER:
       return Object.assign({}, state, {markers: removeMarkerFromLayer(state.layer, state.markers, action.index)})
