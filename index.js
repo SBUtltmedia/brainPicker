@@ -2,6 +2,7 @@ import ReactDom  from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './container/App';
 import configureStore from './store/configureStore';
+
 const store = configureStore();
 
 ReactDom.render(
