@@ -18,13 +18,14 @@ export function showQuestion(question) {
 }
 
 export function submitAnswers() {
-  const NUM_LAYERS = 25;  // TODO: Remove magic number
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { images } = getState();
+    const numLayers = images.length;
     var i = 1;
     const interval = setInterval(() => {
         dispatch(changeLayer(i));
         i += 1;
-        if (i > NUM_LAYERS) {
+        if (i >= numLayers) {
           clearInterval(interval);
           dispatch({
             type: types.SUBMIT_ANSWERS
