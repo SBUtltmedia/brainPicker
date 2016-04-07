@@ -3,6 +3,7 @@ const DEFAULT_LAYER = 1;
 const initialState = {
   requestLayers : '',
   pointsPerLayer : '',
+  leftPoints : '',
   questionText : '',
   region: '',
   points: [],
@@ -41,10 +42,11 @@ export default function currentQuestion(state = initialState, action) {
     case types.CHANGE_LAYER:
       return Object.assign({}, state, {layer: action.layer});
     case types.ADD_MARKER:
-      const marker = { position: action.position, isHit: action.isHit }
-        return Object.assign({}, state, {markers: addMarkerToLayer(state.layer, state.markers, marker,state.pointsPerLayer)});
+      const marker = { position: action.position, isHit: action.isHit };
+
+        return Object.assign({}, state, {markers: addMarkerToLayer(state.layer, state.markers, marker,state.pointsPerLayer),leftPoints:leftPoints-1});
     case types.REMOVE_MARKER:
-      return Object.assign({}, state, {markers: removeMarkerFromLayer(state.layer, state.markers, action.index)})
+      return Object.assign({}, state, {markers: removeMarkerFromLayer(state.layer, state.markers, action.index),leftPoints:leftPoints+1})
     case types.CLEAR_MARKERS:
       return Object.assign({}, state, {markers: []})
     case types.SUBMIT_ANSWERS:
