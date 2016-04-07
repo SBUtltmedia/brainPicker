@@ -21,18 +21,43 @@ export function submitAnswers() {
   return (dispatch, getState) => {
     const { images, currentQuestion } = getState();
     const { markers } = currentQuestion;
-    console.log(markers[12][0]);
+    console.log(currentQuestion);
     const numLayers = images.length;
+    const totalPoint = currentQuestion.requestLayers * currentQuestion.pointsPerLayer;
+    var corPoint =0;
+    console.log(totalPoint);
     var i = 1;
     const interval = setInterval(() => {
         dispatch(changeLayer(i));
+        if(markers[i-1]){
+          for(var j=0;j<markers[i-1].length;j++){
+            if(markers[i-1][j].isHit==true){
+              //Add corrected Points
+              corPoint++;
+
+
+
+            }
+          }
+        }
+
         i += 1;
         if (i >= numLayers) {
           clearInterval(interval);
+
+          const percetPoi = corPoint/ totalPoint*100;
+          console.log("CORRECT POINT",corPoint);
+          console.log("CORRECT PER",percetPoi.toPrecision(3));
           dispatch({
             type: types.SUBMIT_ANSWERS
           });
+
+
         }
+
+
+
+
     }, 300);
   };
 }
@@ -43,6 +68,8 @@ export function changeLayer(layer) {
     layer: parseInt(layer)
   }
 }
+
+
 
 export function wheelChangeLayer(deltaY) {
   return {
