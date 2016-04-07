@@ -19,7 +19,9 @@ export function showQuestion(question) {
 
 export function submitAnswers() {
   return (dispatch, getState) => {
-    const { images } = getState();
+    const { images, currentQuestion } = getState();
+    const { markers } = currentQuestion;
+    console.log(markers[12][0]);
     const numLayers = images.length;
     var i = 1;
     const interval = setInterval(() => {
@@ -49,14 +51,14 @@ export function wheelChangeLayer(deltaY) {
   }
 }
 
-export function putMarker(position) {
-  var e = position.target;
-  var dim = e.getBoundingClientRect();
-  var x = 500 * (position.clientX - dim.left) / dim.width;
-  var y = 500 * (position.clientY- dim.top) / dim.height;
+export function putMarker(e, isHit) {
+  var dim = document.getElementById("brainImage").getBoundingClientRect();
+  var x = 500 * (e.clientX - dim.left) / dim.width;
+  var y = 500 * (e.clientY- dim.top) / dim.height;
   return{
     type : types.ADD_MARKER,
-    position: [x, y]
+    position: [x, y],
+    isHit: isHit
   }
 }
 

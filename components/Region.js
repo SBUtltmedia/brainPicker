@@ -27,10 +27,10 @@ export default ({actions, currentQuestion, images}) => {
   const dot = currentQuestion.questionDot;
   return <div>
     <svg id="brainImage" xmlns="http://www.w3.org/2000/svg" style={styleSVG} viewBox="0 0 500 500" >
-      <image x="0" y="0" width="100%" height="100%" xlinkHref={src} onClick={actions.putMarker}/>
-      {points.map((contiguousPoints, i) =>
-        <polygon style={styleSVG} key={i} onClick={() => console.log('hit')}
-        points={contiguousPoints.map((eachP, i) => i % 2 === 0 ? eachP - 5 : eachP) } />)}
+    <image x="0" y="0" width="100%" height="100%" xlinkHref={src} id="#brainImage" onClick={(e)=>actions.putMarker(e,false)}/>
+          {points.map((contiguousPoints, i) =>
+            <polygon style={styleSVG} key={i} onClick={(e) =>{console.log('hit');actions.putMarker(e,true)}}
+            points={contiguousPoints.map((eachP, i) => i % 2 === 0 ? eachP - 5 : eachP) } />)}
 
       {dot && _.includes(dot.layers, currentQuestion.layer) ? <QuestionDot color="green" position={dot.location} /> : ''}
 
