@@ -17,6 +17,8 @@
     "lodash": "^4.3.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-progress": "0.0.12",
+    "react-progress-bar-plus": "^0.2.3",
     "react-redux": "^4.0.6",
     "react-slider": "^0.6.1",
     "redux": "^3.3.1",

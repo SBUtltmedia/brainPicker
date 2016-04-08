@@ -1,13 +1,19 @@
 import ReactDom  from 'react-dom';
 import ButtonBank from '../components/ButtonBank';
 import Question from '../components/Question';
+import Status from '../components/Status';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as Actions from '../actions/actions';
 import Marker from '../components/Marker';
-import Monitor from '../components/Monitor'
-import Region from '../components/Region'
-import LayerChanger from '../components/LayerChanger'
+import Monitor from '../components/Monitor';
+import Region from '../components/Region';
+import LayerChanger from '../components/LayerChanger';
+import MultistepSlider from 'react-multistep';
+
+//var Multistep = require('react-multistep').Multistep;
+
+
 
 const regionStyle = {
   width: "95%",
@@ -35,7 +41,7 @@ class App extends React.Component {
 
           <ButtonBank actions={this.actions} questions={questions}/>
           <Question actions={this.actions} currentQuestion={currentQuestion} />
-
+          <Status actions={this.actions} currentQuestion={currentQuestion} />
       </div>
       <div>
         <Monitor actions={this.actions} currentQuestion={currentQuestion} value={this.actions.findQuestionDot()} images={images} />
