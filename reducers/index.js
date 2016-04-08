@@ -16,7 +16,6 @@ const initialState = {
     type: types.SHOW_QUESTION,
     questionText: '',
     question: questions[0],
-    leftPoints : -1,
     points: structures[questions[0].region]
   }),
   scores: scores(undefined, existingScores)
@@ -30,11 +29,7 @@ export default function mainReducer(state = initialState, action) {
         ...action,
         points: state.structures[action.question.region]
       })});
-      if(retObj.currentQuestion.leftPoints==-1){
-        //console.log("HERE");
-        retObj.currentQuestion.leftPoints=retObj.currentQuestion.pointsPerLayer;
-      }
-      console.log(retObj);
+
       return retObj;
     case types.WHEEL_CHANGE:
       return Object.assign({}, state, {currentQuestion: currentQuestion(state.currentQuestion, {
