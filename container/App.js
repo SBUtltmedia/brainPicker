@@ -9,11 +9,7 @@ import Marker from '../components/Marker';
 import Monitor from '../components/Monitor';
 import Region from '../components/Region';
 import LayerChanger from '../components/LayerChanger';
-import MultistepSlider from 'react-multistep';
-
-//var Multistep = require('react-multistep').Multistep;
-
-
+//import MultistepSlider from 'react-multistep';
 
 const regionStyle = {
   width: "95%",
