@@ -17,6 +17,7 @@
     "lodash": "^4.3.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-multistep": "^2.0.3",
     "react-progress": "0.0.12",
     "react-progress-bar-plus": "^0.2.3",
     "react-redux": "^4.0.6",
@@ -35,10 +36,9 @@
     "mocha": "^2.4.5",
     "raw-loader": "^0.5.1",
     "sass-loader": "^3.1.2",
-    "style-loader": "^0.13.0"
-  },
-  "peerDependencies": {
+    "style-loader": "^0.13.0",
     "node-sass": "^3.4.2",
     "webpack": "^1.12.12"
-  }
+  },
+  "peerDependencies": {}
 }
