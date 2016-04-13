@@ -15,6 +15,7 @@ const styleSVG = {
    height : '100%',
  };
 
+
 export default ({actions, currentQuestion, images}) => {
   const src = "data/images/catscan/" + images[currentQuestion.layer];
 // src = "data/images/catscan/001.png"

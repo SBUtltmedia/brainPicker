@@ -1,6 +1,5 @@
 
 export default ({actions, currentQuestion}) => {
-	console.log(currentQuestion.markers,currentQuestion.layer);
 	var result;
 
 	var totalPoints=currentQuestion.requestLayers * currentQuestion.pointsPerLayer;
@@ -9,8 +8,7 @@ try
 }catch(e){ var pointsPut=0; }
 
 var layerMarkersLeft = currentQuestion.markers[currentQuestion.layer-1]? currentQuestion.markers[currentQuestion.layer-1].length : 0;
-var currLayerText=`and ${layerMarkersLeft} on this layer`;
-console.log(layerMarkersLeft);
+var currLayerText=`and there are ${layerMarkersLeft} marker(s) on this layer`;
 
 /*
 var  layerMarkersLeft=0;
@@ -20,16 +18,9 @@ if (layerMarkersLeft!=currentQuestion.pointsPerLayer){
  currLayerText =`and ${currentQuestion.markers[currentQuestion.layer-1].length} on this layer`;
 }
 */
-	if(currentQuestion.questionText == ""){
-		result =  (<div>
-						You have {totalPoints-pointsPut} points left on this layer, <u>{currentQuestion.region}</u>, {currLayerText}
-						</div>);
+	return (<div>
+					You have {totalPoints-pointsPut} point(s) left and {} layers left, {currLayerText}
+					</div>);
 
-	}else{
-		result = (<div>{currentQuestion.questionText}</div>);
-
-	}
-
-	return result;
  }
 ;
