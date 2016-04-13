@@ -16,6 +16,7 @@ const initialState = {
     type: types.SHOW_QUESTION,
     questionText: '',
     question: questions[0],
+    leftLayers : 0,
     points: structures[questions[0].region]
   }),
   scores: scores(undefined, existingScores)
