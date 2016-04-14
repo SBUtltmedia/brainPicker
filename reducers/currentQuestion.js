@@ -6,32 +6,26 @@ const initialState = {
   questionText : '',
   region: '',
   points: [],
-  leftLayers : [],
   layer: DEFAULT_LAYER,
   markers: [],
   questionDot: null
 };
 
-export function checkLeftLayers(layer,markers,leftLayers,requestLayers){
+export function checkLeftLayers(pointLayer,RequestLayer,markers){
+	var mark = markers || [];
+  var layerUsed =0 ;
+  console.log("MARK_DATA",mark);
+  console.log("MARK_LENGTH",mark.length);
+	if(mark.length>0){
+		layerUsed= (mark.map((h)=>{var accum=0;if(h)accum++;return accum;})).reduce( (prev, curr) => prev + curr );
 
-  leftLayers.forEach((el)=>{
+	}
+  console.log("LAYERUSED",layerUsed);
+  console.log("REUQESTLAYER",RequestLayer);
 
-    if(layer == el){
-      return leftLayers;
-    }else{
-        if(leftLayers.length == requestLayers)
-          return false;
-
-        
-
-    }
-
-
-  });
-
-
-  return leftLayers+1;
-
+  if(layerUsed <=RequestLayer)
+    return true;
+  else return false;
 }
 
 export function addMarkerToLayer(layer, markers, marker, maxPoints=Number.MAX_VALUE) {
@@ -60,24 +54,24 @@ export default function currentQuestion(state = initialState, action) {
     case types.SHOW_QUESTION:
       const layer = action.question.questionDot ? action.question.questionDot.layers[0] : DEFAULT_LAYER;
     //  const newLeftpoints[state.layer] =
-      return Object.assign({}, state, {questionText:'', ...action.question, markers: [], layer: layer, points: action.points, leftPoints : [state.pointsPerLayer], leftLayers : Array(state.requestLayers)});
+      return Object.assign({}, state, {questionText:'', ...action.question, markers: [], layer: layer, points: action.points, leftPoints : [state.pointsPerLayer], leftLayers : 0});
     case types.WHEEL_CHANGE:
       return Object.assign({}, state, {layer: action.layer});
     case types.CHANGE_LAYER:
       return Object.assign({}, state, {layer: action.layer});
     case types.ADD_MARKER:
-
-      var newLeftLayers = checkLeftLayers(state.layer,state.markers,state.leftLayers);
       var marker = { position: action.position, isHit: action.isHit };
-      marker =  addMarkerToLayer(state.layer, state.markers, marker,state.pointsPerLayer);
+      var markers = addMarkerToLayer(state.layer, state.markers, marker,state.pointsPerLayer);
 
-      console.log("newLeftLAYERS",newLeftLayers);
-
-      if(newLeftLayers <= state.requestLayers){
-        return Object.assign({}, state, {markers: marker, leftLayers : newLeftLayers});
+      var maxLayer = checkLeftLayers(state.pointsPerLayer,state.requestLayers,state.markers);
+      console.log("MAxLayer",maxLayer)
+      if(maxLayer){
+        return Object.assign({}, state, {markers: markers });
       }
 
+
     case types.REMOVE_MARKER:
+
       return Object.assign({}, state, {markers: removeMarkerFromLayer(state.layer, state.markers, action.index)})
     case types.CLEAR_MARKERS:
       return Object.assign({}, state, {markers: []})
