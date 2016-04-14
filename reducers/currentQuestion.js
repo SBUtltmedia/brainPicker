@@ -17,7 +17,7 @@ export function checkLeftLayers(pointLayer,RequestLayer,markers){
   console.log("MARK_DATA",mark);
   console.log("MARK_LENGTH",mark.length);
 	if(mark.length>0){
-		layerUsed= (mark.map((h)=>{var accum=0;if(h)accum++;return accum;})).reduce( (prev, curr) => prev + curr );
+		layerUsed= (mark.map((h)=>{var accum=0;if(h && h.length>0)accum++;return accum;})).reduce( (prev, curr) => prev + curr );
 
 	}
   console.log("LAYERUSED",layerUsed);
@@ -63,7 +63,7 @@ export default function currentQuestion(state = initialState, action) {
       var marker = { position: action.position, isHit: action.isHit };
       var markers = addMarkerToLayer(state.layer, state.markers, marker,state.pointsPerLayer);
 
-      var maxLayer = checkLeftLayers(state.pointsPerLayer,state.requestLayers,state.markers);
+      var maxLayer = checkLeftLayers(state.pointsPerLayer,state.requestLayers,markers);
       console.log("MAxLayer",maxLayer)
       if(maxLayer){
         return Object.assign({}, state, {markers: markers });
