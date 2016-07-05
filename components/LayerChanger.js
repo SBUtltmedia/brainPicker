@@ -5,8 +5,6 @@ const styleRange = {
 
  };
 
-
-
 export default ({actions, currentQuestion,layer,max }) => {
 
 	return <div>

@@ -11,7 +11,6 @@ export function findQuestionDot() {
 }
 
 export function showQuestion(question) {
-console.log(question)
   return {
     type: types.SHOW_QUESTION,
     question: question
