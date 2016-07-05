@@ -3,7 +3,8 @@ import currentQuestion from './currentQuestion';
 import scores from './scores';
 import * as types from '../constants/ActionTypes';
 
-const questions = require('json!../data/questions.json');
+const questionsData = require('json!../data/questions.json');
+const questions=questionsData.map((theQuestion,i)=>({...theQuestion, questionNumber:i}))
 const structures = require('json!../data/structures.json');
 const images = require('json!../data/images.json');
 const existingScores = {}; //require('json!https://apps.tlt.stonybrook.edu/brainPicker/getScores.php?...')
