@@ -1,4 +1,4 @@
-import {Colors, Button} from 'react-foundation';
+import {Colors, Button,Column} from 'react-foundation';
 
 const submitBtnStyle = {
   float: "right",
@@ -6,5 +6,7 @@ const submitBtnStyle = {
 };
 
 export default ({questionNumber, onClick}) => (
-	<Button color={Colors.SUCCESS} style={submitBtnStyle} onClick={onClick}>Submit</Button>
+  <Column small={2} large={4}>
+  <Button color={Colors.SUCCESS} style={submitBtnStyle} onClick={onClick}>Submit</Button>
+  </Column>
 );
