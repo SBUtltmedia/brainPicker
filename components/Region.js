@@ -16,12 +16,25 @@ const styleSVG = {
  };
 
 
+ const mapStateToProps = (state, ownProps) => {
+   return {
+ 		isCurrentQuestion: state.currentQuestion.questionNumber === ownProps.questionNumber
+   };
+ }
+ const mapDispatchToProps = (dispatch, ownProps, state) => ({
+ 	rmMarker: (i) => dispatch(removeMarker(ownProps.question))
+ });
+
+
+
+
 export default ({actions, currentQuestion, images}) => {
   const src = "data/images/catscan/" + images[currentQuestion.layer];
 // src = "data/images/catscan/001.png"
 //  const src = "data/images/catscan/"+Array(3-i.toString().length).fill("0").join("")+i+".png";
   // .log("CURRENTQUESITON POINTS",JSON.stringify(currentQuestion));
-  const points = currentQuestion.points[currentQuestion["layer"].toString()] || [] ;
+  console.log
+  const points = currentQuestion.points[(currentQuestion["layer"]+1).toString()] || [] ;
 //  console.log(JSON.stringify(structures));
 //  const points = currentQuestion.points[currentQuestion.layer] || [];
   const markers = currentQuestion.markers[currentQuestion.layer - 1] || [];
@@ -36,7 +49,7 @@ export default ({actions, currentQuestion, images}) => {
       {dot && _.includes(dot.layers, currentQuestion.layer) ? <QuestionDot color="green" position={dot.location} /> : ''}
 
       {markers.map((marker, i) =>
-        <Marker color={"#93268f"} position={marker.position} key={i} onClick={() => actions.removeMarker(i)} />)}
+        <Marker color={"#93268f"} position={marker.position} key={i} onClick={()=>rmMarker(i)} />)}
 
 
     </svg>
