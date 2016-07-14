@@ -9,6 +9,8 @@ import Marker from '../components/Marker';
 import Monitor from '../components/Monitor';
 import Region from '../components/Region';
 import LayerChanger from '../components/LayerChanger';
+import {Grid,Column,Row} from 'react-foundation';
+import SubmitBtn from '../components/SubmitBtn';
 //import MultistepSlider from 'react-multistep';
 
 const regionStyle = {
@@ -33,15 +35,37 @@ class App extends React.Component {
   render() {
     const { questions, structures, currentQuestion, images } = this.props;
     return <div>
-      <div>
 
-          <ButtonBank actions={this.actions} questions={questions}/>
+          <Row className="display">
+          <Column large={6} columns>
+          <Monitor actions={this.actions} currentQuestion={currentQuestion} images={images} />
+          </Column>
+          <Column large={1} columns>
+          <LayerChanger style={changerStyle} layer={currentQuestion.layer} actions={this.actions} value={this.actions.findQuestionDot.bind()} max={images.length} currentQuestion={currentQuestion} />
+          </Column>
+          <Column large={5} columns>
+          <Row className="display">
           <Question actions={this.actions} currentQuestion={currentQuestion} />
           <Status actions={this.actions} currentQuestion={currentQuestion} />
-      </div>
-      <div>
-        <Monitor actions={this.actions} currentQuestion={currentQuestion} value={this.actions.findQuestionDot()} images={images} />
-      </div>
+          <Row className="display">
+          <Column large={4}  offsetOnLarge={6}>
+            <SubmitBtn onClick={this.actions.submitAnswers} />
+          </Column>
+          </Row>
+          </Row>
+          <Row className="display">
+          <ButtonBank actions={this.actions} questions={questions}/>
+          </Row>
+          </Column>
+          </Row>
+
+
+
+
+
+
+
+
     </div>;
   }
 }
