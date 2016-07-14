@@ -15,7 +15,7 @@ const changerStyle = {
 
 
 
-export default ({actions, currentQuestion, images, value}) => {
+export default ({actions, currentQuestion, images}) => {
 
   return (
   <div onWheel={e=>actions.wheelChangeLayer(e.deltaY)}>
@@ -23,8 +23,6 @@ export default ({actions, currentQuestion, images, value}) => {
   <div style={regionStyle}>
     <Region actions={actions} currentQuestion={currentQuestion} images={images} />
   </div>
-  <div style={changerStyle}>
-    <LayerChanger layer={currentQuestion.layer} actions={actions} value={value} max={images.length} currentQuestion={currentQuestion} />
-  </div>
+
   </div>)
 }
