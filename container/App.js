@@ -37,6 +37,10 @@ class App extends React.Component {
     return <div>
 
           <Row className="display">
+          <Column large={8} columns><h1>BrainPicker</h1></Column>
+          <Column large={4} columns><h3>Stonybrook University</h3></Column>
+          </Row>
+          <Row className="display">
           <Column large={6} columns>
           <Monitor actions={this.actions} currentQuestion={currentQuestion} images={images} />
           </Column>
