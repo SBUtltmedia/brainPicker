@@ -3,20 +3,22 @@ div.poly  {
 }
 
 
-
-
 	input[type=range].layerPicker {
 	  -webkit-appearance: none;
-		-moz-transform: rotate(270deg);
-		-webkit-transform:rotate(90deg);
+		/* -moz-transform: rotate(270deg);
+		-webkit-transform:rotate(90deg); */
+		-webkit-appearance: slider-vertical;
 	  margin: -3.1px 0;
+		height:100%;
+		width:30%;
+
 	}
 	input[type=range].layerPicker:focus {
 	  outline: none;
 	}
 	input[type=range].layerPicker::-webkit-slider-runnable-track {
 
-	  height: 31.2px;
+
 	  cursor: pointer;
 	  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
 	  background: #46262c;
@@ -26,8 +28,8 @@ div.poly  {
 	input[type=range].layerPicker::-webkit-slider-thumb {
 	  box-shadow: 1.8px 1.8px 5.9px rgba(255, 0, 0, 0.49), 0px 0px 1.8px rgba(255, 26, 26, 0.49);
 	  border: 2.9px solid #941e00;
-	  height: 25px;
-	  width: 34px;
+	  height: 90%;
+	  width: 25%;
 	  border-radius: 28px;
 	  background: rgba(255, 55, 56, 0.93);
 	  cursor: pointer;
