@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {Colors, Button} from 'react-foundation';
+import {Colors, Button, Sizes} from 'react-foundation';
 import {changeLayer} from '../actions/actions';
 
 const mapStateToProps = (state, ownProps) => {
@@ -23,10 +23,13 @@ const mapDispatchToProps = (dispatch, ownProps, state) => ({
 const PointDisplay = ({markers,pointsPerLayer,layer,layerNum,changeLayer}) =>{
 const buttonColor = Colors.ALERT;
 const layerMarkers = markers[layer];
+const PDBtnStyle = {
+  margin: "0",
+};
 console.log(layerMarkers);
  return (
    <div>
-{ Array(pointsPerLayer).fill(0).map((nothing, i) =>	<Button color={(layerMarkers || []).length > i ? Colors.SUCCESS : Colors.ALERT} key={i}  buttonNumber={i}   onClick={changeLayer}></Button>)}
+{ Array(pointsPerLayer).fill(0).map((nothing, i) =>	<Button style={PDBtnStyle} size={Sizes.TINY} color={(layerMarkers || []).length > i ? Colors.SUCCESS : Colors.ALERT} key={i}  buttonNumber={i}   onClick={changeLayer}></Button>)}
 </div>)
 
 }

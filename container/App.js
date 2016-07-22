@@ -41,13 +41,13 @@ class App extends React.Component {
           <Column large={4} columns><h3>Stonybrook University</h3></Column>
           </Row>
           <Row className="display">
-          <Column large={6} columns>
+          <Column large={6} small={12} medium={5} columns>
           <Monitor actions={this.actions} currentQuestion={currentQuestion} images={images} />
           </Column>
-          <Column large={1} columns>
+          <Column large={2} columns>
           <LayerChanger style={changerStyle} layer={currentQuestion.layer} actions={this.actions} value={this.actions.findQuestionDot.bind()} max={images.length} currentQuestion={currentQuestion} />
           </Column>
-          <Column large={5} columns>
+          <Column large={4} columns>
           <Row className="display">
           <Question actions={this.actions} currentQuestion={currentQuestion} />
           <Status actions={this.actions} currentQuestion={currentQuestion} />
