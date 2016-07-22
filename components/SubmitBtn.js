@@ -1,8 +1,7 @@
 import {Colors, Button,Column} from 'react-foundation';
 
 const submitBtnStyle = {
-  float: "right",
-  marginRight:"5%"
+  
 };
 
 export default ({questionNumber, onClick}) => (

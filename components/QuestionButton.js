@@ -1,4 +1,4 @@
-import {Colors, Button} from 'react-foundation';
+import {Colors, Button, Sizes} from 'react-foundation';
 import { connect } from 'react-redux';
 import {showQuestion} from '../actions/actions';
 
@@ -17,7 +17,7 @@ const QuestionButton = ({question, isCurrentQuestion, showQuestion, questionNumb
 const buttonColor = isCurrentQuestion ? Colors.WARNING : Colors.ALERT;
 
  return (
-	<Button color={buttonColor} onClick={showQuestion}>{questionNumber+1}</Button>
+	<Button size={Sizes.SMALL} color={buttonColor} onClick={showQuestion}>{questionNumber+1}</Button>
 );
 }
 

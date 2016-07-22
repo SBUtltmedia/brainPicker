@@ -15,15 +15,6 @@ const mapDispatchToProps = (dispatch, ownProps, state) => ({
 
 
 
-
-
-const styleRange = {
-
- };
-
-
-
-
 export default ({max}) => {
 console.log(max)
 
