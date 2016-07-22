@@ -7,6 +7,7 @@ const mapStateToProps = (state, ownProps) => {
 		markers: state.currentQuestion.markers,
     pointsPerLayer:state.currentQuestion.pointsPerLayer,
     layerNum:state.currentQuestion.layer
+
   };
 }
 const mapDispatchToProps = (dispatch, ownProps, state) => ({
@@ -19,12 +20,13 @@ const mapDispatchToProps = (dispatch, ownProps, state) => ({
 });
 
 
-const PointDisplay = ({markers,pointsPerLayer,layerNum,changeLayer}) =>{
+const PointDisplay = ({markers,pointsPerLayer,layer,layerNum,changeLayer}) =>{
 const buttonColor = Colors.ALERT;
-console.log(pointsPerLayer)
+const layerMarkers = markers[layer];
+console.log(layerMarkers);
  return (
    <div>
-{ Array(pointsPerLayer).fill(0).map((nothing, i) =>	<Button color={buttonColor} key={i}  buttonNumber={i}   onClick={changeLayer}></Button>)}
+{ Array(pointsPerLayer).fill(0).map((nothing, i) =>	<Button color={(layerMarkers || []).length > i ? Colors.SUCCESS : Colors.ALERT} key={i}  buttonNumber={i}   onClick={changeLayer}></Button>)}
 </div>)
 
 }
