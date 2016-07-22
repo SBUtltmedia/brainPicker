@@ -1,5 +1,4 @@
 import ReactSlider from 'react-slider';
-import './LayerChanger.scss';
 import PointDisplayBank from './PointDisplayBank';
 const styleRange = {
 

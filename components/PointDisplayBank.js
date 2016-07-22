@@ -30,7 +30,7 @@ console.log(max)
 	return <div>
 
 
-	{ Array(max).fill(0).map((nothing, i) =>	<PointDisplay key={i} layer={i}/>)}
+	{ Array(max).fill(0).map((nothing, i) =>	<PointDisplay key={i} layer={max - 1 - i}/>)}
 	</div>
 
 
