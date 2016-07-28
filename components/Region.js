@@ -1,6 +1,7 @@
-
+import { connect } from 'react-redux';
 import Marker from '../components/Marker';
 import QuestionDot from '../components/QuestionDot';
+import {removeMarker} from '../actions/actions';
 import _ from 'lodash';
 
 const styleSVG = {
@@ -15,20 +16,27 @@ const styleSVG = {
    height : '100%',
  };
 
+ // Enables xmlns tag in SVG
+const DOMProperty = require('react/lib/ReactInjection').DOMProperty;
+DOMProperty.injectDOMPropertyConfig({
+  Properties: {
+    xmlns: DOMProperty.MUST_USE_ATTRIBUTE
+  },
+  isCustomAttribute: (attributeName) => {
+    return attributeName === 'xmlns';
+  }
+});
 
  const mapStateToProps = (state, ownProps) => {
    return {
- 		isCurrentQuestion: state.currentQuestion.questionNumber === ownProps.questionNumber
+     isCurrentQuestion: state.currentQuestion.questionNumber === ownProps.questionNumber
    };
  }
- const mapDispatchToProps = (dispatch, ownProps, state) => ({
- 	rmMarker: (i) => dispatch(removeMarker(ownProps.question))
+ const mapDispatchToProps = dispatch => ({
+ 	rmMarker: index => dispatch(removeMarker(index))
  });
 
-
-
-
-export default ({actions, currentQuestion, images}) => {
+const Region = ({actions, currentQuestion, rmMarker, images}) => {
   const src = "data/images/catscan/" + images[currentQuestion.layer];
 // src = "data/images/catscan/001.png"
 //  const src = "data/images/catscan/"+Array(3-i.toString().length).fill("0").join("")+i+".png";
@@ -49,9 +57,14 @@ export default ({actions, currentQuestion, images}) => {
       {dot && _.includes(dot.layers, currentQuestion.layer) ? <QuestionDot color="green" position={dot.location} /> : ''}
 
       {markers.map((marker, i) =>
-        <Marker color={"#93268f"} position={marker.position} key={i} onClick={()=>rmMarker(i)} />)}
+        <Marker color={"#93268f"} position={marker.position} key={i} onClick={() => rmMarker(i)} />)}
 
 
     </svg>
   </div>;
 }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Region);

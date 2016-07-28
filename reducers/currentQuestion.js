@@ -47,7 +47,6 @@ export function removeMarkerFromLayer(layer, markers, index) {
   return [...markers.slice(0, layerIndex), layerMarkers, ...markers.slice(layerIndex + 1)]
 }
 
-
 export default function currentQuestion(state = initialState, action) {
 console.log(action);
   switch (action.type) {
@@ -69,10 +68,7 @@ console.log(action);
       if(maxLayer){
         return Object.assign({}, state, {markers: markers });
       }
-
-
     case types.REMOVE_MARKER:
-
       return Object.assign({}, state, {markers: removeMarkerFromLayer(state.layer, state.markers, action.index)})
     case types.CLEAR_MARKERS:
       return Object.assign({}, state, {markers: []})
