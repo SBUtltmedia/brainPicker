@@ -19,6 +19,7 @@
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-foundation": "*",
+    "react-joyride": "^1.4.7",
     "react-multistep": "*",
     "react-progress": "*",
     "react-progress-bar-plus": "^1.2.0",
