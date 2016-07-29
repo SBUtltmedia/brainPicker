@@ -20,16 +20,24 @@ const mapDispatchToProps = (dispatch, ownProps, state) => ({
 });
 
 
-const PointDisplay = ({markers,pointsPerLayer,layer,layerNum,changeLayer}) =>{
+const PointDisplay = ({markers,pointsPerLayer,layer,layerNum,changeLayer,isCurrentLayer}) =>{
 const buttonColor = Colors.ALERT;
 const layerMarkers = markers[layer];
 const PDBtnStyle = {
   margin: "0",
 };
+
+const bumpStyle = {
+  "position": "relative",
+  "left" : "10",
+  "top"  : "10"
+};
+
 console.log(layerMarkers);
  return (
    <div>
-{ Array(pointsPerLayer).fill(0).map((nothing, i) =>	<Button style={PDBtnStyle} size={Sizes.TINY} color={(layerMarkers || []).length > i ? Colors.SUCCESS : Colors.ALERT} key={i}  buttonNumber={i}   onClick={changeLayer}></Button>)}
+{ Array(pointsPerLayer).fill(0).map((nothing, i) =>
+  	<Button style={layer==layerNum-1 ? bumpStyle:PDBtnStyle } size={Sizes.TINY} color={(layerMarkers || []).length > i ? Colors.SUCCESS : Colors.ALERT} key={i}   buttonNumber={i}   onClick={changeLayer}></Button>)}
 </div>)
 
 }
