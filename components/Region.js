@@ -16,17 +16,6 @@ const styleSVG = {
    height : '100%'
  };
 
- // Enables xmlns tag in SVG
-const DOMProperty = require('react/lib/ReactInjection').DOMProperty;
-DOMProperty.injectDOMPropertyConfig({
-  Properties: {
-    xmlns: DOMProperty.MUST_USE_ATTRIBUTE
-  },
-  isCustomAttribute: (attributeName) => {
-    return attributeName === 'xmlns';
-  }
-});
-
  const mapStateToProps = (state, ownProps) => {
    return {
      isCurrentQuestion: state.currentQuestion.questionNumber === ownProps.questionNumber
