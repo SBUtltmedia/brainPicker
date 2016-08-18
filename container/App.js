@@ -33,7 +33,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { questions, structures, currentQuestion, images } = this.props;
+    const { questions, structures, layer, images } = this.props;
     return <div>
 
           <Row className="display">
@@ -42,15 +42,15 @@ class App extends React.Component {
           </Row>
           <Row className="display">
           <Column large={6} small={12} medium={5} columns>
-          <Monitor actions={this.actions} currentQuestion={currentQuestion} images={images} />
+          <Monitor actions={this.actions} images={images} />
           </Column>
           <Column large={2} columns>
-          <LayerChanger style={changerStyle} layer={currentQuestion.layer} actions={this.actions} value={this.actions.findQuestionDot.bind()} max={images.length} currentQuestion={currentQuestion} />
+          <LayerChanger style={changerStyle} layer={layer} actions={this.actions} value={this.actions.findQuestionDot.bind()} max={images.length} />
           </Column>
           <Column large={4} columns>
           <Row className="display">
-          <Question actions={this.actions} currentQuestion={currentQuestion} />
-          <Status actions={this.actions} currentQuestion={currentQuestion} />
+          <Question actions={this.actions} />
+          <Status actions={this.actions} />
           <Row className="display">
           <Column large={4}  offsetOnLarge={6}>
             <SubmitBtn onClick={this.actions.submitAnswers} />

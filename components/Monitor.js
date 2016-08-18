@@ -13,15 +13,13 @@ const changerStyle = {
   position : "absolute"
 };
 
-
-
-export default ({actions, currentQuestion, images}) => {
+export default ({actions, images}) => {
 
   return (
   <div onWheel={e=>actions.wheelChangeLayer(e.deltaY)}>
 
   <div style={regionStyle}>
-    <Region actions={actions} currentQuestion={currentQuestion} images={images} />
+    <Region actions={actions} images={images} />
   </div>
 
   </div>)

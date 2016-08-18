@@ -4,21 +4,19 @@ import {changeLayer} from '../actions/actions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-		markers: state.currentQuestion.markers,
-    pointsPerLayer:state.currentQuestion.pointsPerLayer,
-    layerNum:state.currentQuestion.layer
+		markers: state.markers,
+    pointsPerLayer:state.pointsPerLayer,
+    layerNum:state.layer
 
   };
 }
+
 const mapDispatchToProps = (dispatch, ownProps, state) => ({
-
-  		changeLayer: () => {
-        console.log(ownProps)
-        dispatch(changeLayer(ownProps.layer+1))
-      }
-
+	changeLayer: () => {
+    console.log(ownProps)
+    dispatch(changeLayer(ownProps.layer+1))
+  }
 });
-
 
 const PointDisplay = ({markers,pointsPerLayer,layer,layerNum,changeLayer,isCurrentLayer}) =>{
 const buttonColor = Colors.ALERT;
