@@ -10,7 +10,7 @@ import App from './container/App';
 import Foundation from 'react-foundation';
 import './main.scss';
 
-const SHOW_DEV_TOOLS = true;
+const SHOW_DEV_TOOLS = false;
 
 const DevTools = createDevTools(
   <DockMonitor toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q" defaultIsVisible={SHOW_DEV_TOOLS}>
