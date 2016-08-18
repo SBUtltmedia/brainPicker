@@ -5,7 +5,7 @@ import {showQuestion} from '../actions/actions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-		isCurrentQuestion: state.currentQuestion.questionNumber === ownProps.questionNumber
+		isCurrentQuestion: state.questionNumber === ownProps.questionNumber
   };
 }
 const mapDispatchToProps = (dispatch, ownProps, state) => ({

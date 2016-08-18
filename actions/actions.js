@@ -19,11 +19,9 @@ export function showQuestion(question) {
 
 export function submitAnswers() {
   return (dispatch, getState) => {
-    const { images, currentQuestion } = getState();
-    const { markers } = currentQuestion;
-    console.log(currentQuestion);
+    const { images, requestLayers, pointsPerLayer, markers } = getState();
     const numLayers = images.length;
-    const totalPoint = currentQuestion.requestLayers * currentQuestion.pointsPerLayer;
+    const totalPoint = requestLayers * pointsPerLayer;
     var corPoint =0;
     console.log(totalPoint);
     var i = 1;

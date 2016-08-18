@@ -5,8 +5,8 @@ import {changeLayer} from '../actions/actions';
 import PointDisplay from './PointDisplay';
 const mapStateToProps = (state, ownProps) => {
   return {
-		markers: state.currentQuestion.markers,
-    pointsPerLayer:state.currentQuestion.pointsPerLayer,
+		markers: state.markers,
+    pointsPerLayer:state.pointsPerLayer,
   };
 }
 const mapDispatchToProps = (dispatch, ownProps, state) => ({

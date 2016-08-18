@@ -1,13 +1,13 @@
 
-export default ({actions, currentQuestion}) => {
+export default ({actions, questionText, pointsPerLayer, requestLayers, region}) => {
 	var result;
-	if(currentQuestion.questionText == ""){
+	if(questionText == ""){
 		result =  (<div>
-						 Please pick {currentQuestion.pointsPerLayer} points on {currentQuestion.requestLayers} Layers in the <u>{currentQuestion.region}</u>
+						 Please pick {pointsPerLayer} points on {requestLayers} Layers in the <u>{region}</u>
 						</div>);
 
 	}else{
-		result = (<div>{currentQuestion.questionText}</div>);
+		result = (<div>{questionText}</div>);
 
 	}
 

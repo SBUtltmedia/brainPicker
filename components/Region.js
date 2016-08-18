@@ -18,37 +18,31 @@ const styleSVG = {
 
  const mapStateToProps = (state, ownProps) => {
    return {
-     isCurrentQuestion: state.currentQuestion.questionNumber === ownProps.questionNumber
+     isCurrentQuestion: state.questionNumber === ownProps.questionNumber,
+     layer: state.layer,
+     layerPoints: state.points[(state.layer + 1).toString()] || [],
+     layerMarkers: state.markers[state.layer - 1] || [],
+     questionDot: state.questionDot,
    };
  }
  const mapDispatchToProps = dispatch => ({
  	rmMarker: index => dispatch(removeMarker(index))
  });
 
-const Region = ({actions, currentQuestion, rmMarker, images}) => {
-  const src = "data/images/catscan/" + images[currentQuestion.layer];
-// src = "data/images/catscan/001.png"
-//  const src = "data/images/catscan/"+Array(3-i.toString().length).fill("0").join("")+i+".png";
-  // .log("CURRENTQUESITON POINTS",JSON.stringify(currentQuestion));
-  console.log
-  const points = currentQuestion.points[(currentQuestion["layer"]+1).toString()] || [] ;
-//  console.log(JSON.stringify(structures));
-//  const points = currentQuestion.points[currentQuestion.layer] || [];
-  const markers = currentQuestion.markers[currentQuestion.layer - 1] || [];
-  const dot = currentQuestion.questionDot;
+const Region = ({actions, layer, questionDot, layerMarkers, layerPoints, rmMarker, images}) => {
+  const src = "data/images/catscan/" + images[layer];
+  const dot = questionDot;
   return <div>
     <svg id="brainImage" xmlns="http://www.w3.org/2000/svg" style={styleSVG} viewBox="0 0 500 500" >
     <image x="0" y="0" width="100%" height="100%" xlinkHref={src} id="#brainImage" onClick={(e)=>actions.putMarker(e,false)}/>
-          {points.map((contiguousPoints, i) =>
+          {layerPoints.map((contiguousPoints, i) =>
             <polygon style={styleSVG} key={i} onClick={(e) =>{console.log('hit');actions.putMarker(e,true)}}
             points={contiguousPoints.map((eachP, i) => i % 2 === 0 ? eachP - 5 : eachP) } />)}
 
-      {dot && _.includes(dot.layers, currentQuestion.layer) ? <QuestionDot color="green" position={dot.location} /> : ''}
+      {dot && _.includes(dot.layers, layer) ? <QuestionDot color="green" position={dot.location} /> : ''}
 
-      {markers.map((marker, i) =>
+      {layerMarkers.map((marker, i) =>
         <Marker color={"#93268f"} position={marker.position} key={i} onClick={() => rmMarker(i)} />)}
-
-
     </svg>
   </div>;
 }
