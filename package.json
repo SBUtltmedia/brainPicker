@@ -35,11 +35,11 @@
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "mocha": "^2.4.5",
+    "node-sass": "^3.4.2",
     "raw-loader": "^0.5.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
-    "node-sass": "^3.4.2",
-    "webpack": "^1.12.12"
+    "webpack": "^2.2.0"
   },
   "peerDependencies": {}
 }

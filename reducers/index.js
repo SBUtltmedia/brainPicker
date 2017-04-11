@@ -3,10 +3,10 @@ import currentQuestion from './currentQuestion';
 import scores from './scores';
 import * as types from '../constants/ActionTypes';
 
-const questions = require('json!../data/questions.json');
-const structures = require('json!../data/structures.json');
-const images = require('json!../data/images.json');
-const existingScores = {}; //require('json!https://apps.tlt.stonybrook.edu/brainPicker/getScores.php?...')
+const questions = require('../data/questions.json');
+const structures = require('../data/structures.json');
+const images = require('../data/images.json');
+const existingScores = {}; //require('https://apps.tlt.stonybrook.edu/brainPicker/getScores.php?...')
 
 const initialState = {
   questions: questions,
