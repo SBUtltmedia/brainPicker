@@ -16,12 +16,15 @@ export function checkLeftLayers(pointLayer,RequestLayer,markers){
   var layerUsed =0 ;
   console.log("MARK_DATA",mark);
   console.log("MARK_LENGTH",mark.length);
+
+  /*
 	if(mark.length>0){
 		layerUsed= (mark.map((h)=>{var accum=0;if(h && h.length>0)accum++;return accum;})).reduce( (prev, curr) => prev + curr );
 
 	}
   console.log("LAYERUSED",layerUsed);
   console.log("REUQESTLAYER",RequestLayer);
+  */
 
   if(layerUsed <=RequestLayer)
     return true;
@@ -49,10 +52,8 @@ export function removeMarkerFromLayer(layer, markers, index) {
 
 
 export default function currentQuestion(state = initialState, action) {
-console.log(action);
   switch (action.type) {
     case types.SHOW_QUESTION:
-      console.log(action);
       const layer = action.question.questionDot ? action.question.questionDot.layers[0] : DEFAULT_LAYER;
     //  const newLeftpoints[state.layer] =
       return Object.assign({}, state, {questionText:'', ...action.question, markers: [], layer: layer, points: action.points, leftPoints : [state.pointsPerLayer], leftLayers : 0});
