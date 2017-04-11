@@ -10,10 +10,10 @@ export function findQuestionDot() {
   };
 }
 
-export function showQuestion(question) {
+export function showQuestion(index) {
   return {
     type: types.SHOW_QUESTION,
-    question: question
+    questionIndex: index
   };
 }
 

@@ -39,7 +39,7 @@ const Region = ({actions, layer, questionDot, layerMarkers, layerPoints, rmMarke
             <polygon style={styleSVG} key={i} onClick={(e) =>{console.log('hit');actions.putMarker(e,true)}}
             points={contiguousPoints.map((eachP, i) => i % 2 === 0 ? eachP - 5 : eachP) } />)}
 
-      {dot && _.includes(dot.layers, layer) ? <QuestionDot color="green" position={dot.location} /> : ''}
+      {dot && _.includes(dot.layers, layer) && <QuestionDot color="green" position={dot.location} />}
 
       {layerMarkers.map((marker, i) =>
         <Marker color={"#93268f"} position={marker.position} key={i} onClick={() => rmMarker(i)} />)}

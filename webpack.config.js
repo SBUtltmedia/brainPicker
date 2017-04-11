@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
   entry: './index',
-  devtool: '#eval-cheap-module-source-map',
+  devtool: 'source-map',
   output: { path: __dirname, filename: 'bundle.js' },
   plugins: [
     new webpack.ProvidePlugin({ 'React': 'react'})
