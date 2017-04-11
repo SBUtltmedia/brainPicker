@@ -8,15 +8,12 @@ const existingScores = {}; //require('https://apps.tlt.stonybrook.edu/brainPicke
 
 const DEFAULT_LAYER = 1;
 
-
 const initialState = {
-  questions: questions,
-  structures: structures,
-  images: images,
+  questions,
+  structures,
+  images,
   currentQuestionIndex: 0,
   questionScores: {},
-  region: questions[0].region,
-  points: structures[questions[0].region],
   layer: DEFAULT_LAYER,
   markers: [],
   questionDot: questions[0].questionDot,
@@ -66,7 +63,7 @@ export default function mainReducer(state = initialState, action) {
       var marker = {position: action.position, isHit: action.isHit};
       var markers = addMarkerToLayer(state.layer, state.markers, marker, currentQuestion.pointsPerLayer);
       var maxLayer = checkLeftLayers(currentQuestion.pointsPerLayer, state.layer, markers);
-      console.log("MAxLayer",maxLayer)
+      console.log("MAxLayer", maxLayer)
       if (maxLayer){
         return {...state, markers: markers};
       }
