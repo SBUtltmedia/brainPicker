@@ -59,7 +59,7 @@ export function putMarker(offsetX, offsetY, isHit) {
   var dim = document.getElementById("brainImage").getBoundingClientRect();
   var x = 500 * offsetX / dim.width;
   var y = 500 * offsetY / dim.height;
-  return{
+  return {
     type : types.ADD_MARKER,
     position: [x, y],
     isHit: isHit

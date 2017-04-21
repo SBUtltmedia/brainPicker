@@ -6,7 +6,7 @@ import structures from 'data/structures.json';
 import images from 'data/images.json';
 
 const DEFAULT_LAYER = 1;
-const questions = questionsData.map((theQuestion,i) => ({...theQuestion, questionNumber:i}))
+const questions = questionsData.map((q, i) => ({...q, questionNumber: i}))
 
 const initialState = {
   questions,
@@ -15,7 +15,7 @@ const initialState = {
   currentQuestionIndex: 0,
   questionScores: {},
   layer: DEFAULT_LAYER,
-  markers: [],
+  markers: {},
   questionDot: questions[0].questionDot,
 };
 
@@ -36,14 +36,14 @@ export default function mainReducer(state = initialState, action) {
     case types.ADD_MARKER:
       const currentQuestion = getCurrentQuestion(state)
       var marker = {position: action.position, isHit: action.isHit};
-      var markers = markerUtils.addMarkerToLayer(state.layer, state.markers, marker, currentQuestion.pointsPerLayer);
-      var maxLayer = markerUtils.checkLeftLayers(currentQuestion.pointsPerLayer, state.layer, markers);
+      var markers = markerUtils.addMarkerToLayer(state.markers, state.layer, marker, currentQuestion.pointsPerLayer);
+      var maxLayer = markerUtils.checkLeftLayers(state.markers, currentQuestion.pointsPerLayer, state.layer);
       console.log("MAxLayer", maxLayer)
       if (maxLayer){
-        return {...state, markers: markers};
+        return {...state, markers};
       }
     case types.REMOVE_MARKER:
-      return {...state, markers: markerUtils.removeMarkerFromLayer(state.layer, state.markers, action.index)};
+      return {...state, markers: markerUtils.removeMarkerFromLayer(state.markers, state.layer, action.index)};
     case types.CLEAR_MARKERS:
       return {...state, markers: []};
     default:
