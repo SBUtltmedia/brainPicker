@@ -1,15 +1,5 @@
 import * as types from '../constants/ActionTypes';
 
-var questionDots;
-
-export function findQuestionDot() {
-
-  return{
-    type: types.LOAD_QUESTION_DOTS,
-    questionDots : questionDots
-  };
-}
-
 export function showQuestion(index) {
   return {
     type: types.SHOW_QUESTION,
@@ -32,30 +22,19 @@ export function submitAnswers() {
             if(markers[i-1][j].isHit==true){
               //Add corrected Points
               corPoint++;
-
-
-
             }
           }
         }
-
         i += 1;
         if (i >= numLayers) {
           clearInterval(interval);
-
           const percetPoi = corPoint/ totalPoint*100;
           console.log("CORRECT POINT",corPoint);
           console.log("CORRECT PER",percetPoi.toPrecision(3));
           dispatch({
             type: types.SUBMIT_ANSWERS
           });
-
-
         }
-
-
-
-
     }, 300);
   };
 }
@@ -67,8 +46,6 @@ export function changeLayer(layer) {
   }
 }
 
-
-
 export function wheelChangeLayer(deltaY) {
   return {
     type: types.WHEEL_CHANGE,
@@ -76,7 +53,7 @@ export function wheelChangeLayer(deltaY) {
   }
 }
 
-export function putMarker(e, isHit) {
+export function putMarker(isHit) {
   var dim = document.getElementById("brainImage").getBoundingClientRect();
   var x = 500 * (e.clientX - dim.left) / dim.width;
   var y = 500 * (e.clientY- dim.top) / dim.height;
