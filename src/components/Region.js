@@ -18,7 +18,7 @@ const styleSVG = {
 
  const mapStateToProps = (state, ownProps) => {
    const question = state.questions[ownProps.questionNumber]
-   const points = question ? _.values(state.structures)[ownProps.questionNumber] : []
+   const points = question ? _.values(state.structures)[question.region] : []
    const questionDot = question ? question.questionDot : undefined
    return {
      imgSrc: "data/images/catscan/" + state.images[state.layer],
@@ -43,13 +43,13 @@ const Region = ({imgSrc, layer, dot, layerMarkers, layerPoints, removeMarker, pu
                height="100%"
                xlinkHref={imgSrc}
                id="#brainImage"
-               onClick={() => putMarker(false)}
+               onClick={(e) => putMarker(e.nativeEvent.offsetX, e.nativeEvent.offsetY, false)}
          />
             {layerPoints.map((contiguousPoints, i) =>
               <polygon style={styleSVG}
                        key={i}
-                       onClick={() => putMarker(true)}
-                       points={contiguousPoints.map((eachP, i) => i % 2 === 0 ? eachP - 5 : eachP)}
+                       onClick={(e) => putMarker(e.nativeEvent.offsetX, e.nativeEvent.offsetY, true)}
+                       points={contiguousPoints.map((p, i) => i % 2 === 0 ? p - 5 : p)}
               />
             )}
         {dot && <QuestionDot color="green" position={dot.location} />}

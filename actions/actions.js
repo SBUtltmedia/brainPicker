@@ -1,6 +1,13 @@
 import * as types from '../constants/ActionTypes';
 
-//'https://apps.tlt.stonybrook.edu/brainPicker/getScores.php?...'
+var questionDots;
+
+export function findQuestionDot() {
+  return {
+    type: types.LOAD_QUESTION_DOTS,
+    questionDots
+  };
+}
 
 export function showQuestion(index) {
   return {
@@ -30,7 +37,7 @@ export function submitAnswers() {
         i += 1;
         if (i >= numLayers) {
           clearInterval(interval);
-          const percetPoi = corPoint / totalPoint * 100;
+          const percetPoi = corPoint/ totalPoint*100;
           console.log("CORRECT POINT",corPoint);
           console.log("CORRECT PER",percetPoi.toPrecision(3));
           dispatch({
@@ -48,6 +55,8 @@ export function changeLayer(layer) {
   }
 }
 
+
+
 export function wheelChangeLayer(deltaY) {
   return {
     type: types.WHEEL_CHANGE,
@@ -55,10 +64,10 @@ export function wheelChangeLayer(deltaY) {
   }
 }
 
-export function putMarker(offsetX, offsetY, isHit) {
+export function putMarker(x, y, isHit) {
   var dim = document.getElementById("brainImage").getBoundingClientRect();
-  var x = 500 * offsetX / dim.width;
-  var y = 500 * offsetY / dim.height;
+  var x = 500 * (x - dim.left) / dim.width;
+  var y = 500 * (y - dim.top) / dim.height;
   return{
     type : types.ADD_MARKER,
     position: [x, y],

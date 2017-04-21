@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+  context: path.resolve('./'),
   entry: './src/index',
   devtool: 'source-map',
   output: { path: __dirname, filename: 'bundle.js' },
@@ -20,5 +21,10 @@ module.exports = {
       test: /\.json$/,
       loader: 'json-loader'
     }]
-  }
+  },
+  resolve: {
+    alias: {
+      data: path.resolve('data'),
+    }
+  }
 };
