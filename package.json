@@ -1,0 +1,50 @@
+{
+  "name": "finalreact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --progress --colors"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-loader": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "foundation-sites": "*",
+    "json-loader": "*",
+    "lodash": "^4.14.0",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "react-foundation": "*",
+    "react-joyride": "^1.4.7",
+    "react-multistep": "*",
+    "react-progress": "*",
+    "react-progress-bar-plus": "^1.2.0",
+    "react-redux": "*",
+    "react-slider": "*",
+    "redux": "*",
+    "redux-thunk": "*"
+  },
+  "devDependencies": {
+    "babel-core": "^6.4.5",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "chai": "^3.5.0",
+    "css-loader": "^0.23.1",
+    "mocha": "^2.4.5",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "node-sass": "^3.4.2",
+    "webpack": "^1.12.12",
+    "redux-devtools": "^3.3.1",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.0.11"
+  },
+  "peerDependencies": {}
+}
