@@ -1,1 +1,1 @@
-{"Spinal Cord":0,"Medulla Oblongata":0,"area medial and caudal to the green point":0,"Temporal Lobe":0,"Frontal Lobe":0}
+{"dolphin":{"area medial and caudal to the green point":{"Total":103,"score":100,"ab":3},"Spinal Cord":{"Total":50,"score":50,"ab":0}},"human":{"area medial and caudal to the green point":{"Total":103,"score":100,"ab":3},"Spinal Cord":{"Total":0,"score":0,"ab":0},"Midbrain":{"Total":0,"score":0,"ab":0}}}
