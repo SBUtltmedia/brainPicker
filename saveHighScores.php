@@ -1,35 +1,54 @@
 <?php
-
-function saveHighScores($user
+function saveHighScores($user, $brain, $question)
+{
 $dir = getcwd() . '/rawdata/';
 $files = scandir($dir);
-$highScores = JSON_decode(file_get_contents(getcwd() ."/highScores.json"));
+$highScores = JSON_decode(file_get_contents($brain ."/highScores.json"));
 
 //$highScores -> {$key}[0] is Username
 //$highScores -> {$key}[1] is score
 //$files[$i] is username for $theTrials
 
 
-    $theTrials = JSON_decode(file_get_contents("rawdata/".$user));
-    //$j=0;
+    $theTrials = JSON_decode(getUserJSON($user));
+    $userValues = $theTrials->$brain->$question;
+    print_r($userValues->Total);
+    $foundQuestion = false;
     foreach($highScores as $key => $value){
-
-
-
-    if (!property_exists($theTrials,$keys) && $theTrials->{$key} > $highScores -> {$key}[1] )
+      if ($key!=$question) continue;
+      $foundQuestion = true;
+      print("
+      Found match
+      ");
+    if ($userValues->Total > $highScores -> {$key}[1] )
     {
-    $highScores -> {$key}[1] =$theTrials->{$key};
-    $highScores -> {$key}[0]= $files[$i];
-
+      print ("Beat!
+      ");
+    $highScores -> {$key}[1] =$userValues->Total;
+    $highScores -> {$key}[2] =$userValues->score;
+    $highScores -> {$key}[3] =$userValues->ab;
+    $highScores -> {$key}[0]= $user;
+    file_put_contents($brain ."/highScores.json",json_encode($highScores));
+    break;
+    }
+    }
+    if ($foundQuestion == false) {
+        print("
+        Question not found");
+        $highScoreValues = array();
+        $highScoreValues[0] = $user;
+        $highScoreValues[1] = $userValues->Total;
+        $highScoreValues[2] = $userValues->score;
+        $highScoreValues[3] = $userValues->ab;
+        $highScores-> $question = $highScoreValues;
+        file_put_contents($brain ."/highScores.json",json_encode($highScores));
     }
 
-    }
-file_put_contents(getcwd() ."/highScores.json",json_encode($highScores));
 
 }
 
 //print_r($highScores);
 
- saveHighScores("keabarry");
+
 
 ?>

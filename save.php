@@ -1,34 +1,47 @@
 <?
 
-//$temp=json_decode('{"area_medil_and_caudal_to_the_green_point":"99"}');
+
+//$temp=json_decode('{"area_medial_and_caudal_to_the_green_point":"99"}');
 //reset($temp);
 include("saveHighScores.php");
 include("getUserJSON.php");
-$user = $_SERVER["cn"]; 
-$first_key =array_keys($_REQUEST);
-$first_key=$first_key[0];
-$no_underscore = str_replace('_', ' ', $first_key);
-$paddedScore=$first_key[0] + $first_key[1]/100;
- 
-
- 
-$allTrials=json_decode( getUserJSON($user));
-if(!property_exists($allTrials,$no_underscore)) {
-$allTrials->{$no_underscore}=$paddedScore;
+$user = $_SERVER["cn"];
+$question = $_POST["question"];
+$score = (int)$_POST["score"];
+$afterburner = (int)$_POST["afterburner"];
+$brain = $_POST["brain"];
+$paddedScore=$score+$afterburner;
+$allTrials=json_decode(getUserJSON($user));
+if (!property_exists($allTrials, $brain)) {
+  $allTrials->$brain->$question= array("Total" => $paddedScore , "score" => $score, "ab" => $afterburner);
+  $firstTime = true;
+  print("did not find brain");
+}
+$brainTrials = $allTrials -> $brain;
+if(!property_exists($brainTrials,$question)) {
+$brainTrials->$question = array("Total" => $paddedScore , "score" => $score, "ab" => $afterburner);
 $firstTime = true;
+print ("have not had this question before");
 }
 #print_r($allTrials);
-if (($allTrials->{$no_underscore} < $_REQUEST[$first_key]) || ($firstTime))
+// print("Old Score: ".$brainTrials->$question. "
+// New Score: ".$paddedScore);
+$oldScore = $brainTrials->$question->Total;
+print_r($oldScore);
+if (($oldScore < $paddedScore) || ($firstTime))
 {
- $allTrials->{$no_underscore}=$paddedScore;
- saveHighScores($user);
+ $brainTrials->$question= array("Total" => $paddedScore , "score" => $score, "ab" => $afterburner);
+ $allTrials -> $brain = $brainTrials;
  file_put_contents("rawdata/".$user,json_encode($allTrials));
- 
+ print("
+ User Score Updated
+ ");
+ saveHighScores($user, $brain, $question);
 }
+
 
 //$allTrials = str_replace('_', ' ', $allTrials);
 
 
 
 ?>
-

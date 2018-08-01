@@ -14,6 +14,7 @@
 	<script src="jquery.ui.touch-punch.min.js"></script>
 	<script src='jcanvas.min.js'></script>
 	<script src="typed.js"></script>
+	<script src="getImageTotal.js"></script>
 	<script src="jquery.joyride-2.1.js"></script>
 	<script src="brainPicker.js"></script>
 
@@ -21,11 +22,7 @@
 	<!-- Preloader -->
     <script type="text/javascript">
 	//<![CDATA[
-		$(window).load(function() { // makes sure the whole site is loaded
-			$('#status').fadeOut(); // will first fade out the loading animation
-			$('#preloader').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website.
-			$('body').delay(350).css({'overflow':'visible'});
-		})
+
 	//]]>
     </script>
 
@@ -77,7 +74,7 @@ Use this game to help you practice locating the different regions of the brain. 
   		</div>
     </div>
 	<div id="brainDisplay">
-		<div id="sagitalView"> <img id="Sagital" src="images/Sagital.png" /> <div id="sagitaLine"> </div> </div>
+		<div id="sagitalView"> <img id="Sagital" /> <div id="sagitaLine"> </div> </div>
 		<img id="brainPic"/><canvas id="theCanvas"></canvas>
 		<div id='progressbar'></div><div id='burnerbar'></div>
 	</div>
@@ -113,7 +110,7 @@ Use this game to help you practice locating the different regions of the brain. 
 <li><img src="images/screenshot.png" alt="Monitors" style="width:20%; float:right; margin:2px;" /> Before we dig in to the brain, let's check our monitors.<br/></li>
 <li data-id="questionText">This monitor will tell you which part of the Brain to select, and how many points you should use.<br/> Be sure to check this after answering each question because it changes.<br/></li>
 <li data-id="questionSelect">This is the Question Selection Menu! <br/> Click a button to pick that question, then complete it!</li>
-<li data-class="questionSelectBtn">Each button will be highlighted yellow when you pick it. <br/> When you've completed a question correctly, the button will be<br/>highlighted green.  Answer it incorrectly and it will appear red.</li>
+<li data-class="questionSelectBtn">Each button will be highlighted yellow when you pick it. <br/> When you've completed a question the button will be<br/>highlighted green.</li>
 <li data-id="helpText">This monitor keeps track of your status as you play, look here for the Submit button when you've placed all your points!</li>
 <li><img src="images/screenshot2.png" alt="BrainSIde" style="width:20%; float:right; margin:2px;" /> Great! Now let's look at how to traverse our tomography.<br/></li>
 <li data-id="gridTable">Use your mouse to scroll up and down through our brain.</li>
