@@ -10,39 +10,34 @@ $question = $_POST["question"];
 $score = (int)$_POST["score"];
 $afterburner = (int)$_POST["afterburner"];
 $brain = $_POST["brain"];
-$totalScore=$score+$afterburner;
+$paddedScore=$score+$afterburner;
 $allTrials=json_decode(getUserJSON($user));
-$scoreObject= json_decode("{\"score\":$score,\"ab\": $afterburner}");
 if (!property_exists($allTrials, $brain)) {
-  $allTrials->$brain=json_decode("{}");
+  $allTrials->$brain->$question= array("Total" => $paddedScore , "score" => $score, "ab" => $afterburner);
+  $firstTime = true;
+  print("did not find brain");
 }
 $brainTrials = $allTrials -> $brain;
 if(!property_exists($brainTrials,$question)) {
-$brainTrials->$question =$scoreObject;
+$brainTrials->$question = array("Total" => $paddedScore , "score" => $score, "ab" => $afterburner);
+$firstTime = true;
+print ("have not had this question before");
 }
 #print_r($allTrials);
 // print("Old Score: ".$brainTrials->$question. "
 // New Score: ".$paddedScore);
-
-$oldScore = $brainTrials->$question;
-
-$oldTotalScore = $oldScore->score+$oldScore->ab;
-if ($oldTotalScore <= $totalScore)
+$oldScore = $brainTrials->$question->Total;
+print_r($oldScore);
+if (($oldScore < $paddedScore) || ($firstTime))
 {
-
- $brainTrials->$question=$scoreObject;
+ $brainTrials->$question= array("Total" => $paddedScore , "score" => $score, "ab" => $afterburner);
  $allTrials -> $brain = $brainTrials;
- $highScoreObject = json_decode("{\"user\":\"$user\",\"score\":$score,\"ab\": $afterburner}");
  file_put_contents("rawdata/".$user,json_encode($allTrials));
  print("
  User Score Updated
  ");
- print("User high score object: ");
- print_r($highScoreObject);
- saveHighScores($highScoreObject, $brain, $question);
+ saveHighScores($user, $brain, $question);
 }
-
-
 
 
 //$allTrials = str_replace('_', ' ', $allTrials);

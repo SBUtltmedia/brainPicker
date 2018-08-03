@@ -74,12 +74,15 @@ body {
 #gridList{
     position:absolute;
     left:45%;
-    top:8%;
+    top:5%;
     float:right;
-    height:67%;
+    height:71%;
     width:6%;
     background-color:white;
 
+}
+#down, #up {
+  width: 40%;
 }
 #gridList table{
  width:100%;

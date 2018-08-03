@@ -1,4 +1,4 @@
-//Represent the following as a state, rather than a class
+//Represent the following variables as part of a state, rather than having globals..
 var state = {
   which: "",
   totalLayers: 34,
@@ -27,51 +27,24 @@ var state = {
   currentLayer: null,
   pause: undefined,
   mytimeout: null,
-  brainType:"human"
+  brainType: "human",
+  previousQuestionScores: null,
+  user: null,
+  submitted: false
 };
 
-//For testing different brains
-
-
-
-
-// var state.which = 'Caudate';
-// var state.totalLayers = 34;
-// var state.requiredLayers; // Used to keep track, decrement count
-// var state.requiredLayers; // Used in drawGrid, and UpdatePoints
-// var state.globalPoly; // Used in UpdatePoints
-// var state.globalQuestion; // Yet to be used
-// var state.currentQuestionNum = 0; // Yet to be used
-// var state.totalReqPoints; //The number of Layers times the number of points
-// var state.currentRegion;
-// var state.layerTotal = 0;
-// var state.pointsLayer = 0;
-// var state.drawOp = 0;
-// var state.aspectWidth = 16;
-// var state.aspectHeight = 9;
-// var state.scaleFactor;
-// var state.imageWidth = 512;
-// var state.selectionMarker;
-// var state.sagitalTopOffsetPercent = 50;
-// var state.sagitalAreaPercent = 100;
-// var state.inter;
-// var state.previousScores;
-// var state.leaderBoard;
-// var state.previousX;
-// var state.previousy;
-// var state.canvaswidthglobal;
-// var state.currentLayer;
-// var state.pause = undefined;
-// var state.mouseOverGridEnabled = false;
-// var state.mytimeout;
 const sensitivity = 120;
 const timeOutTime = 70;
 $(function() {
   var dfd = jQuery.Deferred();
-
-  state.brainType=location.hash.split("#")[1]||state.brainType;
+  $.getJSON("getUsername.php", function(data) {
+    state.user = data;
+  }).fail(function(d, textStatus, error) {
+    console.error("getJSON failed, status: " + textStatus + ", error: " + error)
+  });
+  state.brainType = location.hash.split("#")[1] || state.brainType;
   var brainTypes = ["dolphin", "human"];
-  state.brainType= state.brainType.toLowerCase();
+  state.brainType = state.brainType.toLowerCase();
   if (!(brainTypes.includes(state.brainType))) state.brainType = "human";
   getImageTotal(state.brainType + "/layerImages/", 1, dfd).then(function(data) {
     state.totalLayers = data;
@@ -83,21 +56,23 @@ $(function() {
 function load() { // makes sure the whole site is loaded
   $('#status').fadeOut(); // will first fade out the loading animation
   $('#preloader').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website.
-  $('body').delay(350).css({'overflow':'visible'});
+  $('body').delay(350).css({
+    'overflow': 'visible'
+  });
   $("#Sagital").attr("src", state.brainType + "/Sagital.png");
   loadPlayerButtons();
   $("#accordion").accordion({
     heightStyle: "fill"
   });
-
-  useMousewheel(true);
+  useLeaderBScroll(true);
+  useMouseWheelLayers(true);
   updateScoreData();
 
   $.getJSON(state.brainType + "/structures.json", function(data) {
     state.globalPoly = data;
 
 
-    $.getJSON(state.brainType+ "/questionBank.json", function(data) {
+    $.getJSON(state.brainType + "/questionBank.json", function(data) {
       state.globalQuestion = data;
       loadCurrentQuestion()
       showQuestionButtons()
@@ -114,11 +89,29 @@ function load() { // makes sure the whole site is loaded
   // compute
 };
 
-function updateScoreData() {
-  $.getJSON("read.php", function(data) {
-    state.previousScores= data[state.brainType];
-    console.log(state.previousScores);
+function useLeaderBScroll(status) {
+  //Should always be scrollable, regardless of whether or not the on/off functions are on.
+  $("#leaderB").css("pointerEvents", "auto");
+  $("#leaderB").off();
+  if (status == true) {
+    $("#leaderB").on("mouseenter", function() {
+      if ($("#leaderB").scrollTop() == 0) $("#leaderB").scrollTop(1); //if it is scrollable, this will remain at 1. However, if it is NOT scrollable, it will go back to zero.
+      //^Do not change value upon rentry if the value is anything besides zero.
+      var isScrollable = $("#leaderB").scrollTop() != 0;
+      useMouseWheelLayers(!isScrollable);
+    });
+    $("#leaderB").on("mouseleave", function() {
+      useMouseWheelLayers(true);
+    });
+  }
+}
 
+function updateScoreData() {
+
+  //Data for username and all previous scores for this brain.
+  $.getJSON("read.php", function(data) {
+    state.user = data["user"];
+    state.previousScores = data[state.brainType] || data;
 
     if (Object.keys(state.previousScores).length == 0) {
       startJoyride();
@@ -128,7 +121,7 @@ function updateScoreData() {
     console.log("error - Previous scores");
   });
 
-
+  //Get all highscores for this brain
   $.getJSON(state.brainType + "/highScores.json", function(data) {
     state.leaderBoard = data;
   }).fail(function() {
@@ -137,7 +130,7 @@ function updateScoreData() {
 }
 
 
-
+//Joyride is the tutorial, so this starts the tutorial. It keeps in mind the visibility states of the playback controls, since they do not always show.
 function startJoyride() {
   var nextShowing;
   var prevShowing;
@@ -160,6 +153,7 @@ function startJoyride() {
       pauseShowing = $("#playbackControls").css("visibility");
       prevShowing = $("#buttonPrevPlayer").css("visibility");
       nextShowing = $("#buttonNextPlayer").css("visibility");
+      $(".tour").css("pointerEvents", "auto");
       $("#playbackControls").css("visibility", "visible");
       $("#buttonPrevPlayer").css("visibility", "visible");
       $("#buttonNextPlayer").css("visibility", "visible");
@@ -172,70 +166,21 @@ function startJoyride() {
 
 }
 
-
-
-//Use key presses to change layer
-// window.onkeyup = function(e) {
-//   var key = e.keyCode ? e.keyCode : e.state.which;
-//   if (key == 38) {
-//     updateWidgets(state.currentLayer + 1);
-//   } else if (key == 87) {
-//     updateWidgets(state.currentLayer + 1);
-//   } else if (key == 40) {
-//     updateWidgets(state.currentLayer - 1);
-//   } else if (key == 83) {
-//     updateWidgets(state.currentLayer - 1);
-//   }
-// }
-
-// function unbindForPlayback(isOn) {
-//   //if state.pause exists, be sure to always unbind (useful for infoToggle and restartToggle)
-//   if (state.pause)
-//       isOn = true;
-//   if (isOn == true) {
-//     useMousewheel(false);
-//     console.log("binding off");
-//     $("#brainDisplay").unbind()
-//     for (n = state.totalLayers; n > 0; n--) {
-//       var currentRowId = 'row_' + n;
-//       $('#' + currentRowId).off("click mouseover");
-//     }
-//     $(".questionSelectBtn").off();
-//
-//   } else {
-//     useMousewheel(true);
-//     $("#restartToggle").off('click',function() {
-//       if (state.pause == false){
-//         pausePlayback();
-//       }
-//     });
-//     $(".questionSelectBtn").on("click", function(event) {
-//
-//       state.currentQuestionNum = parseInt($(event.target).data('num'));
-//       resetQuestionState();
-//       cleanUpModal();
-//       updateButtons();
-//
-//     })
-//
-//   }
-//
-//
-// }
+//If true: Unbinds all UI functions, except for the scrolling on leader Board, if false, all UI becomes active.
 function unbindAll(status) {
   //since opposite, !status
-  useMousewheel(!status);
+  useMouseWheelLayers(!status);
   if (status) {
     $("body").css("pointerEvents", "none")
   } else {
     $("body").css("pointerEvents", "auto")
   }
-
+  useLeaderBScroll(!status);
 }
 
-function useMousewheel(status) {
-  $('#stage').off("mousewheel DOMMouseScroll");
-  console.log("unbinding mouse wheel"); //removes old wheels as to not stack.
+//Enables/Disables mouse wheel scroll to change brain layers.
+function useMouseWheelLayers(status) {
+  $('#stage').off("mousewheel DOMMouseScroll"); //removes old wheels as to not stack.
   if (status == true) {
     $('#stage').on('mousewheel DOMMouseScroll', function(e) {
 
@@ -257,12 +202,43 @@ function useMousewheel(status) {
     });
   }
 }
+
+//Updates leaderboard and your question high score.
 function updateLeaderBoard() {
   updateScoreData();
-  var activeR = state.leaderBoard[state.which];
-  $("#leaderB").css("font-size", "1rem");
+  $("#leaderB").html("");
+  updateButtons();
+  if (state.leaderBoard) var questionLeaderB = state.leaderBoard[state.which]
+  state.previousQuestionScores = state.previousScores[state.which];
+
+  $("#leaderB").css({
+    "font-size": "1.0rem",
+    "overflow": "auto"
+  });
   $("#leaderB").html(" ");
-  if (activeR) $("#leaderB").append("<table><caption font-size='1.0rem'>High Score</caption><tbody><tr><th>NetID</th><th>Percent Correct</th><th>Distance Bonus</th><th>Total</th></tr><tr><td>" + activeR[0] + "</td><td>" + activeR[2] + "</td><td>" + activeR[3] + "</td><td>" + activeR[1] + "</td></tr></tbody></table>");
+  if (state.previousQuestionScores) {
+    var userTotal = state.previousQuestionScores["score"] + state.previousQuestionScores["ab"];
+    $("#leaderB").append("<table><caption font-size='1.0rem'> Your Question High Score</caption><tbody><tr><th>NetID</th><th>Percent Correct</th><th>Distance Bonus</th><th>Total</th></tr><tr><td>" + state.user + "</td><td>" + state.previousQuestionScores["score"] + "</td><td>" + state.previousQuestionScores["ab"] + "</td><td>" + userTotal + "</td></tr>");
+  }
+  if (questionLeaderB) {
+    var table = $("<table/>", {
+      id: "leaderTable"
+    });
+    var tbody = $("<tbody/>", {
+      id: "leaderTableBody"
+    });
+    table.append("<caption font-size='1.0rem'> Top 10 Question High Scores</caption>");
+    tbody.append("<tr><th>NetID</th><th>Percent Correct</th><th>Distance Bonus</th><th>Total</th></tr>");
+    table.append(tbody);
+    $("#leaderB").append(table);
+
+    for (i = 0; i < questionLeaderB.length; i++) {
+      var activeR = questionLeaderB[i];
+      var total = activeR["score"] + activeR["ab"];
+      console.log(activeR);
+      if (state.leaderBoard && activeR) $("#leaderTableBody").append("<tr><td>" + activeR["user"] + "</td><td>" + activeR["score"] + "</td><td>" + activeR["ab"] + "</td><td>" + total + "</td></tr></tbody></table>");
+    }
+  }
 
 }
 
@@ -271,8 +247,18 @@ function showQuestionButtons() {
 
 
   $("#infoToggle,#infoClose").on("click", function() {
-    var isVisible = $("#info").toggle().is(':visible')
-    unbindAll(isVisible);
+    var isVisible = $("#info").toggle().is(':visible');
+    if ($("#playbackControls").css("visibility") == "visible") {
+      console.log("isVi");
+      if (isVisible) {
+        $("#playbackControls, #restartToggle").css("pointerEvents", "none");
+
+      } else {
+        $("#playbackControls, #restartToggle").css("pointerEvents", "auto");
+      }
+    } else {
+      unbindAll(isVisible);
+    }
     $("#info").css("pointerEvents", "auto");
     resizeWindow();
   });
@@ -283,7 +269,6 @@ function showQuestionButtons() {
 
 
   $("#restartToggle").click(function() {
-    $("#tourSelector").css("pointerEvents", "auto");
     startJoyride();
   });
 
@@ -311,6 +296,7 @@ function showQuestionButtons() {
 
   $(".questionSelectBtn").on("click", function(event) {
     state.currentQuestionNum = parseInt($(event.target).data('num'));
+    updateScoreData();
     unbindAll(false);
     resetQuestionState();
     updateLeaderBoard();
@@ -329,7 +315,6 @@ function computeBounds(pointList) {
   var maxCoords = [0, 0, 0];
   var minCoords = [1, 1, 1];
   $.each(pointList, function(index, value) {
-    console.log(index);
     for (i = 0; i < value[0].length; i += 2) {
       var normX = value[0][i] / state.imageWidth;
       var normY = value[0][i + 1] / state.imageWidth;
@@ -360,23 +345,19 @@ function computeBounds(pointList) {
 
 }
 
-
+//Helper function for updateButtons that marks state of each question button.
 function getUserHistory() {
   var questionBool = []
   $.each(state.globalQuestion, function(key, value) {
     questionBool.push(!!state.previousScores[value["region"]])
-
   })
-
   return questionBool
-  //state.globalQuestion.each(function(){
-  //state.previousScores
 }
 
+//Colors question buttons if based on status (answered, unanswered, current question)
 function updateButtons() {
 
   usrArr = getUserHistory();
-  console.log(usrArr);
   $(".questionSelectBtn").css("background-color", "white");
   $(".questionSelectBtn").each(function(index, element) {
 
@@ -395,15 +376,16 @@ function updateButtons() {
   })
 
 }
-
-
+//Self-explainatory
 function resetQuestionState() {
   $('#modal').remove();
   $("#questionText").typed("reset");
   $("#buttonPausePlayer").innerHTML = "&#10074&#10074";
+  //state.submitted = false;
 
 }
 
+//loads the currently selected question
 function loadCurrentQuestion() {
 
   updateButtons();
@@ -434,7 +416,7 @@ function loadCurrentQuestion() {
   state.requiredLayers = theQuestion.requestLayers;
   state.which = theQuestion.region;
   state.currentRegion = "qn" + state.currentQuestionNum;
-  upDatePoints()
+  updatePoints()
   $("#helpText").html("<p class='powerOn'>You have " + state.totalReqPoints + " points left to place, across " + theQuestion.requestLayers + " more Layers </p>");
   $("#questionText").html("")
 
@@ -464,35 +446,7 @@ function loadCurrentQuestion() {
   else updateWidgets(state.totalLayers);
 }
 
-
-//Old for slider
-// function drawSlider() { // 1 Call by $(document).ready
-//   var select = $("#sliderDiv").slider({
-//     orientation: "vertical",
-//
-//     min: 1,
-//     max: state.totalLayers,
-//     slide: function(event, ui) {
-//       updateWidgets(ui.value);
-//     }
-//   });
-//   $('.ui-slider-handle').css("height", "3.8%");
-//   $('.ui-slider-handle').css("width", "285%");
-//   //$('.ui-slider-handle').css("margin-bottom", "-.125em");
-//   $('.ui-slider-vertical').css("height", "100%");
-//   $('.ui-slider-vertical').css("width", "10%");
-//   $('.ui-slider-vertical').removeClass('ui-corner-all')
-//
-//   $('.ui-slider-handle').removeClass('ui-corner-all')
-//
-//
-//
-//
-// }
-
-
-
-
+//updates Sagital View
 function updateSagital(layer) {
   state.sagitalAreaPercent = 51.5;
   state.sagitalTopOffsetPercent = 15;
@@ -508,7 +462,7 @@ function updateSagital(layer) {
 
 }
 
-
+//Updates layer and points
 function updateWidgets(layer) {
   if (layer > state.totalLayers || layer <= 0) return;
   //console.log(layer);
@@ -518,25 +472,20 @@ function updateWidgets(layer) {
   //$("#sliderDiv").slider("value", layer);
 
   //$( "#sliderDiv" ).focus();
-  upDatePoints(layer);
+  updatePoints(layer);
   updateSagital(layer);
 
 
 }
 
+//Draws table for points
 function drawGrid() { // 2 Calls by addToClickList, $(document).ready
+
   var rows = state.totalLayers;
   var delay = 0;
   var tableMade = $('#gridTable').get(0);
   if (!tableMade) $('#gridList').append("<table id='gridTable'></table>");
-
-  $("#gridList").on("mouseenter mouseleave", function() {
-    useMousewheel(true);
-    clearTimeout(state.mytimeout)
-    //console.log("gridList")
-    delay = 500;
-
-  });
+  var boxPercent = 100 / (state.requiredLayers + 2);
   for (n = rows; n > 0; n--) {
 
     if (!tableMade) {
@@ -545,10 +494,11 @@ function drawGrid() { // 2 Calls by addToClickList, $(document).ready
         "class": "gridRow",
         "id": currentRowId
       })
+
       $('#gridTable').append(tableRow);
     }
 
-    var boxPercent = 100 / (state.requiredLayers + 2);
+
     var pointerCell = $("<td/>", {
       id: "pointerCell" + currentRowId,
       style: "width:" + boxPercent + "%",
@@ -606,18 +556,24 @@ function drawGrid() { // 2 Calls by addToClickList, $(document).ready
     }
 
   }
-  $('.gridRow').on("click mouseenter", function(evt) {
-    useMousewheel(false);
-    //console.log("gridRow")
-    state.mytimeout = setTimeout(function() {
-      var thisRowNum = evt.currentTarget.id.split("_")[1];
-      updateWidgets(thisRowNum);
-      delay = 0;
-    }, delay);
-  });
+  if (!tableMade) { //first time drawgrid is called, it creates the time buffer .on functions. This prevents stacking issues..
+    $("#gridList").on("mouseenter mouseleave", function() {
+      useMouseWheelLayers(true);
+      clearTimeout(state.mytimeout)
+      delay = 500;
+    });
+    $('.gridRow').on("click mouseenter", function(evt) {
+      useMouseWheelLayers(false);
+      state.mytimeout = setTimeout(function() {
+        var thisRowNum = evt.currentTarget.id.split("_")[1];
+        updateWidgets(thisRowNum);
+        delay = 0;
+      }, delay);
+    });
+  }
 }
 
-function upDatePoints(layer) { // 2 Call by DrawSlider, Index.html
+function updatePoints(layer) { // 2 Call by DrawSlider, Index.html
   for (var i = 1; i <= state.totalLayers; i++) {
     $('.' + i).hide();
     if (i == layer) {
@@ -836,17 +792,18 @@ function checkPointCount(region) {
     });
     $("#helpText").append(submitButton);
     $('#submit').click(function() {
-      //colorPoints();
-      state.drawOp = 0.5;
-      state.currentLayer = state.totalLayers;
-      playbackTheatre(state.currentRegion);
-
+      unbindAll(true);
+      setTimeout(function() {
+        state.currentLayer = state.totalLayers;
+        state.drawOp = 0.5;
+        playbackTheatre(state.currentRegion);
+      }, 125); //waits half a second
     })
   }
 }
 
 function loadPlayerButtons() {
-    $("#playbackControls").css("visibility", "hidden");
+  $("#playbackControls").css("visibility", "hidden");
   var buttonBank = $("<div/>", {
     id: "buttonBank",
     style: "z-index:10"
@@ -906,6 +863,7 @@ function playbackTheatre(theRegion) {
   unbindAll(true);
   $("#playbackControls").css("pointerEvents", "auto");
   $(".questionSelectBtn").css("backgroundColor", "#a6a9ad");
+  $(".questionSelectBtn").css("pointerEvents", "none");
   $("#infoToggle").css("pointerEvents", "auto");
   $("#restartToggle").css("pointerEvents", "auto");
   $("#buttonPausePlayer, #buttonNextPlayer,  #buttonPrevPlayer").off();
@@ -913,6 +871,7 @@ function playbackTheatre(theRegion) {
     pausePlayback();
   });
   $("#buttonNextPlayer").on("click", function() {
+    state.currentLayer--;
     playResults();
   });
   $("#buttonPrevPlayer").on("click", function() {
@@ -971,7 +930,6 @@ function playbackTheatre(theRegion) {
 
   function pausePlayback() {
     state.pause = !state.pause;
-    console.log(state.pause + "for state.pause");
     if (state.pause == true) {
       document.getElementById("buttonPausePlayer").innerHTML = "&#9658";
       $("#buttonPrevPlayer").css("visibility", "visible");
@@ -1019,9 +977,9 @@ function playbackTheatre(theRegion) {
 
       updateWidgets(state.currentLayer);
       if ($("." + state.currentLayer + ".picked").length == 0) {
-        state.currentLayer--;
         setTimeout(function() {
           if (!state.pause) {
+            state.currentLayer--;
             window.requestAnimationFrame(playResults);
           }
         }, timeOutTime);
@@ -1164,6 +1122,7 @@ function score() {
   $(".checked").addClass("picked");
   $(".checked").removeClass("checked");
   state.pause = false;
+  //state.submitted = true;
   playbackTheatre(state.currentRegion);
   $("#playbackControls").css("visibility", "visible");
   updateWidgets(state.totalLayers);
@@ -1181,6 +1140,7 @@ function stripUnderscores() {
 function endModal(cs, ab) {
 
   var t = cs.length;
+  $(".questionSelectBtn").css("pointerEvents", "auto");
   $("#playbackControls").css("visibility", "hidden");
   $("#buttonPrevPlayer").css("visibility", "hidden");
   $("#buttonNextPlayer").css("visibility", "hidden");
@@ -1205,13 +1165,23 @@ function endModal(cs, ab) {
   $(".questionSelectBtn").css("backgroundColor", "white");
   $("#questionSelect").css("pointerEvents", "inherit");
   resizeWindow();
+  //if (state.submitted == false) {
   $.ajax({
     type: "POST",
     url: "save.php",
-    data: {"brain" : state.brainType, "question":state.which, "score": barTotal ,"afterburner": ab}
+    data: {
+      "brain": state.brainType,
+      "question": state.which,
+      "score": barTotal,
+      "afterburner": ab
+    }
+  }).fail(function(d, textStatus, error) {
+    console.error("getJSON failed, status: " + textStatus + ", error: " + error)
+  }).done(function() {
+    updateLeaderBoard();
   });
-  updateScoreData();
-  updateLeaderBoard();
+  //}
+
 
 
 
@@ -1317,24 +1287,6 @@ function resizeWindow() {
 
   //Resize font-size for HTML type. Use rem measurement to set font-size
   $("html").css("font-size", (stageHeight / 60) + "px");
-
-
-  //Outdated::
-  // Resize text based on stage height
-
-  // To give a class a certain font size, assign it the class "fs-X" where X is an integer between 1 and 1000. 1000 is the height of the screen.
-
-  // New font resize loop
-  // for (var i = 1; i <= 1000; i++) {
-  //   var s = stageHeight * (i / 1000);
-  //   var c = ".fs-" + i;
-  //   $(c).css({
-  //     'font-size': s + "px"
-  //   });
-  // }
-
-
-
 
 }
 
