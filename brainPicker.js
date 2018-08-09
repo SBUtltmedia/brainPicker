@@ -423,10 +423,12 @@ function getUserHistory() {
   var questionColors = []
   var dfd = jQuery.Deferred();
   $.each(state.globalQuestion, function(key, value) {
+    if (state.previousScores) {
     var value = state.previousScores[value["region"]];
     score = -1;
     if (value) score = value["score"]+value["ab"];
     questionColors.push(score)
+  }
   })
   dfd.resolve(questionColors);
   return dfd;
