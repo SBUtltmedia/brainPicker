@@ -1,4 +1,4 @@
 static
 node_modules
 *.log
-rawdata/
+rawdata/*
