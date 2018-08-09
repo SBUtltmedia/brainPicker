@@ -40,7 +40,9 @@ if ($oldTotalScore <= $totalScore)
  print("User high score object: ");
  print_r($highScoreObject);
  saveHighScores($highScoreObject, $brain, $question);
+ return "{}";
 }
+return "{}";
 
 
 

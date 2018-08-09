@@ -93,7 +93,7 @@ Use this game to help you practice locating the different regions of the brain. 
 
 
 <div id="gridList">
-	
+
 	<!---<div id="sliderDiv"> </div>-->
 </div>
 
@@ -111,14 +111,17 @@ Use this game to help you practice locating the different regions of the brain. 
 <li class="tour"><img src="images/screenshot.png" alt="Monitors" style="width:20%; float:right; margin:2px;" /> Before we dig in to the brain, let's check our monitors.<br/></li>
 <li class="tour" data-id="questionText">This monitor will tell you which part of the Brain to select, and how many points you should use.<br/> Be sure to check this after answering each question because it changes.<br/></li>
 <li class="tour" data-id="questionSelect">This is the Question Selection Menu! <br/> Click a button to pick that question, then complete it!</li>
-<li class="tour" data-class="questionSelectBtn">Each button will be highlighted yellow when you pick it. <br/> When you've completed a question the button will be<br/>highlighted green.</li>
+<li class="tour" data-class="questionSelectBtn">Each button will be highlighted yellow when currently selected. <br/> If you correctly complete a question, the button will be highlighted green. <br> Answer incorrectly and it will be colored red.</li>
 <li class="tour" data-id="helpText">This monitor keeps track of your status as you play, look here for the Submit button when you've placed all your points!</li>
 <li class="tour"> <img src="images/screenshot2.png" alt="BrainSIde" style="width:20%; float:right; margin:2px;" /> Great! Now let's look at how to traverse our tomography.<br/></li>
-<li class="tour" data-id="gridTable">Use your mouse to scroll up and down through our brain.</li>
-<li class="tour" data-id="gridTable">Alternatively you can hover over or click on any layer in this column to move to it. <br/> The boxes will change color if there is a point on that layer.</li>
+<li class="tour" data-id="gridTable">Hover over or click on any row to change layers. <br/> The boxes will change color if there is a point on that layer.</li>
+<li class="tour" data-id="gridTable">Alternatively, use your mouse to scroll up and down through our brain.</li>
 <li class="tour" data-id="sagitalView">Up here we have a <i>sagital</i> view of the brain.</li>
 <li class="tour" data-id="sagitaLine">This line tells you where vertically the <i>axial</i> slice you're looking at is in the brain!</li>
 <li class="tour" data-id = "playbackControls"> These are your playback controls. When playing question results, use these to change layers or pause the playback. </li>
+<li class="tour" data-id = "leaderB"> This is the score table. Here you will see <br> your all-time top score for this question. </li>
+<li class="tour" data-id = "leaderB"> You will also see the Top 10 Overall Question High Scores. <br>Try the question again and try to be Number 1! </li>
+<li class="tour" data-id = "leaderB"> Please note: Each user can only have one high score in the Overall Top 10 Scores. <br> Only your top overall score will appear. </li>
 <li class="tour" data-id="theCanvas">Last but not least, this is where you'll see and select points on different sections of the brain.</li>
 <li class="tour" <img src="images/threeClicks.gif" alt="placement Example" style="width:50%; float:right; margin:1px;" /> Click anywhere on the brain to place points.<br/> Make a mistake?<br/> Click on one of your points to delete it.<br/></li>
 <li class="tour" <img src="images/fourClicks.gif" alt="replacement Example" style="width:50%; float:right; margin:1px;" /> Your last click will always replace the last marker.<br/></li>
@@ -133,6 +136,14 @@ Use this game to help you practice locating the different regions of the brain. 
 <!-- Preloader -->
 <div id="preloader">
     <div id="status">&nbsp;</div>
+		<noscript>
+			<style type="text/css">
+					.pagecontainer {display:none;}
+			</style>
+			<div class="noscriptmsg">
+			You don't have javascript enabled.  Please enable it in your browser settings and refresh.
+			</div>
+	</noscript>
 </div>
 
 
