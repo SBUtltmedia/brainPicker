@@ -659,3 +659,10 @@ width: 10%;
         opacity: 1;
     }
 }
+/* @media screen and (max-width: 368px) {
+#stage {
+  background-image: url(images/leftscreen.png?heyportrait);
+
+}
+
+} */

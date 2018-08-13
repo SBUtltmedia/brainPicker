@@ -8,10 +8,10 @@ Note the following updates from master:
 
 -User and Overall High Scores
 
--Visual notifier of failed, passed, and new questions.
+-Visual notifier of failed, passed, and new questions. (red, green, and white respectively)
 
 -Playback Pause and navigation
 
--Percent area based distance bonus (rather than direct distance)
+-Distance bonus now based on maximum possible distance for that question.
 
 -Various Fixed UI issues

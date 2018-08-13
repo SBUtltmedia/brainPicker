@@ -8,7 +8,7 @@ var state = {
   currentQuestionNum: 0,
   curRegion: null,
   layerTotal: 0,
-  pointsLayer: 0,
+  pointsLayer: -1,
   drawOp: 0,
   aspectWidth: 16,
   aspectHeight: 9,
@@ -31,9 +31,9 @@ var state = {
   user: null,
   submitted: false,
   firstPause: true,
-  questionScore: 0.01,
-  questionAreas: null,
-  playback: false
+  questionScore: 0,
+  maxDistances : null,
+  playback: false,
 };
 
 const sensitivity = 120;
@@ -48,6 +48,7 @@ $(function() {
   }).fail(function(d, textStatus, error) {
     console.error("getJSON failed, status: " + textStatus + ", error: " + error)
   });
+
   state.brainType = location.hash.split("#")[1] || state.brainType;
   var brainTypes = ["dolphin", "human"];
   state.brainType = state.brainType.toLowerCase();
@@ -70,6 +71,7 @@ function load() { // makes sure the whole site is loaded
   $("#accordion").accordion({
     heightStyle: "fill"
   });
+
   useLeaderBScroll(true);
   useMouseWheelLayers(true);
   updateScoreData();
@@ -85,7 +87,11 @@ function load() { // makes sure the whole site is loaded
       showQuestionButtons()
       updateButtons();
       computeBounds(state.globalPoly[state.which]);
-      resizeWindow();
+      $(window).on("resize", function() {
+        resizeWindow();
+        drawMultiPoly();
+        console.log("Resize");
+      }).trigger("resize");
 
 
 
@@ -119,6 +125,7 @@ function updateScoreData() {
   //Once this is completed, pull the
   $.getJSON("read.php", function(data) {
     state.user = data["user"];
+    $("#title").html("Brain Picker -"+state.user);
     state.previousScores = data[state.brainType] || data;
 
     if (Object.keys(state.previousScores).length == 0) {
@@ -223,7 +230,7 @@ function updateLeaderBoard() {
     $("#leaderB").html("");
     updateButtons();
     if (state.leaderBoard) var questionLeaderB = state.leaderBoard[state.which]
-    state.previousQuestionScores = state.previousScores[state.which];
+    if (state.previousScores) state.previousQuestionScores = state.previousScores[state.which];
 
     $("#leaderB").css({
       "font-size": "1.0rem",
@@ -308,7 +315,7 @@ function showQuestionButtons() {
       else $("#rp, #ta, #n, #modal, #questionSelect, .questionSelectBtn").css("pointerEvents", "auto");
     }
     $("#info").css("pointerEvents", "auto");
-    resizeWindow();
+    //resizeWindow();
   });
 
 
@@ -357,11 +364,13 @@ function showQuestionButtons() {
 
 
 function computeBounds(pointList) {
-  calculateAreas(pointList).then(function() {
+  maxDistance(pointList).then(function(){
+    console.log(state.maxDistances);
     var boxSize = [0, 0, 0];
     var maxCoords = [0, 0, 0];
     var minCoords = [1, 1, 1];
     $.each(pointList, function(index, value) {
+      if (!value[0]) return true; //for some reason, the loop will iterate even if the value is empty and cause error. So, if no value, continue to next iteration.
       for (i = 0; i < value[0].length; i += 2) {
         var normX = value[0][i] / state.imageWidth;
         var normY = value[0][i + 1] / state.imageWidth;
@@ -391,44 +400,68 @@ function computeBounds(pointList) {
   });
 
 }
-function calculateAreas(pointListAllLayers) {
+function maxDistance(questionPointList) {
   dfd = jQuery.Deferred();
-  state.questionAreas = [];
-  $.each(pointListAllLayers, function(index, value){
-    var pointListLayer = value[0];
-    //The following two are stored so the polygon can close at the end.
-    var firstX = pointListLayer[0];
-    var firstY = pointListLayer[1];
-    var total = 0;
-    for (i=0; i<pointListLayer.length-3; i+=2) {
-      var x1 = pointListLayer[i];
-      var y1 = pointListLayer[i+1];
-      var x2 = pointListLayer[i+2];
-      var y2 = pointListLayer[i+3];
-      if(i==pointListLayer.length-1) {
-        x2 = firstX;
-        y2 = firstY;
+  state.maxDistances= [];
+  var max_dist = 0;
+  $.each(questionPointList, function(index, value){
+    var layerPoints = value[0];
+    if (!layerPoints) return true //returing true is continue for jQuery each statement
+    for (i=0; i<layerPoints.length-1; i+=2) {
+      for (j=i+2; j<layerPoints.length-1; j+=2) {
+        var x1 = layerPoints[i];
+        var y1 = layerPoints[i+1];
+        var x2 = layerPoints[j];
+        var y2 = layerPoints[j+1];
+        max_dist = Math.max(max_dist, Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)));
       }
-      total += x1*y2 - y1*x2;
     }
-    total = Math.abs(total/2);
-    state.questionAreas[index] = total;
+    state.maxDistances[index] = max_dist*state.scaleFactor;
   });
   dfd.resolve();
   return dfd;
 }
+// function calculateAreas(pointListAllLayers) {
+//   dfd = jQuery.Deferred();
+//   var newPoints= {};
+//   state.questionAreas = [];
+//   $.each(pointListAllLayers, function(index, value){
+//     var pointListLayer = value[0];
+//     //The following two are stored so the polygon can close at the end.
+//     if(!pointListLayer) return true;
+//     newPoints[index] = []
+//     newPoints[index][0]=pointListLayer;
+//     var firstX = pointListLayer[0];
+//     var firstY = pointListLayer[1];
+//     var total = 0;
+//     for (i=0; i<pointListLayer.length-3; i+=2) {
+//       var x1 = pointListLayer[i];
+//       var y1 = pointListLayer[i+1];
+//       var x2 = pointListLayer[i+2];
+//       var y2 = pointListLayer[i+3];
+//       if(i==pointListLayer.length-1) {
+//         x2 = firstX;
+//         y2 = firstY;
+//       }
+//       total += x1*y2 - y1*x2;
+//     }
+//     total = Math.abs(total/2);
+//     var canvasArea = parseFloat($("#brainDisplay").css("width")) * parseFloat($("#brainDisplay").css("height"));
+//     state.questionAreas[index] = (total/canvasArea)*100; //makes it a percent value of the area of the canvas.
+//   });
+//   dfd.resolve(newPoints);
+//   return dfd;
+// }
 
 //Helper function for updateButtons that marks state of each question button.
 function getUserHistory() {
   var questionColors = []
   var dfd = jQuery.Deferred();
   $.each(state.globalQuestion, function(key, value) {
-    if (state.previousScores) {
-    var value = state.previousScores[value["region"]];
+    if (state.previousScores) var value = state.previousScores[value["region"]];
     score = -1;
     if (value) score = value["score"]+value["ab"];
-    questionColors.push(score)
-  }
+    questionColors.push(score);
   })
   dfd.resolve(questionColors);
   return dfd;
@@ -464,7 +497,7 @@ function loadCurrentQuestion() {
   $(".picked").remove();
   $(".joyride-content-wrapper").css("font-size", "1.2rem");
   $("#questionText").css("font-size", "1.2rem");
-  resizeWindow();
+  //resizeWindow();
 
 
   $("#gridTable").remove();
@@ -538,6 +571,10 @@ function updateWidgets(layer) {
   if (layer > state.totalLayers || layer <= 0) return;
   //console.log(layer);
   state.currentLayer = layer;
+  if (!state.playback) {//Updates help text based on layer
+    state.pointsLayer = $('.' + state.currentLayer).length-1;
+    checkPointCount(state.currentRegion);
+  }
   $(".pointerCell").css("opacity", 0);
   $("#pointerCellrow_" + layer).css("opacity", 1);
   //$("#sliderDiv").slider("value", layer);
@@ -605,6 +642,7 @@ function drawGrid() { // 2 Calls by addToClickList, $(document).ready
           }));
           $("#" + "erase_" + n).click(function() {
             $("." + this.id.split("_")[1]).remove();
+            state.pointsLayer = -1;
             checkPointCount(state.currentRegion);
             drawGrid();
 
@@ -783,8 +821,10 @@ function drawPoly(layerIndex, polyIndex, curPoly) {
 function addToClickList(ex, ey, isCorrect) { // 2 calls from canvasClearing, drawPoly
   var fudgeX = 2.65;
   var fudgeY = 4.35;
-  var percentX = ex / stageWidth * 100 + fudgeX;
-  var percentY = ey / stageHeight * 100 + fudgeY;
+  var w = parseFloat($("#stage").width());
+  var h = parseFloat($("#stage").height());
+  var percentX = ex / w * 100 + fudgeX;
+  var percentY = ey / h * 100 + fudgeY;
   var cols = state.globalQuestion[state.currentQuestionNum].pointsPerLayer;
   //alert(ey);
   //var state.currentLayer = $("#sliderDiv").slider("value");
@@ -825,6 +865,7 @@ function addToClickList(ex, ey, isCorrect) { // 2 calls from canvasClearing, dra
       id: idName
     }).on("click", function() {
       $(this).remove();
+      state.pointsLayer = state.pointsLayer-1;
       drawGrid();
       checkPointCount(state.currentRegion);
     }));
@@ -879,8 +920,11 @@ function checkPointCount(region) {
   var pointPerLayer = cols - state.pointsLayer;
 
   $("#helpText").html("You have " + pointsLeft + " points left to place, across " + (state.requiredLayers - activeLayers()) + " more Layers");
-  if (pointPerLayer > 1) $("#helpText").append("<p>You need " + (pointPerLayer - 1) + " points on this Layer.</p>");
-  else $("#helpText").append("<p>You have enough points here.</p>");
+  if (state.pointsLayer==-1)  {} //Do nothing - effectively removes the help text;
+  else if (pointPerLayer > 1) $("#helpText").append($("<p/>", {id: "helpLayer"}).html("You need "+(pointPerLayer-1)+ " points on this Layer."));
+  //$("#helpText").append("<p>You need " + (pointPerLayer - 1) + " points on this Layer.</p>");
+  else $("#helpText").append($("<p/>").html("You have enough points on this layer"));
+  //$("#helpText").append("<p>You have enough points here.</p>");
 
   if (!(pointsLeft >= 0 && t < state.totalReqPoints)) {
     $("#helpText").html("You've placed all the points! Click here when you are ready to check your answers:");
@@ -1033,7 +1077,7 @@ function playbackTheatre(theRegion) {
   //$("#brainDisplay").append("<button id='state.pause' onclick='pausePlayback();'>state.pause</button><button id='rp' ");
   //$("#modal").addClass("fs-35");
   //$("#modal button").addClass("fs-22");
-  resizeWindow();
+  //resizeWindow();
   //resetQuestionState();
 
   function pausePlayback() {
@@ -1057,7 +1101,6 @@ function playbackTheatre(theRegion) {
 
 
   function playResults() {
-    console.log("Playing results: "+state.currentLayer);
     if ($(".picked").length == 0 && state.currentLayer == 0) {
 
       burnBar(totalAfterBurnerScore/state.requiredLayers*10);
@@ -1065,6 +1108,7 @@ function playbackTheatre(theRegion) {
       //console.log(totalAfterBurnerScore + "afterburnerscore");
       $(".checked").addClass("picked");
       state.currentLayer = state.totalLayers;
+      console.log("Afterburner: "+totalAfterBurnerScore);
       endModal(cs, totalAfterBurnerScore/state.requiredLayers);
       state.playback = false;
       console.log("Playback ended");
@@ -1091,12 +1135,13 @@ function playbackTheatre(theRegion) {
         setTimeout(function(){
         colorPoints(state.currentLayer).then(
           function(val) {
-            console.log("Ran color");
             retValue = val;
-            window.requestAnimationFrame(playResults);
-
             //console.log("ColorPoints returned: " + retValue);
-            totalAfterBurnerScore += afterBurner(state.currentLayer);
+            afterBurner(state.currentLayer).then(function(ab){
+              totalAfterBurnerScore+=ab;
+              window.requestAnimationFrame(playResults);
+            });
+
 
 
           }
@@ -1167,10 +1212,10 @@ function bumpBar() {
     var progressbar = $("#progressbar");
     var timeOutBar = setInterval(function(){
     var val = progressbar.progressbar("value") || 0;
-    if ((val<state.questionScore)) {console.log("less than"); progressbar.progressbar("value", val+.11);}
+    if ((val<state.questionScore)) { progressbar.progressbar("value", val+.11);}
     if (state.playback == false && val>=state.questionScore) clearInterval(timeOutBar);
   },timeOutTime);
-    state.questionScore = 0.01;
+    state.questionScore = 0.00;
 }
 
 function burnBar(c) {
@@ -1200,70 +1245,32 @@ function burnBar(c) {
 // }
 
 function afterBurner(layer) {
-  var totalDistance = 0;
-
-
+  var dfd = jQuery.Deferred();
+  var dist = 0;
+  var divider = 0;
   var pointArray = $("." + layer + "[iscorrect='true']");
-  return Math.abs((10*afterBurnerArea(pointArray)-state.questionAreas[layer])/state.questionAreas[layer]);
-  //^^retrieves afterburnerarea, then compares to whole layer area. Multiplies by 10 to get float value (since we want out of 10), rounded later.
-
-
-  //BurnBar test below
-  //return 5;
-
-  //Outdated repetion of each point distance.
-  // for (i = 0; i < pointArray.length; i++) {
-  //   for (j = 0; j < (pointArray.length - i); j++) {
-  //
-  //     //console.log($(pointArray[i]).css("left"));
-  //
-  //     totalDistance += afterburnerDistance($(pointArray[i]).css("left"), $(pointArray[j]).css("left"), $(pointArray[i]).css("top"), $(pointArray[j]).css("left"), layer);
-  //
-  //   }
-  // }
-  // return (totalDistance);
-
-  //console.log($(this));
-}
-//Returns point area for a particular layer.
-function afterBurnerArea(pointArray) {
-  //Following two are stored to close off area at end.
-  var firstX = parseFloat($(pointArray[0]).css("left"));
-  var firstY = parseFloat($(pointArray[0]).css("top"));
-
-  var total = 0;
-  for (i=0; i<pointArray.length-1; i++) {
+  if (pointArray.length<state.requiredLayers) {dfd.resolve(0); return dfd;}
+  for (i=0; i<pointArray.length; i++) {
     var x1 = parseFloat($(pointArray[i]).css("left"));
     var y1 = parseFloat($(pointArray[i]).css("top"));
-    var x2 = parseFloat($(pointArray[i+1]).css("left"));
-    var y2 = parseFloat($(pointArray[i+1]).css("top"));
-    if (i==pointArray.length-1) {
-      var x2 = firstX;
-      var y2 = firstY;
+    for (j=i+1; j<pointArray.length; j++) {
+      var x2 = parseFloat($(pointArray[j]).css("left"));
+      var y2 = parseFloat($(pointArray[j]).css("top"));
+      dist += Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+      divider++;
     }
-    // console.log("X1: "+x1);
-    // console.log("Y1: "+y1);
-    // console.log("X2: "+x2);
-    // console.log("Y2: "+y2);
-    total+=x1*y2-y1*x2;
   }
-  total = Math.abs(total/2);
-  return total;
+  console.log("Divider:"+divider);
+  var avgDist = (dist/divider)*state.scaleFactor; //gets average distance between points
+  console.log("Avg dist:" +avgDist);
+  console.log("Max:" +state.maxDistances[layer]);
+  var returnScore = 10*(1-Math.abs((avgDist-state.maxDistances[layer])/state.maxDistances[layer]));
+  console.log(returnScore);
+  dfd.resolve(returnScore);
+  return dfd;
 }
 
-function rePlay() {
 
-
-
-}
-
-function score() {
-
-
-
-
-
-}
 
 function stripUnderscores() {
   //var spacedRegion = state.currentRegion("_"g, / /);
@@ -1271,7 +1278,6 @@ function stripUnderscores() {
 }
 
 function endModal(cs, ab) {
-
   var t = cs.length;
   $(".questionSelectBtn").css("pointerEvents", "auto");
   $("#playbackControls").css("visibility", "hidden");
@@ -1291,7 +1297,29 @@ function endModal(cs, ab) {
   var finalValue = barTotal + ab;
 
   stripUnderscores();
-  $("#brainDisplay").append("<div id='modal'><div><h2>Results: </h2><p>Correct: " + barTotal + "%</p>+<p>Distance Bonus:<br/> " + ab + "%</p><h2>Final Score: " + finalValue + "%</h2><button id='n'>Next Question</button><button id='rp'>Replay Answer</button><button id='ta'>Try Again</button>  </div></div>");
+  var modal = $("<div/>", {
+    id: "modal"
+  });
+  var divInModal = $("<div/>").append($("<h2/>").html("Results: "));
+  var scoreText = $("<p/>").html("Correct: "+barTotal+"%");
+  var afterburnerText = $("<p/>").html("Distance Bonus: <br>"+ab+"%");
+  var finalText = $("<h2/>").html("Final Score: "+finalValue+"%");
+  var nextBtn = $("<button/>", {
+    id: "n",
+    text: "Next Question"
+  });
+  var taBtn = $("<button/>", {
+    id: "ta",
+    text: "Try again"
+  });
+  var replayBtn = $("<button/>", {
+    id: "rp",
+    text: "Replay Answer"
+  });
+  divInModal.append([scoreText, afterburnerText, finalText, nextBtn, replayBtn,taBtn]);
+  modal.append(divInModal);
+  $("#brainDisplay").append(modal);
+  //$("#brainDisplay").append("<div id='modal'><div><h2>Results: </h2><p>Correct: " + barTotal + "%</p>+<p>Distance Bonus:<br/> " + ab + "%</p><h2>Final Score: " + finalValue + "%</h2><button id='n'>Next Question</button><button id='rp'>Replay Answer</button><button id='ta'>Try Again</button>  </div></div>");
 
   //Function for replay answer button
   $("#rp").on("click", function(){
@@ -1330,7 +1358,7 @@ function endModal(cs, ab) {
   $("#modal button").css("font-size", "1.15rem");
   $(".questionSelectBtn").css("backgroundColor", "white");
   $("#questionSelect").css("pointerEvents", "inherit");
-  resizeWindow();
+  //resizeWindow();
   //if (state.submitted == false) {
   $.ajax({
     type: "POST",
@@ -1397,35 +1425,44 @@ function checkWin(cs) {
 }
 
 // Fix aspect ratio of the stage
-$(window).resize(function() {
-  resizeWindow();
-  drawMultiPoly();
-});
+
+
+
 
 // Resize the window
 function resizeWindow() {
+
   // Get window width and height
   $("#accordion").accordion("refresh");
   state.canvaswidthglobal = parseFloat($("#brainDisplay").css("width"));
-  var w = $(window).width();
-  var h = $(window).height();
+  var   stageWidth = $(window).width();
+  var stageHeight = $(window).height();
   // If the window aspect ratio >=  screen aspect, fix height and set width based on height
-  if ((w / h) >= state.aspectWidth / state.aspectHeight) {
-    stageHeight = h;
-    stageWidth = (state.aspectWidth / state.aspectHeight) * h;
-    stageLeft = (w - stageWidth) / 2;
+  var rotate = 0;
+  // console.log($("#stage").css("background-image"));
+  if ((stageWidth / stageHeight) >= state.aspectWidth / state.aspectHeight) {
+    var lastWidth = stageWidth
+    stageWidth = (state.aspectWidth / state.aspectHeight) * stageHeight;
+    stageLeft = (lastWidth - stageWidth) / 2;
     stageTop = 0;
 
 
   }
   // If the window aspect ratio < than screen aspect, fix width and set height based on width
   else {
-    stageWidth = w;
-    stageHeight = (state.aspectHeight / state.aspectWidth) * w;
-    stageTop = (h - stageHeight) / 2;
+    var lastHeight = stageHeight
+    stageHeight = (state.aspectHeight / state.aspectWidth) * stageWidth;
+    stageTop = (lastHeight - stageHeight) / 2;
     stageLeft = 0;
 
   }
+  // if ($("#stage").css("background-image").split("?").length>1) {
+  //   stageLeft = 0;
+  //   stageTop = 0;
+  //   console.log("Portrait");
+  //   console.log($("#stage").css("background-image"));
+  //   rotate = 90;
+  // }
 
 
   //  var plungerRange = 10/stageHeight;
@@ -1436,23 +1473,23 @@ function resizeWindow() {
     width: stageWidth + "px",
     height: stageHeight + "px",
     left: stageLeft + "px",
-
-    top: stageTop + "px"
+    top: stageTop + "px",
+    transform : "rotate(" +rotate +"deg)"
   });
 
   // Resize corner border radii based on stage height
 
 
-  var cornerSize = .025 * stageHeight;
-  $(".rounded").css({
-    '-webkit-border-radius': cornerSize + "px",
-    '-moz-border-radius': cornerSize + "px",
-    'border-radius': cornerSize + "px"
-  });
+  // var cornerSize = .025 * stageHeight;
+  // $(".rounded").css({
+  //   '-webkit-border-radius': cornerSize + "px",
+  //   '-moz-border-radius': cornerSize + "px",
+  //   'border-radius': cornerSize + "px"
+  // });
 
 
   //Resize font-size for HTML type. Use rem measurement to set font-size
-  $("html").css("font-size", (stageHeight / 60) + "px");
+  $("html").css("font-size", (stageHeight / 60) + "px"); //updates bounds and areas when window is resized.
 
 }
 
