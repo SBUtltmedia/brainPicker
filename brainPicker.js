@@ -86,6 +86,7 @@ function load() { // makes sure the whole site is loaded
       loadCurrentQuestion()
       showQuestionButtons()
       updateButtons();
+      maxAvgDistance(state.globalPoly[state.which]);
       $(window).on("resize", function() {
         resizeWindow();
         drawMultiPoly();
@@ -1025,7 +1026,7 @@ function playbackTheatre(theRegion) {
   unbindAll(true);
   state.playback = true;
   $("#playbackControls").css("pointerEvents", "auto");
-  $(".questionSelectBtn").css("backgroundColor", "#a6a9ad");
+  $(".questionSelectBtn").css("filter", "grayScale(15)");
   $(".questionSelectBtn").css("pointerEvents", "none");
   $("#infoToggle").css("pointerEvents", "auto");
   $("#restartToggle").css("pointerEvents", "auto");
@@ -1385,7 +1386,7 @@ function endModal(cs, ab) {
   $("#modal").css("font-size", "1.8rem");
   $("#rp, #ta, #n").css("pointerEvents", "auto");
   $("#modal button").css("font-size", "1.15rem");
-  $(".questionSelectBtn").css("backgroundColor", "white");
+  $(".questionSelectBtn").css("filter", "grayScale(0)");
   $("#questionSelect").css("pointerEvents", "inherit");
   //resizeWindow();
   //if (state.submitted == false) {
