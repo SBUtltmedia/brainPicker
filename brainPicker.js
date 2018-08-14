@@ -32,7 +32,7 @@ var state = {
   submitted: false,
   firstPause: true,
   questionScore: 0,
-  maxDistances : null,
+  maxAvgDistances : null,
   playback: false,
 };
 
@@ -86,11 +86,10 @@ function load() { // makes sure the whole site is loaded
       loadCurrentQuestion()
       showQuestionButtons()
       updateButtons();
-      computeBounds(state.globalPoly[state.which]);
       $(window).on("resize", function() {
         resizeWindow();
         drawMultiPoly();
-        console.log("Resize");
+        console.log("Resizing");
       }).trigger("resize");
 
 
@@ -300,9 +299,7 @@ function showQuestionButtons() {
 
   $("#infoToggle,#infoClose").on("click", function() {
     var isVisible = $("#info").toggle().is(':visible');
-    console.log(isVisible);
     if ($("#playbackControls").css("visibility") == "visible") {
-      console.log("isVi");
       if (isVisible) {
         $("#playbackControls, #restartToggle").css("pointerEvents", "none");
 
@@ -363,63 +360,82 @@ function showQuestionButtons() {
 }
 
 
-function computeBounds(pointList) {
-  maxDistance(pointList).then(function(){
-    console.log(state.maxDistances);
-    var boxSize = [0, 0, 0];
-    var maxCoords = [0, 0, 0];
-    var minCoords = [1, 1, 1];
-    $.each(pointList, function(index, value) {
-      if (!value[0]) return true; //for some reason, the loop will iterate even if the value is empty and cause error. So, if no value, continue to next iteration.
-      for (i = 0; i < value[0].length; i += 2) {
-        var normX = value[0][i] / state.imageWidth;
-        var normY = value[0][i + 1] / state.imageWidth;
-        var normZ = index / state.totalLayers;
-        //console.log(normX, normY, normZ);
-
-        if (normX > maxCoords[0]) maxCoords[0] = normX;
-        if (normY > maxCoords[1]) maxCoords[1] = normY;
-        if (normZ > maxCoords[2]) maxCoords[2] = normZ;
-
-        if (normX < minCoords[0]) minCoords[0] = normX;
-        if (normY < minCoords[1]) minCoords[1] = normY;
-        if (normZ < minCoords[2]) minCoords[2] = normZ;
-
-        //console.log(maxCoords[0], maxCoords[1], maxCoords[2], minCoords[0], minCoords[1], minCoords[2]);
-
-        for (ee = 0; ee < 3; ee++) {
-          boxSize[ee] = maxCoords[ee] - minCoords[ee];
-        }
-
-
-
-      }
-
-    });
-
-  });
-
-}
-function maxDistance(questionPointList) {
-  dfd = jQuery.Deferred();
-  state.maxDistances= [];
-  var max_dist = 0;
+// function computeBounds(pointList) {
+//   maxAvgDistance(pointList).then(function(){
+//     var boxSize = [0, 0, 0];
+//     var maxCoords = [0, 0, 0];
+//     var minCoords = [1, 1, 1];
+//     $.each(pointList, function(index, value) {
+//       if (!value[0]) return true; //for some reason, the loop will iterate even if the value is empty and cause error. So, if no value, continue to next iteration.
+//       for (i = 0; i < value[0].length; i += 2) {
+//         var normX = value[0][i] / state.imageWidth;
+//         var normY = value[0][i + 1] / state.imageWidth;
+//         var normZ = index / state.totalLayers;
+//         //console.log(normX, normY, normZ);
+//
+//         if (normX > maxCoords[0]) maxCoords[0] = normX;
+//         if (normY > maxCoords[1]) maxCoords[1] = normY;
+//         if (normZ > maxCoords[2]) maxCoords[2] = normZ;
+//
+//         if (normX < minCoords[0]) minCoords[0] = normX;
+//         if (normY < minCoords[1]) minCoords[1] = normY;
+//         if (normZ < minCoords[2]) minCoords[2] = normZ;
+//
+//         //console.log(maxCoords[0], maxCoords[1], maxCoords[2], minCoords[0], minCoords[1], minCoords[2]);
+//
+//         for (ee = 0; ee < 3; ee++) {
+//           boxSize[ee] = maxCoords[ee] - minCoords[ee];
+//         }
+//
+//
+//
+//       }
+//
+//     });
+//
+//   });
+//
+// }
+function maxAvgDistance(questionPointList) {
+  state.maxAvgDistances= [];
   $.each(questionPointList, function(index, value){
+    var max_dist = 0;
+    var totalMaxDist = 0;
+    var overallMaxDist = 0;
     var layerPoints = value[0];
+    var oldPoint;
+    var newPoint;
     if (!layerPoints) return true //returing true is continue for jQuery each statement
-    for (i=0; i<layerPoints.length-1; i+=2) {
-      for (j=i+2; j<layerPoints.length-1; j+=2) {
-        var x1 = layerPoints[i];
-        var y1 = layerPoints[i+1];
-        var x2 = layerPoints[j];
-        var y2 = layerPoints[j+1];
-        max_dist = Math.max(max_dist, Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)));
+    for (i=0; i<layerPoints.length; i+=2) {
+      totalMaxDist = 0;
+      var layerPointsTemp = layerPoints.slice();
+      oldPoint = i;
+      var x1 = layerPoints[i];
+      var y1 = layerPoints[i+1];
+      for (l = 0; l<state.totalReqPoints/state.requiredLayers-1; l++) {
+        max_dist = 0;
+        for (j=0; j<layerPointsTemp.length-2; j+=2) {
+          //console.log("Checking Point ("+layerPoints[j]+","+layerPoints[j+1]+")");
+          var x2 = layerPointsTemp[j];
+          var y2 = layerPointsTemp[j+1];
+          if (x1==x2 && y1==y2) continue;
+          var previous = max_dist;
+          max_dist = Math.max(max_dist, Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)));
+          if (max_dist!=previous) {
+            newPoint = j;
+          }
+        }
+        x1 = layerPointsTemp[newPoint];
+        y1 = layerPointsTemp[newPoint+1];
+        layerPointsTemp.splice(oldPoint,2); //removes point.
+        oldPoint = newPoint;
+        totalMaxDist+=max_dist;
       }
+      if (overallMaxDist<totalMaxDist) overallMaxDist = totalMaxDist;
     }
-    state.maxDistances[index] = max_dist*state.scaleFactor;
+    state.maxAvgDistances[index] = state.scaleFactor*(overallMaxDist/(state.totalReqPoints/state.requiredLayers));
+    //sets maxAverageDistance
   });
-  dfd.resolve();
-  return dfd;
 }
 // function calculateAreas(pointListAllLayers) {
 //   dfd = jQuery.Deferred();
@@ -518,7 +534,7 @@ function loadCurrentQuestion() {
   var questionText = "Please pick " + theQuestion.pointsPerLayer + " points on " + theQuestion.requestLayers + " Layers in the <u>" + theQuestion.region + "</u><strong class='typed-cursor'> |</strong>";
   state.requiredLayers = theQuestion.requestLayers;
   state.which = theQuestion.region;
-  computeBounds(state.globalPoly[state.which]);
+  maxAvgDistance(state.globalPoly[state.which]);
   state.currentRegion = "qn" + state.currentQuestionNum;
   updatePoints()
   $("#helpText").html("<p class='powerOn'>You have " + state.totalReqPoints + " points left to place, across " + state.requiredLayers + " more Layers </p>");
@@ -1136,7 +1152,7 @@ function playbackTheatre(theRegion) {
         colorPoints(state.currentLayer).then(
           function(val) {
             retValue = val;
-            //console.log("ColorPoints returned: " + retValue);
+            console.log("ColorPoints returned: " + retValue);
             afterBurner(state.currentLayer).then(function(ab){
               totalAfterBurnerScore+=ab;
               window.requestAnimationFrame(playResults);
@@ -1244,12 +1260,24 @@ function burnBar(c) {
 //
 // }
 
+
+
+
+
+//Afterburner steps
+
+// 1) Calculate average distance between points chosen on this layer (according to scaleFactor)
+// 2) Compare this (as a decimal percentage) to the max average distance (max distance/number of points -1)
+// 3) Subtract from 1 to get percent accurate value (before subtracting it was percent inaccurate)
+// 4) Multiply by ten to get percent out of 10.
 function afterBurner(layer) {
   var dfd = jQuery.Deferred();
+  console.log("running afterburner");
   var dist = 0;
-  var divider = 0;
+  requiredPoints = state.totalReqPoints/state.requiredLayers;
+  var divider = (requiredPoints*requiredPoints-1)/2;
   var pointArray = $("." + layer + "[iscorrect='true']");
-  if (pointArray.length<state.requiredLayers) {dfd.resolve(0); return dfd;}
+  if (pointArray.length<state.totalReqPoints/state.requiredLayers) {dfd.resolve(0); return dfd;}
   for (i=0; i<pointArray.length; i++) {
     var x1 = parseFloat($(pointArray[i]).css("left"));
     var y1 = parseFloat($(pointArray[i]).css("top"));
@@ -1257,14 +1285,15 @@ function afterBurner(layer) {
       var x2 = parseFloat($(pointArray[j]).css("left"));
       var y2 = parseFloat($(pointArray[j]).css("top"));
       dist += Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
-      divider++;
     }
   }
   console.log("Divider:"+divider);
   var avgDist = (dist/divider)*state.scaleFactor; //gets average distance between points
   console.log("Avg dist:" +avgDist);
-  console.log("Max:" +state.maxDistances[layer]);
-  var returnScore = 10*(1-Math.abs((avgDist-state.maxDistances[layer])/state.maxDistances[layer]));
+  console.log("Max:" +state.maxAvgDistances[layer]);
+  var returnScore = 10*(1-Math.abs((avgDist-state.maxAvgDistances[layer])/state.maxAvgDistances[layer]));
+  console.log(returnScore);
+  returnScore = (returnScore>10) ? 10:returnScore;
   console.log(returnScore);
   dfd.resolve(returnScore);
   return dfd;
@@ -1348,7 +1377,7 @@ function endModal(cs, ab) {
   $("#ta").on("click", function(){
     $('#modal').remove();
     resetQuestionState();
-    console.log("Pressed");
+    console.log("Trying again");
     loadCurrentQuestion();
     unbindAll(false);
   });
