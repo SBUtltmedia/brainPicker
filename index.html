@@ -3,19 +3,33 @@
 <html lang="en" >
 
 <head>
-	<title id = "title">Brain Scanner</title>
+	<title id = "title">Brain Picker</title>
+	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.7.3/themes/humanity/jquery-ui.css">
 	<link rel="stylesheet" href="style2.css">
 	<link href='https://fonts.googleapis.com/css?family=Share+Tech+Mono|Press+Start+2P|Electrolize' rel='stylesheet' type='text/css'>
 	<link rel=" stylesheet" type="text/css" href="joyride-2.1.css">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32x32.png">
+<link rel="manifest" href="images/favicons/site.webmanifest">
+<link rel="shortcut icon" href="images/favicons/favicon.ico">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-config" content="images/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+<!-- Scripts -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 	<script src="jquery.ui.touch-punch.min.js"></script>
-	<script src='jcanvas.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jcanvas/21.0.1/min/jcanvas.min.js'></script>
 	<script src="typed.js"></script>
 	<script src="getImageTotal.js"></script>
 	<script src="jquery.joyride-2.1.js"></script>
+	<script src="lockToOrientation.js"></script>
 	<script src="brainPicker.js"></script>
 
 
@@ -33,6 +47,7 @@
 
 
 	<div id="stage" class="screen">
+		<div id = "exitFull"> </div>
 	<div id="info" title="About MRI" >
 	<div id="infoClose" class="fs-26"> &#x2717 </div>
 	<div id="accordion">
@@ -121,6 +136,7 @@ Use this game to help you practice locating the different regions of the brain. 
 <li class="tour" data-id = "playbackControls"> These are your playback controls. When playing question results, use these to change layers or pause the playback. </li>
 <li class="tour" data-id = "leaderB"> This is the score table. Here you will see <br> your all-time top score for this question. </li>
 <li class="tour" data-id = "leaderB"> You will also see the Top 10 Overall Question High Scores. <br>Try the question again and try to be Number 1! </li>
+<li class="tour" data-id = "leaderB"> Scores will be calculated by combining the number <br/> of correct points and the distance bonus for the question. <br/> Distance bonus will be calculated on the distance between <br/> placed points, as well as the distance between chosen layers.</li>
 <li class="tour" data-id = "leaderB"> Please note: Each user can only have one high score in the Overall Top 10 Scores. <br> Only your top overall score will appear. </li>
 <li class="tour" data-id="theCanvas">Last but not least, this is where you'll see and select points on different sections of the brain.</li>
 <li class="tour" <img src="images/threeClicks.gif" alt="placement Example" style="width:50%; float:right; margin:1px;" /> Click anywhere on the brain to place points.<br/> Make a mistake?<br/> Click on one of your points to delete it.<br/></li>

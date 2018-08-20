@@ -1,6 +1,6 @@
 //Represent the following variables as part of a state, rather than having globals..
 var state = {
-  which: "",
+  which: "area medial and caudal to the green point",
   totalLayers: 34,
   requiredLayers: null,
   totalReqPoints: null,
@@ -24,6 +24,7 @@ var state = {
   previousy: null,
   canvaswidthglobal: null,
   currentLayer: null,
+  lastLayer: null,
   pause: undefined,
   mytimeout: null,
   brainType: "human",
@@ -32,17 +33,19 @@ var state = {
   submitted: false,
   firstPause: true,
   questionScore: 0,
-  maxAvgDistances : null,
-  playback: false,
+  maxAvgDistances: null,
+  playback: false
 };
 
 const sensitivity = 120;
 const timeOutTime = 70;
 const passScore = 70;
-
+const screenMax = [480,850];
 
 $(function() {
+  $("#title").html("Loading...");
   var dfd = jQuery.Deferred();
+  getOrientationKeys();
   $.getJSON("getUsername.php", function(data) {
     state.user = data;
   }).fail(function(d, textStatus, error) {
@@ -54,18 +57,49 @@ $(function() {
   state.brainType = state.brainType.toLowerCase();
   if (!(brainTypes.includes(state.brainType))) state.brainType = "human";
   getImageTotal(state.brainType + "/layerImages/", 1, dfd).then(function(data) {
-    state.totalLayers = data;
-    console.log("^Don't worry about failed resource error, it's intentional^");
-    load();
+      state.totalLayers = data;
+      console.log("^Don't worry about failed resource error, it's intentional^");
+      //For mobile
+      load().then(function(){
+        //Mobile device detection
+        if (($(window).width() < screenMax[0] && $(window).height()<screenMax[1]) || $(window).height()<screenMax[0] ) {
+            mobileSetup();
+            //only display blocker when device is in potrait mode.
+            mobilePotraitBlocker(!($(window).height()<screenMax[0]));
+        }
+        else {
+          $('#status').fadeOut(); // will first fade out the loading animation
+          $('#preloader').delay(200).fadeOut('slow'); // will fade out the white DIV that covers the website.
+        }
+      });
+
+
+    });
   });
-});
+
+
 
 function load() { // makes sure the whole site is loaded
-  $('#status').fadeOut(); // will first fade out the loading animation
-  $('#preloader').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website.
   $('body').delay(350).css({
     'overflow': 'visible'
   });
+  if ( !window.requestAnimationFrame ) {
+
+  	window.requestAnimationFrame = ( function() {
+
+  		return window.webkitRequestAnimationFrame ||
+  		window.mozRequestAnimationFrame ||
+  		window.oRequestAnimationFrame ||
+  		window.msRequestAnimationFrame ||
+  		function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+
+  			window.setTimeout( callback, 1000 / 60 );
+
+  		};
+
+  	} )();
+
+  }
   $("#Sagital").attr("src", state.brainType + "/Sagital.png");
   loadPlayerButtons();
   $("#accordion").accordion({
@@ -91,7 +125,8 @@ function load() { // makes sure the whole site is loaded
         resizeWindow();
         drawMultiPoly();
         console.log("Resizing");
-      }).trigger("resize");
+      });
+
 
 
 
@@ -100,7 +135,12 @@ function load() { // makes sure the whole site is loaded
     }); // input
   }); // input
   // compute
+  return resizeWindow();
 };
+
+
+
+
 
 function useLeaderBScroll(status) {
   //Should always be scrollable, regardless of whether or not the on/off functions are on.
@@ -125,7 +165,6 @@ function updateScoreData() {
   //Once this is completed, pull the
   $.getJSON("read.php", function(data) {
     state.user = data["user"];
-    $("#title").html("Brain Picker -"+state.user);
     state.previousScores = data[state.brainType] || data;
 
     if (Object.keys(state.previousScores).length == 0) {
@@ -215,6 +254,7 @@ function useMouseWheelLayers(status) {
 
         if ((newVal >= 1) && (newVal <= state.totalLayers)) {
           //console.log(newVal);
+          console.log(newVal);
           updateWidgets(newVal);
         }
       }
@@ -397,6 +437,8 @@ function showQuestionButtons() {
 //   });
 //
 // }
+
+//Calculates max possible distance for the question
 function maxAvgDistance(questionPointList) {
   state.maxAvgDistances= [];
   $.each(questionPointList, function(index, value){
@@ -406,14 +448,16 @@ function maxAvgDistance(questionPointList) {
     var layerPoints = value[0];
     var oldPoint;
     var newPoint;
+    var keptDivider = 0;
     if (!layerPoints) return true //returing true is continue for jQuery each statement
     for (i=0; i<layerPoints.length; i+=2) {
       totalMaxDist = 0;
+      divider=0;
       var layerPointsTemp = layerPoints.slice();
       oldPoint = i;
       var x1 = layerPoints[i];
       var y1 = layerPoints[i+1];
-      for (l = 0; l<state.totalReqPoints/state.requiredLayers-1; l++) {
+      for (l = 0; l<(state.totalReqPoints/state.requiredLayers)-1; l++) {
         max_dist = 0;
         for (j=0; j<layerPointsTemp.length-2; j+=2) {
           //console.log("Checking Point ("+layerPoints[j]+","+layerPoints[j+1]+")");
@@ -431,13 +475,26 @@ function maxAvgDistance(questionPointList) {
         layerPointsTemp.splice(oldPoint,2); //removes point.
         oldPoint = newPoint;
         totalMaxDist+=max_dist;
+        divider++;
       }
-      if (overallMaxDist<totalMaxDist) overallMaxDist = totalMaxDist;
+      if (overallMaxDist<totalMaxDist) {
+        overallMaxDist = totalMaxDist;
+        keptDivider = divider;
+      }
     }
-    state.maxAvgDistances[index] = state.scaleFactor*(overallMaxDist/(state.totalReqPoints/state.requiredLayers));
+    state.maxAvgDistances[index] = (overallMaxDist/(keptDivider));
     //sets maxAverageDistance
   });
 }
+function zMaxDistance() { //caclulates maximum zDistance spread for each question.
+  questionPointList = state.globalPoly[state.which];
+  return Math.ceil(Object.keys(questionPointList).length / state.requiredLayers);
+}
+
+
+
+
+
 // function calculateAreas(pointListAllLayers) {
 //   dfd = jQuery.Deferred();
 //   var newPoints= {};
@@ -477,7 +534,7 @@ function getUserHistory() {
   $.each(state.globalQuestion, function(key, value) {
     if (state.previousScores) var value = state.previousScores[value["region"]];
     score = -1;
-    if (value) score = value["score"]+value["ab"];
+    if (value) score = value["score"] + value["ab"];
     questionColors.push(score);
   })
   dfd.resolve(questionColors);
@@ -486,12 +543,12 @@ function getUserHistory() {
 
 //Colors question buttons if based on status (answered, unanswered, current question)
 function updateButtons() {
-  getUserHistory().then(function(usrArr){
+  getUserHistory().then(function(usrArr) {
     $(".questionSelectBtn").css("background-color", "white");
     $(".questionSelectBtn").each(function(index, element) {
       if (index == state.currentQuestionNum) $(this).css("background-color", "yellow")
       else if (usrArr[index] >= passScore) $(this).css("background-color", "green")
-      else if (usrArr[index]<0) $(this).css("background-color", "white");
+      else if (usrArr[index] < 0) $(this).css("background-color", "white");
       else $(this).css("background-color", "red");
     });
   });
@@ -510,7 +567,6 @@ function loadCurrentQuestion() {
 
   updateButtons();
 
-
   $(".picked").remove();
   $(".joyride-content-wrapper").css("font-size", "1.2rem");
   $("#questionText").css("font-size", "1.2rem");
@@ -519,7 +575,7 @@ function loadCurrentQuestion() {
 
   $("#gridTable").remove();
   //MasterOpacity
-  state.drawOp = 0;
+  state.drawOp = 0.3;
   state.totalReqPoints = state.globalQuestion[state.currentQuestionNum].pointsPerLayer * state.globalQuestion[state.currentQuestionNum].requestLayers;
   //drawSlider(); // output
 
@@ -535,6 +591,7 @@ function loadCurrentQuestion() {
   var questionText = "Please pick " + theQuestion.pointsPerLayer + " points on " + theQuestion.requestLayers + " Layers in the <u>" + theQuestion.region + "</u><strong class='typed-cursor'> |</strong>";
   state.requiredLayers = theQuestion.requestLayers;
   state.which = theQuestion.region;
+  $("#title").html("Brain Picker " + state.brainType.capitalize() + " -" + state.which);
   maxAvgDistance(state.globalPoly[state.which]);
   state.currentRegion = "qn" + state.currentQuestionNum;
   updatePoints()
@@ -588,8 +645,8 @@ function updateWidgets(layer) {
   if (layer > state.totalLayers || layer <= 0) return;
   //console.log(layer);
   state.currentLayer = layer;
-  if (!state.playback) {//Updates help text based on layer
-    state.pointsLayer = $('.' + state.currentLayer).length-1;
+  if (!state.playback) { //Updates help text based on layer
+    state.pointsLayer = $('.' + state.currentLayer).length - 1;
     checkPointCount(state.currentRegion);
   }
   $(".pointerCell").css("opacity", 0);
@@ -647,14 +704,14 @@ function drawGrid() { // 2 Calls by addToClickList, $(document).ready
 
       if (!tableMade) {
         $('#' + currentRowId).append($("<td/>", {
-          id: "box_" + n +"_" + m,
-          style: "width:" +boxPercent + "%",
+          id: "box_" + n + "_" + m,
+          style: "width:" + boxPercent + "%",
           class: "gridBox"
         }));
         if (m == columns - 1) {
           $('#' + currentRowId).append($("<td/>", {
             id: "erase_" + n,
-            class : "strobeBtn",
+            class: "strobeBtn",
             style: "visibility: hidden"
           }));
           $("#" + "erase_" + n).click(function() {
@@ -817,7 +874,7 @@ function drawPoly(layerIndex, polyIndex, curPoly) {
     opacity: state.drawOp,
     // opacity: true,
     groups: ["group" + layerIndex],
-    fillStyle: 'orange',
+    fillStyle: 'purple',
     click: function(e) {
 
       addToClickList(e._eventX, e._eventY, true);
@@ -877,21 +934,21 @@ function addToClickList(ex, ey, isCorrect) { // 2 calls from canvasClearing, dra
 
 
     $("#brainDisplay").append($("<div/>", {
-      isCorrect : isCorrect,
-      class : state.currentLayer + " " +state.currentRegion + " pointerImage picked",
+      isCorrect: isCorrect,
+      class: state.currentLayer + " " + state.currentRegion + " pointerImage picked",
       id: idName
     }).on("click", function() {
       $(this).remove();
-      state.pointsLayer = state.pointsLayer-1;
+      state.pointsLayer = state.pointsLayer - 1;
       drawGrid();
       checkPointCount(state.currentRegion);
     }));
-    $("#" +idName).css({
+    $("#" + idName).css({
       position: "absolute",
-      left: " "+percentX + "%",
-      top: " "+percentY + "%"
+      left: " " + percentX + "%",
+      top: " " + percentY + "%"
     });
-    $("#"+idName).append($("<img/>").attr("src",'images/BrainPointerSmall.svg'));
+    $("#" + idName).append($("<img/>").attr("src", 'images/BrainPointerSmall.svg'));
     //Previous appending method: $("#brainDisplay").append("<div onclick='$(this).remove();drawGrid();checkPointCount(state.currentRegion);' isCorrect='" + isCorrect + "' class='" + state.currentLayer + " " + state.currentRegion + " pointerImage picked' style='position:absolute; left:" + percentX + "%; top: " + percentY + "%;' id='" + idName + "'><img src='images/BrainPointerSmall.svg'/></div>");
     state.previousX = percentX;
     state.previousy = percentY;
@@ -933,12 +990,13 @@ function checkPointCount(region) {
   var t = cs.length;
   //console.log(t);
   var pointsLeft = state.totalReqPoints - t
-  console.log(state.currentLayer);
   var pointPerLayer = cols - state.pointsLayer;
 
   $("#helpText").html("You have " + pointsLeft + " points left to place, across " + (state.requiredLayers - activeLayers()) + " more Layers");
-  if (state.pointsLayer==-1)  {} //Do nothing - effectively removes the help text;
-  else if (pointPerLayer > 1) $("#helpText").append($("<p/>", {id: "helpLayer"}).html("You need "+(pointPerLayer-1)+ " points on this Layer."));
+  if (state.pointsLayer == -1) {} //Do nothing - effectively removes the help text;
+  else if (pointPerLayer > 1) $("#helpText").append($("<p/>", {
+    id: "helpLayer"
+  }).html("You need " + (pointPerLayer - 1) + " points on this Layer."));
   //$("#helpText").append("<p>You need " + (pointPerLayer - 1) + " points on this Layer.</p>");
   else $("#helpText").append($("<p/>").html("You have enough points on this layer"));
   //$("#helpText").append("<p>You have enough points here.</p>");
@@ -958,7 +1016,7 @@ function checkPointCount(region) {
       unbindAll(true);
       setTimeout(function() {
         state.currentLayer = state.totalLayers;
-        state.drawOp = 0.5;
+        state.drawOp = 0.3;
         playbackTheatre(state.currentRegion);
       }, 125); //waits half a second
     })
@@ -999,7 +1057,6 @@ function loadPlayerButtons() {
 
 
 
-
 function focusLayerErase() {
 
 
@@ -1036,6 +1093,7 @@ function playbackTheatre(theRegion) {
   document.getElementById("buttonPausePlayer").innerHTML = "&#10074&#10074";
   console.log("Loading playback theatre")
   var totalAfterBurnerScore = 0;
+  var zScore = 0;
 
   if (state.firstPause) {
     $("#buttonPausePlayer").on("click", function() {
@@ -1120,19 +1178,26 @@ function playbackTheatre(theRegion) {
   function playResults() {
     if ($(".picked").length == 0 && state.currentLayer == 0) {
 
-      burnBar(totalAfterBurnerScore/state.requiredLayers*10);
+
       $("#helpText").html("<h1>DONE</h1>");
       //console.log(totalAfterBurnerScore + "afterburnerscore");
       $(".checked").addClass("picked");
       state.currentLayer = state.totalLayers;
-      console.log("Afterburner: "+totalAfterBurnerScore);
-      endModal(cs, totalAfterBurnerScore/state.requiredLayers);
+      state.lastLayer = null;
+      //console.log("Afterburner: "+totalAfterBurnerScore);
+      totalAfterBurnerScore /= state.requiredLayers;
+      if (state.lastLayer) {
+        zScore /= state.requiredLayers - 1;
+      }
+      else { //If there was only one layer for the question, automatically give a full score of 5 for zBonus.
+        zScore = 5;
+      }
+      burnBar((totalAfterBurnerScore + zScore)); //fills meter at rate in which 15% bonus is a full bar.
+      endModal(cs, totalAfterBurnerScore + zScore);
       state.playback = false;
       console.log("Playback ended");
 
-      }
-
-    else {
+    } else {
 
       var afterBurnerCount;
 
@@ -1149,23 +1214,28 @@ function playbackTheatre(theRegion) {
 
 
       } else {
-        setTimeout(function(){
-        colorPoints(state.currentLayer).then(
-          function(val) {
-            retValue = val;
-            console.log("ColorPoints returned: " + retValue);
-            afterBurner(state.currentLayer).then(function(ab){
-              totalAfterBurnerScore+=ab;
-              window.requestAnimationFrame(playResults);
-            });
+        setTimeout(function() {
+          colorPoints(state.currentLayer).then(
+            function(val) {
+              retValue = val;
+              console.log("ColorPoints returned: " + retValue);
+              afterBurner(state.currentLayer).then(function(ab) {
+                console.log(state.lastLayer);
+                if (ab != 0) {
+                  zScore += zBonus(state.currentLayer, state.lastLayer);
+                }
+                state.lastLayer = state.currentLayer
+                totalAfterBurnerScore += ab;
+                window.requestAnimationFrame(playResults);
+              });
 
 
 
-          }
+            }
 
 
-        );
-      },timeOutTime*5);
+          );
+        }, timeOutTime * 5);
       }
     }
   }
@@ -1177,13 +1247,17 @@ function playbackTheatre(theRegion) {
 
   function colorPoints(playbackLayer) {
     var deferred = jQuery.Deferred();
-      return colorPoint();
+    return colorPoint();
+
     function colorPoint() {
 
       var returnValue = 0;
       var points = $("." + playbackLayer + ".picked");
       var currentPointNum = 0;
-      if (currentPointNum >= points.length) {deferred.resolve(returnValue); return deferred};
+      if (currentPointNum >= points.length) {
+        deferred.resolve(returnValue);
+        return deferred
+      };
       currentPoint = points[currentPointNum];
       //console.log($(currentPoint));
       $(currentPoint).removeClass("picked");
@@ -1213,10 +1287,10 @@ function playbackTheatre(theRegion) {
 
       }
 
-    return deferred;
-    //console.log(state.currentRegion,num);
+      return deferred;
+      //console.log(state.currentRegion,num);
+    }
   }
-}
 
 
 
@@ -1226,16 +1300,19 @@ function playbackTheatre(theRegion) {
 
 function bumpBar() {
   var i = 0;
-    var progressbar = $("#progressbar");
-    var timeOutBar = setInterval(function(){
+  var progressbar = $("#progressbar");
+  var timeOutBar = setInterval(function() {
     var val = progressbar.progressbar("value") || 0;
-    if ((val<state.questionScore)) { progressbar.progressbar("value", val+.11);}
-    if (state.playback == false && val>=state.questionScore) clearInterval(timeOutBar);
-  },timeOutTime);
-    state.questionScore = 0.00;
+    if ((val < state.questionScore)) {
+      progressbar.progressbar("value", val + .11);
+    }
+    if (state.playback == false && val >= state.questionScore) clearInterval(timeOutBar);
+  }, timeOutTime);
+  state.questionScore = 0.00;
 }
 
 function burnBar(c) {
+  c = c * 7.25 //fills meter at rate in which 15% bonus is a full bar.
   var burnerbar = $("#burnerbar");
   burnerbarValue = burnerbar.find(".ui-progressbar-value");
   burnerbarValue.css({
@@ -1243,11 +1320,11 @@ function burnBar(c) {
   });
   var val = burnerbar.progressbar("value") || 0;
   var i = 0;
-  var bar = setInterval(function(){
-      i++;
-      if (val+i>c*1.5) clearInterval(bar);
-      burnerbar.progressbar("value", val + i);
-  },15);
+  var bar = setInterval(function() {
+    i++;
+    if (val + i > c * 1.5) clearInterval(bar);
+    burnerbar.progressbar("value", val + i);
+  }, 15);
 }
 
 
@@ -1263,6 +1340,18 @@ function burnBar(c) {
 
 
 
+function zBonus(current, last) {
+  if(!last) return 0; //if no previous layer exists
+  console.log("in Z");
+  max = zMaxDistance();
+  console.log(max);
+  if (zMaxDistance() > (last - current)) { //the reason it is last-current instead of vice versa is because the layer numbers descend, starting from the max layer number (bottom is 1);
+    var zScore = 5 * (((last - current) / zMaxDistance()));
+    console.log("Z: " + zScore);
+    return zScore;
+  } else return 5; //otherwise return a full score.
+
+}
 
 
 //Afterburner steps
@@ -1273,29 +1362,39 @@ function burnBar(c) {
 // 4) Multiply by ten to get percent out of 10.
 function afterBurner(layer) {
   var dfd = jQuery.Deferred();
-  console.log("running afterburner");
+  //console.log("running afterburner");
   var dist = 0;
-  requiredPoints = state.totalReqPoints/state.requiredLayers;
-  var divider = (requiredPoints*requiredPoints-1)/2;
+  requiredPoints = state.totalReqPoints / state.requiredLayers;
+  var divider = 0;
   var pointArray = $("." + layer + "[iscorrect='true']");
-  if (pointArray.length<state.totalReqPoints/state.requiredLayers) {dfd.resolve(0); return dfd;}
-  for (i=0; i<pointArray.length; i++) {
+  if (pointArray.length < state.totalReqPoints / state.requiredLayers) {
+    dfd.resolve(0);
+    return dfd;
+  }
+  for (i = 0; i < pointArray.length; i++) {
     var x1 = parseFloat($(pointArray[i]).css("left"));
     var y1 = parseFloat($(pointArray[i]).css("top"));
-    for (j=i+1; j<pointArray.length; j++) {
+    for (j = i + 1; j < pointArray.length; j++) {
       var x2 = parseFloat($(pointArray[j]).css("left"));
       var y2 = parseFloat($(pointArray[j]).css("top"));
-      dist += Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+      dist += Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+      divider++;
     }
   }
-  console.log("Divider:"+divider);
-  var avgDist = (dist/divider)*state.scaleFactor; //gets average distance between points
-  console.log("Avg dist:" +avgDist);
-  console.log("Max:" +state.maxAvgDistances[layer]);
-  var returnScore = 10*(1-Math.abs((avgDist-state.maxAvgDistances[layer])/state.maxAvgDistances[layer]));
+  console.log("Divider:" + divider);
+  var avgDist = (dist / divider) * state.scaleFactor; //gets average distance between points
+  console.log("Avg dist:" + avgDist);
+  console.log("Max:" + state.maxAvgDistances[layer]);
+  var returnScore;
+  if (avgDist > state.maxAvgDistances[layer]) returnScore = 10;
+  else returnScore = 12 * (1 - Math.abs((avgDist - state.maxAvgDistances[layer]) / state.maxAvgDistances[layer]));
+  //^^even though the score maxes out at 10, the a multiplier of 12 is used to make the game easier.
+  returnScore = (returnScore > 10) ? 10 : returnScore;
   console.log(returnScore);
-  returnScore = (returnScore>10) ? 10:returnScore;
-  console.log(returnScore);
+
+
+
+
   dfd.resolve(returnScore);
   return dfd;
 }
@@ -1331,9 +1430,9 @@ function endModal(cs, ab) {
     id: "modal"
   });
   var divInModal = $("<div/>").append($("<h2/>").html("Results: "));
-  var scoreText = $("<p/>").html("Correct: "+barTotal+"%");
-  var afterburnerText = $("<p/>").html("Distance Bonus: <br>"+ab+"%");
-  var finalText = $("<h2/>").html("Final Score: "+finalValue+"%");
+  var scoreText = $("<p/>").html("Correct: " + barTotal + "%");
+  var afterburnerText = $("<p/>").html("Distance <br /> &nbsp;Bonus: <br/>" + ab + "%");
+  var finalText = $("<h2/>").html("&nbsp;Final <br /> &nbsp;Score: <br />" + finalValue + "%");
   var nextBtn = $("<button/>", {
     id: "n",
     text: "Next Question"
@@ -1346,13 +1445,13 @@ function endModal(cs, ab) {
     id: "rp",
     text: "Replay Answer"
   });
-  divInModal.append([scoreText, afterburnerText, finalText, nextBtn, replayBtn,taBtn]);
+  divInModal.append([scoreText, afterburnerText, finalText, nextBtn, replayBtn, taBtn]);
   modal.append(divInModal);
   $("#brainDisplay").append(modal);
   //$("#brainDisplay").append("<div id='modal'><div><h2>Results: </h2><p>Correct: " + barTotal + "%</p>+<p>Distance Bonus:<br/> " + ab + "%</p><h2>Final Score: " + finalValue + "%</h2><button id='n'>Next Question</button><button id='rp'>Replay Answer</button><button id='ta'>Try Again</button>  </div></div>");
 
   //Function for replay answer button
-  $("#rp").on("click", function(){
+  $("#rp").on("click", function() {
     $('#modal').remove();
     $(".picked img").attr("src", "images/BrainPointerSmall.svg");
     $(".checked").addClass("picked");
@@ -1365,7 +1464,7 @@ function endModal(cs, ab) {
   });
 
   //Function for clicking next button
-  $("#n").on("click", function(){
+  $("#n").on("click", function() {
     cleanUpModal();
     state.currentQuestionNum++;
     updateLeaderBoard();
@@ -1375,7 +1474,7 @@ function endModal(cs, ab) {
   });
 
   //Function for clicking try again buttonNextPlayer
-  $("#ta").on("click", function(){
+  $("#ta").on("click", function() {
     $('#modal').remove();
     resetQuestionState();
     console.log("Trying again");
@@ -1461,15 +1560,29 @@ function checkWin(cs) {
 
 // Resize the window
 function resizeWindow() {
-
+  var dfd = jQuery.Deferred();
   // Get window width and height
   $("#accordion").accordion("refresh");
   state.canvaswidthglobal = parseFloat($("#brainDisplay").css("width"));
-  var   stageWidth = $(window).width();
+  var stageWidth = $(window).width();
   var stageHeight = $(window).height();
+  console.log(stageWidth,stageHeight);
+  //If mobile device
+  if (stageWidth<screenMax[0] && stageHeight <screenMax[1]) {
+    $("#preloader").html($("<h4/>", {
+      "style": "font-Size : 10rem",
+      "text": "Rotate to Resume"
+    }));
+    mobilePotraitBlocker(true);
+  }
+
+
+
+  else {
+      $('#preloader').delay(200).fadeOut('slow'); //remove preloader
+  }
+
   // If the window aspect ratio >=  screen aspect, fix height and set width based on height
-  var rotate = 0;
-  // console.log($("#stage").css("background-image"));
   if ((stageWidth / stageHeight) >= state.aspectWidth / state.aspectHeight) {
     var lastWidth = stageWidth
     stageWidth = (state.aspectWidth / state.aspectHeight) * stageHeight;
@@ -1484,15 +1597,13 @@ function resizeWindow() {
     stageHeight = (state.aspectHeight / state.aspectWidth) * stageWidth;
     stageTop = (lastHeight - stageHeight) / 2;
     stageLeft = 0;
-
   }
-  // if ($("#stage").css("background-image").split("?").length>1) {
-  //   stageLeft = 0;
-  //   stageTop = 0;
-  //   console.log("Portrait");
-  //   console.log($("#stage").css("background-image"));
-  //   rotate = 90;
-  // }
+  //Resize font-size for HTML type. Use rem measurement to set font-size
+  $("html").css("font-size", (stageHeight / 60) + "px"); //updates bounds and areas when window is resized.
+
+  //console.log($("#stage").css("background-image"));
+
+
 
 
   //  var plungerRange = 10/stageHeight;
@@ -1503,8 +1614,7 @@ function resizeWindow() {
     width: stageWidth + "px",
     height: stageHeight + "px",
     left: stageLeft + "px",
-    top: stageTop + "px",
-    transform : "rotate(" +rotate +"deg)"
+    top: stageTop + "px"
   });
 
   // Resize corner border radii based on stage height
@@ -1518,8 +1628,8 @@ function resizeWindow() {
   // });
 
 
-  //Resize font-size for HTML type. Use rem measurement to set font-size
-  $("html").css("font-size", (stageHeight / 60) + "px"); //updates bounds and areas when window is resized.
+  dfd.resolve();
+  return dfd;
 
 }
 
@@ -1537,4 +1647,7 @@ if (!Object.keys) {
     }
     return keys;
   };
+}
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 }

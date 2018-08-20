@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My HTML Page</title>
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  <script>
+  $(function(){
+    var $canvas = $("<canvas/>").css("opacity", "0.5");
+    $canvas[0].width=1000;
+    $canvas[0].height=1000;
+    var ctx =$canvas[0].getContext('2d');
+    $('body').append([$canvas]);
+    $.get("human/structures.json",function(data){
+    for (i in data) {
+        // i = Object.keys(data)[3];
+        //ctx.fillStyle = 'rgb(255,165,0)';
+        ctx.fillStyle = 'rgb('+Math.random()*255+','+Math.random()*255+','+Math.random()*255+')';
+        //console.log(i);
+        for (j in data[i]) {
+
+
+           for (k in data[i][j]) {
+             var points = data[i][j][k];
+
+
+              for (l = 0; l<points.length/2; l++) {
+                //console.log(l);
+                if (l==0) {
+                  ctx.beginPath();
+                  ctx.moveTo(points[l*2],points[l*2+1]);
+                }
+                else {
+                  ctx.lineTo(points[l*2],points[l*2+1]);
+                  //console.log(points[l*2],points[l*2+1]);
+                }
+              }
+              ctx.closePath();
+              ctx.fill();
+
+
+
+           }
+
+        }
+    }
+    var pixelData = ctx.getImageData(0,0,1000,1000);
+    //console.log(pixelData);
+    var total = 0;
+    for (m = 0; m<=pixelData.data.length/4; m++) {
+      var red = pixelData.data[m*4];
+      var green = pixelData.data[m*4+1];
+      var blue = pixelData.data[m*4+2];
+      if ((red>250) && (green>150 && green<170) && (blue<5)) {
+        total++;
+      }
+    }
+    //ctx.putImageData(pixelData, 0, 0);
+    console.log(total/(pixelData.data.length/4)+ "%");
+    });
+
+
+
+
+
+  });
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>

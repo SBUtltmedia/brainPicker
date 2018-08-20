@@ -1,12 +1,10 @@
 body {
     margin: 0;
     padding: 0;
-
-    background: url(images/backgroundredesign.png);
-    -webkit-background-size: cover;
-  	-moz-background-size: cover;
-  	-o-background-size: cover;
-  	background-size: cover;
+    background-color: gray;
+}
+html { /*For some reason, body backgrounds do not appear in fullscreen..*/
+    background-color: gray;
 }
 
 /* Preloader */
@@ -19,6 +17,11 @@ body {
 	background-color:#fff; /* change if the mask should have another color then white */
 	z-index:99; /* makes sure it stays on top */
 }
+#preloader h4 {
+  position: relative;
+  top: 50rem;           /*aligns text to middle */
+  text-align: center;
+}
 
 #status {
 	width:200px;
@@ -26,7 +29,7 @@ body {
 	position:absolute;
 	left:50%; /* centers the loading animation horizontally one the screen */
 	top:50%; /* centers the loading animation vertically one the screen */
-	background-image:url(images/status.gif); /* path to your loading animation */
+	background-image:url(images/status.gif);
 	background-repeat:no-repeat;
 	background-position:center;
 	margin:-100px 0 0 -100px; /* is width and height divided by two */
@@ -302,6 +305,7 @@ float:right;
     background-color: green;
     color: white;
     font-size: .75rem;
+    padding: 2px;
 }
 
 #leaderB  td {
@@ -659,7 +663,10 @@ width: 10%;
         opacity: 1;
     }
 }
-/* @media screen and (max-width: 368px) {
+
+
+
+/* @media screen and (orientation: portrait) {
 #stage {
   background-image: url(images/leftscreen.png?heyportrait);
 

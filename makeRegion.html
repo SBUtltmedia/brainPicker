@@ -1,0 +1,77 @@
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous">
+</script>
+<script>
+//How to use: go to this url and use #RegionName to pull values from all svgs width the format "{number}-{RegionName}.svg"
+//Scale factors and offsets can be used to change values across all points, in order to get them correctly set. Tweak them as necessary
+  var path = "human/svgs/"
+  var layerIndex = 0
+  //After hours of fiddling around, these numbers seemed to produce the most accurate representation.
+  var scaleFactorX = 0.65;
+  var scaleFactorY = 0.65;
+  var offsetX = 60.00;
+  var offsetY = 60.00;
+  // var scaleFactorX = 0.65;
+  // var scaleFactorY = 0.65;
+  // var offsetX = -50;
+  // var offsetY = -100;
+  var region = {}
+  var regionName = location.hash.split("#")[1];
+  region[regionName] = {}
+  scanLayers(layerIndex)
+  function scanLayers(layerIndex) {
+    var file = `${path}${layerIndex}-${regionName}.svg`;
+    //console.log(file)
+    $.get(file).then(
+      function(data) {
+        var polyArray = [];
+        var polys = $(data).find("polygon,polyline");
+        if (polys.length == 0) {
+          var paths = $(data).find("path");
+          for (i = 0; i < paths.length; i++) {
+            var pathArray = [];
+            var pathLength = paths[i].getTotalLength();
+          for (n = 0; n <= 200; n++) {
+            x= paths[i].getPointAtLength((n/200)* pathLength).x;
+            y=paths[i].getPointAtLength((n/200)* pathLength).y;
+            if(x!=undefined) {
+            pathArray.push(x*scaleFactorX+offsetX);
+            pathArray.push(y*scaleFactorY+offsetY);
+            }
+          }
+          polyArray.push(pathArray);
+        }
+        } else {
+          for (i = 0; i < polys.length; i++) {
+            //console.log(i);
+          //  console.log($(polys[i]).attr("points"))
+            points = $(polys[i]).attr("points").replace(/ /g, ",").replace(/  /g, ",").split(",");
+            //console.log(points);
+            points.remove("");
+            console.log(points);
+            polyArray.push(points.map(function(point, index) {
+              if (index%2 ==0) return point*scaleFactorX+offsetX;
+              else return point*scaleFactorY+offsetY;
+            }));
+
+          }
+        }
+        region[regionName][layerIndex + ""] = polyArray;
+      }).always(function() {
+      if (layerIndex >= 100) {
+        console.log(JSON.stringify(region));
+        return;
+      }
+      scanLayers(layerIndex + 1)
+    })
+  }
+  Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+</script>

@@ -1,2 +1,4 @@
 *.log
 rawdata/*
+admins.json
+node_modules
