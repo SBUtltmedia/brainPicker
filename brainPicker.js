@@ -655,16 +655,15 @@ function getUserHistory() {
   $.each(state.globalQuestion, function(key, value) {
     if (state.previousScores) {
       if (value.text) {
-        var value = state.previousScores[value["text"]];
+        var val = state.previousScores[value["text"]];
       }
       else {
-        var value = state.previousScores[value["region"]];
+        var val = state.previousScores[value["region"]];
       }
 
   }
-
     score = -1;
-    if (value) score = value["score"] + value["ab"];
+    if (val) score = val["score"] + val["ab"];
     questionColors.push(score);
   })
   dfd.resolve(questionColors);
