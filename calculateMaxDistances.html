@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Max Distance Calculator</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script>
+    $(function() {
+      var brainType = location.hash.split("#")[1] || "human";
+      var brainTypes = ["dolphin", "human"];
+      brainType = brainType.toLowerCase();
+      if (!(brainTypes.includes(brainType))) brainType = "human";
+      var $canvas = $("<canvas/>").css("opacity", "0.5");
+      var brainType = "human"
+      $canvas[0].width = 1000;
+      $canvas[0].height = 1000;
+      var questions = {};
+      var questionData;
+      var ctx = $canvas[0].getContext('2d');
+      ctx.strokeStyle = 'white'
+      ctx.fillStyle = 'orange';
+      $('body').append([$canvas]);
+      $.get(brainType+"/questionBank.json", function(qData) {
+        questionData = qData;
+        console.log(questionData);
+      $.get(brainType+"/structures.json", function(data) {
+        //for each question
+        for (i in data) {
+          console.log(i);
+          var index = questionData.findIndex(p => p.region == i);
+          var required = questionData[index].pointsPerLayer;
+           console.log(required);
+          //  console.log("Starting ", i);
+          //ctx.fillStyle = 'rgb(255,165,0)';
+          //for each layers
+          var layer = {};
+          for (j in data[i]) {
+            for (k in data[i][j]) {
+              var points = data[i][j][k];
+               for (pointNum = 0; pointNum < points.length/2; pointNum++) {
+                 if (pointNum == 0) {
+                   ctx.beginPath();
+                   ctx.moveTo(points[pointNum*2], points[pointNum*2+1]);
+                 }
+                 else {
+                   ctx.lineTo(points[pointNum*2], points[pointNum*2+1]);
+                 }
+               }
+               ctx.closePath();
+              ctx.stroke();
+            }
+            var newPoints = [];
+            for (xIt = 0; xIt < 1000; xIt++) {
+              for (yIt = 0; yIt <1000; yIt ++) {
+                if(ctx.isPointInPath(xIt,yIt)) {
+                  newPoints.push(xIt,yIt);
+                }
+              }
+            }
+            console.log(newPoints);
+            layer[j] = maxDistance(orderedPair(newPoints), required);
+            // }
+              // var pixels = ctx.getImageData(0,0,1000,1000);
+              // var pixelData = pixels.data;
+              // var total = 0;
+              // for (pixelNum=0; pixelNum<pixelData.length/4; pixelNum+=1) {
+              //   var red = pixelNum[i*4];
+              //   if (red>100) total++;
+              // }
+              // ctx.clearRect(0,0,1000,1000);
+              // console.log(j);
+              // layer[j] = total;
+              // console.log(total);
+            }
+
+           questions[i] = layer;
+          //console.log("Ending ", i);
+        }
+        console.log(JSON.stringify(questions));
+
+        //ctx.putImageData(pixelData, 0, 0);
+      });
+      });
+    });
+    function maxDistance(points, required) {
+      var indexes = [];
+      var max = 0;
+      for (it = 0; it<required; it++) {
+        if (points[it]) indexes[it] = it;
+      }
+      //var skipper = Math.ceil(points.length/5);
+      var skipper = 1;
+      var completedPoints = 1; //dtarts at one since zero-based indexing.
+      var currentIndex = 0;
+      while (indexes[0]<points.length) {
+        var newValue = indexes[currentIndex];
+        if (newValue>=points.length) {
+          indexes[currentIndex]=points.length-1;
+          currentIndex--;
+          completedPoints++;
+          continue;
+        }
+        if (newValue<=points.length && currentIndex<required-completedPoints) {
+          currentIndex++;
+          indexes[currentIndex] = indexes[currentIndex-1]+skipper;
+          continue;
+        }
+        var arra = [];
+        for (var pointNum = required-1; pointNum>=0; pointNum--) {
+          arra.push(points[indexes[pointNum]]);
+        }
+        //console.log(arra);
+        max = compare(arra,max);
+        indexes[currentIndex]+=skipper;
+        //caclulate distance here.
+        }
+        //console.log(max);
+        return max;
+
+    }
+    function compare(arr, max) {
+      var dist = 0;
+      var divider = Math.pow(arr.length, 2);
+      for (a = 0; a < arr.length; a++) {
+        for (b = 0; b < arr.length; b++) {
+          var x = arr[a].x - arr[b].x;
+          var y = arr[a].y - arr[b].y;
+          dist += Math.sqrt(x * x + y * y);
+        }
+      }
+      dist/=divider;
+      if (dist > max) {
+        max = dist;
+      }
+      return max;
+    }
+    //
+    // function subsetIterator(arr, length) {
+    //   var max = 0;
+    //   var subset = [];
+    //   if (length < 2) return 0;
+    //   else if (length<6) {
+    //     for (a = 0; a < arr.length; a += skips) {
+    //       subset[0] = arr[a];
+    //       if(length-1==subset.length) {
+    //         max=compare(subset, max);
+    //         continue;
+    //       }
+    //       for (b = 0; b < arr.length; b += skips) {
+    //         if (a == b) continue
+    //         subset[1] = arr[b];
+    //         if(length-1==subset.length) {
+    //           max=compare(subset, max);
+    //           continue;
+    //         }
+    //         for (c = 0; c < arr.length; c += skips) {
+    //           if (a == c && b == c) continue
+    //           subset[2]= arr[c];
+    //           if(length-1==subset.length) {
+    //             max=compare(subset, max);
+    //             continue;
+    //           }
+    //           for (d = 0; d < arr.length; d += skips) {
+    //             if (a == d || b == d || c == d) continue
+    //             subset[3]= arr[d];
+    //             if(length-1==subset.length) {
+    //               max=compare(subset, max);
+    //               continue;
+    //             }
+    //             for (e = 0; e < arr.length; e += skips) {
+    //               if (a == e || b == e || c == e || d == e) continue;
+    //               subset[4]= arr[e];
+    //               if(length-1==subset.length) {
+    //                 max=compare(subset, max);
+    //                 continue;
+    //               }
+    //               for (f = 0; f < arr.length; f += skips) {
+    //                 if (a == f || b == f || c == f || d == f || e == f) continue;
+    //                 subset[5]= arr[f];
+    //                 max=compare(subset, max);
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //     console.log("end layer");
+    //     return max;
+    //   }
+    // Example:
+
+
+    function orderedPair(array) {
+      var retArray = [];
+      for (loop = 0; loop < array.length - 1; loop += 2) {
+        var obj = {};
+        obj.x = array[loop];
+        obj.y = array[loop + 1];
+        retArray.push(obj);
+      }
+      return retArray;
+    }
+  </script>
+</head>
+
+<body>
+  <div id="root"> Please note, this computation may take a long time...</div>
+</body>
+
+</html>
