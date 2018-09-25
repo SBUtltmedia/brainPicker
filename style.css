@@ -108,10 +108,15 @@ td {
     padding: 0;
     border: 0;
     outline: 0;
-    font-size: 100%;
+    font-size: 1rem;
     vertical-align: baseline;
     background: transparent;
 }
+
+.rowNumber{
+   font-size: .5rem;
+}
+
 
 #gridList td {
     background-color: white;
@@ -187,7 +192,7 @@ td {
 }
 
 #helpText h3 {
-    font-size: 110%;
+    font-size: 1.1rem;
     color: white;
     -webkit-text-stroke: 1px yellow;
     text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;

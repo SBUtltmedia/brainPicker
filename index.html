@@ -45,9 +45,7 @@
 <body>
 <div class = "wrapper">
 
-
 	<div id="stage" class="screen">
-		<div id = "exitFull"> </div>
 	<div id="info" title="About MRI" >
 	<div id="infoClose" class="fs-26"> &#x2717 </div>
 	<div id="accordion">
@@ -90,8 +88,10 @@ Use this game to help you practice locating the different regions of the brain. 
     </div>
 	<div id="brainDisplay">
 		<div id="sagitalView"> <img id="Sagital" /> <div id="sagitaLine"> </div> </div>
-		<img id="brainPic"/><canvas id="theCanvas"></canvas>
-		<div id='progressbar'></div><div id='burnerbar'></div>
+		<img id="brainPic"></img>
+		<canvas id="theCanvas"></canvas>
+		<div id='progressbar'></div>
+		<div id='burnerbar' ></div>
 	</div>
 	<div id= 'playbackControls'></div>
 	<div id="skeuomorph">
@@ -136,7 +136,8 @@ Use this game to help you practice locating the different regions of the brain. 
 <li class="tour" data-id = "playbackControls"> These are your playback controls. When playing question results, use these to change layers or pause the playback. </li>
 <li class="tour" data-id = "leaderB"> This is the score table. Here you will see <br> your all-time top score for this question. </li>
 <li class="tour" data-id = "leaderB"> You will also see the Top 10 Overall Question High Scores. <br>Try the question again and try to be Number 1! </li>
-<li class="tour" data-id = "leaderB"> Scores will be calculated by combining the number <br/> of correct points and the distance bonus for the question. <br/> Distance bonus will be calculated on the distance between <br/> placed points, as well as the distance between chosen layers.</li>
+<li class="tour" data-id = "leaderB"> Scores will be calculated by combining the number <br/> of correct points and the distance bonus for the question. <br/> </li>
+<li class="tour" data-id = "leaderB">Distance bonus will be calculated on the distance between <br/> placed points, as well as the distance between chosen layers.</li>
 <li class="tour" data-id = "leaderB"> Please note: Each user can only have one high score in the Overall Top 10 Scores. <br> Only your top overall score will appear. </li>
 <li class="tour" data-id="theCanvas">Last but not least, this is where you'll see and select points on different sections of the brain.</li>
 <li class="tour" <img src="images/threeClicks.gif" alt="placement Example" style="width:50%; float:right; margin:1px;" /> Click anywhere on the brain to place points.<br/> Make a mistake?<br/> Click on one of your points to delete it.<br/></li>

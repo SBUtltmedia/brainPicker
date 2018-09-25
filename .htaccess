@@ -14,3 +14,12 @@ php_flag display_errors on
 php_flag html_errors on
 php_flag log_errors on
 php_value error_log PHP_errors.log
+<filesMatch "\.(jpg|png)$">
+  FileETag None
+  <ifModule mod_headers.c>
+     Header unset ETag
+     Header unset Cache-Control
+     Header unset Pragma
+     Header unset Expires
+  </ifModule>
+</filesMatch>

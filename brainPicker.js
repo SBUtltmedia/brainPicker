@@ -25,6 +25,7 @@ var state = {
   canvaswidthglobal: null,
   currentLayer: null,
   lastLayer: null,
+  layerImages: null,
   pause: undefined,
   mytimeout: null,
   brainType: "human",
@@ -33,71 +34,106 @@ var state = {
   submitted: false,
   firstPause: true,
   questionScore: 0,
-  maxAvgDistances: null,
   playback: false
 };
 
 const sensitivity = 120;
 const timeOutTime = 70;
 const passScore = 70;
-const screenMax = [480,850];
+const screenMax = [480, 850];
 
 $(function() {
   $("#title").html("Loading...");
   var dfd = jQuery.Deferred();
   getOrientationKeys();
-  $.getJSON("getUsername.php", function(data) {
-    state.user = data;
-  }).fail(function(d, textStatus, error) {
-    console.error("getJSON failed, status: " + textStatus + ", error: " + error)
-  });
 
   state.brainType = location.hash.split("#")[1] || state.brainType;
   var brainTypes = ["dolphin", "human"];
   state.brainType = state.brainType.toLowerCase();
   if (!(brainTypes.includes(state.brainType))) state.brainType = "human";
   getImageTotal(state.brainType + "/layerImages/", 1, dfd).then(function(data) {
-      state.totalLayers = data;
-      console.log("^Don't worry about failed resource error, it's intentional^");
-      //For mobile
-      load().then(function(){
-        //Mobile device detection
-        if (($(window).width() < screenMax[0] && $(window).height()<screenMax[1]) || $(window).height()<screenMax[0] ) {
-            mobileSetup();
-            //only display blocker when device is in potrait mode.
-            mobilePotraitBlocker(!($(window).height()<screenMax[0]));
-        }
-        else {
-          $('#status').fadeOut(); // will first fade out the loading animation
-          $('#preloader').delay(200).fadeOut('slow'); // will fade out the white DIV that covers the website.
-        }
-      });
+    state.totalLayers = data;
+    // preLoadImages().then(function(){
 
 
+    console.log("^Don't worry about failed resource error, it's intentional^");
+    //For mobile
+    load().then(function() {
+      //Mobile device detection
+      if (($(window).width() < screenMax[0] && $(window).height() < screenMax[1]) || $(window).height() < screenMax[0]) {
+        mobileSetup();
+        mobileCSS();
+        //only display blocker when device is in potrait mode.
+        mobilePotraitBlocker(!($(window).height() < screenMax[0]));
+      } else {
+        $('#status').fadeOut(); // will first fade out the loading animation
+        $('#preloader').delay(200).fadeOut('slow'); // will fade out the white DIV that covers the website.
+      }
     });
+
+    // });
   });
+});
 
+//preloads images to have them cached.
+// function preLoadImages() {
+//   var dfd = jQuery.Deferred();
+//   var div= $("#brainImages");
+//   loadPicture(1);
+//   function loadPicture(layer) {
+//     var virtualImg = $("<img/>",{
+//       id: "pic_layer_"+layer,
+//       class: "brainPic"
+//     }).attr("src", state.brainType + "/layerImages/" + layer + ".jpg");
+//     virtualImg.on("load", function(){
+//       if (layer==state.totalLayers) {
+//         div.append(virtualImg);
+//         dfd.resolve();
+//         return;
+//       }
+//       else {
+//         div.append(virtualImg);
+//         loadPicture(layer+1);
+//       }
+//     });
+//     virtualImg.error(function(){
+//       if (layer>=state.totalLayers) {
+//         dfd.resolve();
+//         return;
+//       }
+//       else {
+//         loadPicture(layer);
+//       }
+//     });
+//   }
+//   return dfd;
+// }
 
+function mobileCSS() {
+  $("#gridList").css("height", "65%");
+  $("#gridList").css("padding-top", "1%");
+  $("#gridList").css("padding-bottom", "1%");
+}
 
 function load() { // makes sure the whole site is loaded
   $('body').delay(350).css({
     'overflow': 'visible'
   });
-  if ( !window.requestAnimationFrame ) {
+  if (!window.requestAnimationFrame) {
 
-  	window.requestAnimationFrame = ( function() {
+    window.requestAnimationFrame = (function() {
 
-  		return window.webkitRequestAnimationFrame ||
-  		window.mozRequestAnimationFrame ||
-  		window.oRequestAnimationFrame ||
-  		window.msRequestAnimationFrame ||
-  		function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+      return window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
 
-  			window.setTimeout( callback, 1000 / 60 );
+          window.setTimeout(callback, 1000 / 60);
 
-  		};
+        };
 
-  	} )();
+    })();
 
   }
   $("#Sagital").attr("src", state.brainType + "/Sagital.png");
@@ -109,6 +145,9 @@ function load() { // makes sure the whole site is loaded
   useLeaderBScroll(true);
   useMouseWheelLayers(true);
   updateScoreData();
+  $.getJSON(state.brainType + "/distances.json", function(data) {
+    state.maxDistances = data;
+  });
 
   $.getJSON(state.brainType + "/structures.json", function(data) {
     state.globalPoly = data;
@@ -120,7 +159,8 @@ function load() { // makes sure the whole site is loaded
       loadCurrentQuestion()
       showQuestionButtons()
       updateButtons();
-      maxAvgDistance(state.globalPoly[state.which]);
+      //calculateAreas(state.globalPoly[state.which]);
+      getBounds(state.maxDistances[state.which]);
       $(window).on("resize", function() {
         resizeWindow();
         drawMultiPoly();
@@ -254,7 +294,6 @@ function useMouseWheelLayers(status) {
 
         if ((newVal >= 1) && (newVal <= state.totalLayers)) {
           //console.log(newVal);
-          console.log(newVal);
           updateWidgets(newVal);
         }
       }
@@ -265,15 +304,21 @@ function useMouseWheelLayers(status) {
 //Updates leaderboard and your question high score.
 function updateLeaderBoard() {
 
-  console.log("updating lederboard");
+  console.log("updating leaderboard");
   updateScoreData().then(function() {
     $("#leaderB").html("");
     updateButtons();
-    if (state.leaderBoard) var questionLeaderB = state.leaderBoard[state.which]
-    if (state.previousScores) state.previousQuestionScores = state.previousScores[state.which];
+    var question = state.which;
+    if (state.globalQuestion[state.currentQuestionNum].text) {
+      question = state.globalQuestion[state.currentQuestionNum].text; //if the region has an alt text, load the highscores from the text. otherwise, keep it via region.
+    }
+
+
+    if (state.leaderBoard) var questionLeaderB = state.leaderBoard[question]
+    if (state.previousScores) state.previousQuestionScores = state.previousScores[question];
 
     $("#leaderB").css({
-      "font-size": "1.0rem",
+      "font-size": "1.3rem",
       "overflow": "auto"
     });
     $("#leaderB").html(" ");
@@ -281,7 +326,7 @@ function updateLeaderBoard() {
       var userTotal = state.previousQuestionScores["score"] + state.previousQuestionScores["ab"];
       var table = $("<table/>").append($("<tbody/>"));
       var caption = $("<caption/>", {
-        fontSize: "1.0rem",
+        fontSize: "1.3rem",
         text: "Your Question High Score"
       });
       table.append(caption);
@@ -305,7 +350,7 @@ function updateLeaderBoard() {
     if (questionLeaderB) {
       table = $("<table/>").append($("<tbody/>"));
       caption = $("<caption/>", {
-        fontSize: "1.0rem",
+        fontSize: "1.3rem",
         text: "Top 10 Question Scores"
       });
       table.append(caption);
@@ -368,6 +413,9 @@ function showQuestionButtons() {
   for (i = 0; i < state.globalQuestion.length; i++) {
 
     toolTip = state.globalQuestion[i]["region"];
+    if (state.globalQuestion[i]["text"]) {
+      toolTip = state.globalQuestion[i]["text"];
+    }
 
     var qBtn = $("<button/>", {
       style: 'border:0',
@@ -382,9 +430,44 @@ function showQuestionButtons() {
     $("#questionSelect").append(qBtn)
     //$( "button[num="+i+"]" ).append(i+1)
     $(".questionSelectBtn").css("font-size", "1rem");
-
-
   }
+  $("#questionSelect").append($("<br/>"));
+  var div = $("<div/>", {
+    id: "correctLabels",
+    width: "100%",
+    height: "20%"
+  });
+  var table = $("<table/>", {
+    width: "100%",
+    height: "100%"
+  });
+  var tr = $("<tr/>", {
+    width: "100%",
+    height: "100%"
+  });
+  var boxPercentWidth = 100 / 5;
+  tr.append($("<td/>", {
+    width: boxPercentWidth + "%",
+    style: "background-color: green"
+  }));
+  tr.append($("<td/>", {
+    width: boxPercentWidth + "%",
+    id: "numCorrect"
+  }));
+  tr.append($("<td/>", {
+    width: boxPercentWidth + "%"
+  }));
+
+  tr.append($("<td/>", {
+    width: boxPercentWidth + "%",
+    style: "background-color: red"
+  }));
+  tr.append($("<td/>", {
+    width: boxPercentWidth + "%",
+    id: "numWrong"
+  }));
+  div.append(table.append(tr));
+  $("#questionSelect").append(div);
 
 
   $(".questionSelectBtn").on("click", function(event) {
@@ -392,6 +475,7 @@ function showQuestionButtons() {
     updateScoreData();
     unbindAll(false);
     resetQuestionState();
+    console.log(state.questionDistances);
     updateLeaderBoard();
     cleanUpModal();
     updateButtons();
@@ -438,60 +522,95 @@ function showQuestionButtons() {
 //
 // }
 
+// function maxAvgDistance(questionPointList) {
+//   state.maxAvgDistances = [];
+//   $.each(questionPointList, function(index,value) {
+//     var allPoints = [];
+//     //combines all points into a single list.
+//     $.each(value,function(polygonNumber) {
+//       allPoints = allPoints.concat(value[polygonNumber]);
+//     });
+//   });
+//
+// }
+
+function getBounds(question) {
+  state.questionDistances = {};
+  $.each(question, function(index, value) {
+    state.questionDistances[index] = value;
+  })
+
+}
+
+
+
+
+
 //Calculates max possible distance for the question
 function maxAvgDistance(questionPointList) {
-  state.maxAvgDistances= [];
-  $.each(questionPointList, function(index, value){
+  state.maxAvgDistances = [];
+  $.each(questionPointList, function(index, value) {
     var max_dist = 0;
     var totalMaxDist = 0;
     var overallMaxDist = 0;
-    var layerPoints = value[0];
+    var layerPoints = [];
+    //combines all points into a single list.
+    $.each(value, function(polygonNumber) {
+      layerPoints = layerPoints.concat(value[polygonNumber]);
+    });
     var oldPoint;
     var newPoint;
     var keptDivider = 0;
     if (!layerPoints) return true //returing true is continue for jQuery each statement
-    for (i=0; i<layerPoints.length; i+=2) {
+    for (i = 0; i < layerPoints.length; i += 2) {
       totalMaxDist = 0;
-      divider=0;
+      divider = 0;
       var layerPointsTemp = layerPoints.slice();
       oldPoint = i;
       var x1 = layerPoints[i];
-      var y1 = layerPoints[i+1];
-      for (l = 0; l<(state.totalReqPoints/state.requiredLayers)-1; l++) {
+      var y1 = layerPoints[i + 1];
+      for (l = 0; l < (state.totalReqPoints / state.requiredLayers) - 1; l++) {
         max_dist = 0;
-        for (j=0; j<layerPointsTemp.length-2; j+=2) {
+        for (j = 0; j < layerPointsTemp.length - 2; j += 2) {
           //console.log("Checking Point ("+layerPoints[j]+","+layerPoints[j+1]+")");
           var x2 = layerPointsTemp[j];
-          var y2 = layerPointsTemp[j+1];
-          if (x1==x2 && y1==y2) continue;
+          var y2 = layerPointsTemp[j + 1];
+          if (x1 == x2 && y1 == y2) continue;
           var previous = max_dist;
-          max_dist = Math.max(max_dist, Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)));
-          if (max_dist!=previous) {
+          max_dist = Math.max(max_dist, Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)));
+          if (max_dist != previous) {
             newPoint = j;
           }
         }
         x1 = layerPointsTemp[newPoint];
-        y1 = layerPointsTemp[newPoint+1];
-        layerPointsTemp.splice(oldPoint,2); //removes point.
+        y1 = layerPointsTemp[newPoint + 1];
+        layerPointsTemp.splice(oldPoint, 2); //removes point.
         oldPoint = newPoint;
-        totalMaxDist+=max_dist;
+        totalMaxDist += max_dist;
         divider++;
       }
-      if (overallMaxDist<totalMaxDist) {
+      if (overallMaxDist < totalMaxDist) {
         overallMaxDist = totalMaxDist;
         keptDivider = divider;
       }
     }
-    state.maxAvgDistances[index] = (overallMaxDist/(keptDivider));
+    state.maxAvgDistances[index] = (overallMaxDist / (keptDivider));
     //sets maxAverageDistance
   });
 }
+
 function zMaxDistance() { //caclulates maximum zDistance spread for each question.
   questionPointList = state.globalPoly[state.which];
   return Math.ceil(Object.keys(questionPointList).length / state.requiredLayers);
 }
 
+function setQuestionAreas(question) {
+  state.questionAreas = [];
+  $.each(question, function(index, value) {
+    state.questionAreas[index] = value;
+  });
 
+}
 
 
 
@@ -520,8 +639,10 @@ function zMaxDistance() { //caclulates maximum zDistance spread for each questio
 //       total += x1*y2 - y1*x2;
 //     }
 //     total = Math.abs(total/2);
-//     var canvasArea = parseFloat($("#brainDisplay").css("width")) * parseFloat($("#brainDisplay").css("height"));
-//     state.questionAreas[index] = (total/canvasArea)*100; //makes it a percent value of the area of the canvas.
+//     var canvasArea = $("#stage").width()*.41 *$("#stage").height()*.73
+//     console.log("A:"+canvasArea);
+//     state.questionAreas[index] = 1-(total/canvasArea) //makes multiplier
+//     console.log(state.questionAreas[index]);
 //   });
 //   dfd.resolve(newPoints);
 //   return dfd;
@@ -532,7 +653,16 @@ function getUserHistory() {
   var questionColors = []
   var dfd = jQuery.Deferred();
   $.each(state.globalQuestion, function(key, value) {
-    if (state.previousScores) var value = state.previousScores[value["region"]];
+    if (state.previousScores) {
+      if (value.text) {
+        var value = state.previousScores[value["text"]];
+      }
+      else {
+        var value = state.previousScores[value["region"]];
+      }
+
+  }
+
     score = -1;
     if (value) score = value["score"] + value["ab"];
     questionColors.push(score);
@@ -545,11 +675,31 @@ function getUserHistory() {
 function updateButtons() {
   getUserHistory().then(function(usrArr) {
     $(".questionSelectBtn").css("background-color", "white");
+    var correct = 0;
+    var wrong = 0;
     $(".questionSelectBtn").each(function(index, element) {
-      if (index == state.currentQuestionNum) $(this).css("background-color", "yellow")
-      else if (usrArr[index] >= passScore) $(this).css("background-color", "green")
-      else if (usrArr[index] < 0) $(this).css("background-color", "white");
-      else $(this).css("background-color", "red");
+      if (index == state.currentQuestionNum) {
+        $(this).css("background-color", "yellow")
+        if (usrArr[index] >= passScore) { //if the user has a score greater than the passing score.
+            correct++
+        }
+        else if (usrArr[index] < passScore && usrArr[index]>-1) { //if user had tried the question, and the score is less than the passing score.
+          wrong++;
+        }
+      }
+      else if (usrArr[index] >= passScore) {
+        $(this).css("background-color", "green")
+        correct++;
+      }
+      else if (usrArr[index] < 0) {
+        $(this).css("background-color", "white");
+      }
+      else {
+        $(this).css("background-color", "red");
+        wrong++;
+      }
+      $("#numCorrect").html(" = "+correct);
+      $("#numWrong").html(" = "+wrong);
     });
   });
 }
@@ -557,7 +707,7 @@ function updateButtons() {
 function resetQuestionState() {
   $('#modal').remove();
   $("#questionText").typed("reset");
-  $("#buttonPausePlayer").innerHTML = "&#10074&#10074";
+  pausePicture(true);
   //state.submitted = false;
 
 }
@@ -569,13 +719,13 @@ function loadCurrentQuestion() {
 
   $(".picked").remove();
   $(".joyride-content-wrapper").css("font-size", "1.2rem");
-  $("#questionText").css("font-size", "1.2rem");
-  //resizeWindow();
+  $("#questionText").css("font-size", "1.5rem");
+  //resizeWindow();.
 
 
   $("#gridTable").remove();
   //MasterOpacity
-  state.drawOp = 0.3;
+  state.drawOp = 0.5;
   state.totalReqPoints = state.globalQuestion[state.currentQuestionNum].pointsPerLayer * state.globalQuestion[state.currentQuestionNum].requestLayers;
   //drawSlider(); // output
 
@@ -588,20 +738,31 @@ function loadCurrentQuestion() {
     state.selectionMarker = null;
     delete obj;
   }
-  var questionText = "Please pick " + theQuestion.pointsPerLayer + " points on " + theQuestion.requestLayers + " Layers in the <u>" + theQuestion.region + "</u><strong class='typed-cursor'> |</strong>";
+  var text= "";
+  if (theQuestion.text) {
+    text= theQuestion.text;
+  }
+  else {
+    text = theQuestion.region;
+  }
+  var questionText = "Please pick " + theQuestion.pointsPerLayer + " points on " + theQuestion.requestLayers + " Layers in the <u>" + text + "</u><strong class='typed-cursor'> |</strong>";
+
+  var textSize = 175/questionText.length; //makes new size according to length of text.
+
   state.requiredLayers = theQuestion.requestLayers;
   state.which = theQuestion.region;
   $("#title").html("Brain Picker " + state.brainType.capitalize() + " -" + state.which);
-  maxAvgDistance(state.globalPoly[state.which]);
+  getBounds(state.maxDistances[state.which]);
   state.currentRegion = "qn" + state.currentQuestionNum;
   updatePoints()
   $("#helpText").html("<p class='powerOn'>You have " + state.totalReqPoints + " points left to place, across " + state.requiredLayers + " more Layers </p>");
   $("#questionText").html("")
+  $("#questionText").css("font-size", textSize+"rem") //sets text size according to text-length
 
   //if ( $("#questionText").   $("#questionText").removeData('typed');
   $("#questionText").typed({
     strings: [questionText],
-    typeSpeed: 0,
+    typeSpeed: 1,
     backDelay: 0,
     showCursor: false,
     contentType: 'html',
@@ -649,8 +810,10 @@ function updateWidgets(layer) {
     state.pointsLayer = $('.' + state.currentLayer).length - 1;
     checkPointCount(state.currentRegion);
   }
-  $(".pointerCell").css("opacity", 0);
-  $("#pointerCellrow_" + layer).css("opacity", 1);
+  $(".pointerCell").css("backgroundImage", "none");
+  $(".pointerCell").css("color", "black");
+  $("#pointerCellrow_" + layer).css("backgroundImage", "url('images/LayerSelect2.png')");
+  $("#pointerCellrow_" + layer).css("color", "black");
   //$("#sliderDiv").slider("value", layer);
 
   //$( "#sliderDiv" ).focus();
@@ -658,6 +821,27 @@ function updateWidgets(layer) {
   updateSagital(layer);
 
 
+}
+function scan(x1, y1, x2, y2) {
+  var dfd = jQuery.Deferred();
+  var area = 0;
+  var totalPx = Math.abs(x2-x1)*Math.abs(y2-y1);
+  console.log(totalPx);
+  var loopPx=0;
+  $('canvas').setPixels({
+    x: x1,
+    y: y1,
+    width: x2,
+    height: y2,
+    each: function(px) {
+      loopPx++;
+      if (px.r != 0) area++;
+      if (loopPx>=totalPx) {
+        dfd.resolve(area);
+      }
+    }
+  })
+  return dfd;
 }
 
 //Draws table for points
@@ -670,7 +854,7 @@ function drawGrid() { // 2 Calls by addToClickList, $(document).ready
   if (!tableMade) $('#gridList').append($("<table/>", {
     id: "gridTable"
   }));
-  var boxPercent = 100 / (columns + 2);
+  var boxPercentWidth = 100 / (columns + 2);
   for (n = rows; n > 0; n--) {
 
     if (!tableMade) {
@@ -686,8 +870,9 @@ function drawGrid() { // 2 Calls by addToClickList, $(document).ready
 
     var pointerCell = $("<td/>", {
       id: "pointerCell" + currentRowId,
-      style: "width:" + boxPercent + "%",
-      class: "pointerCell"
+      style: "width:" + boxPercentWidth + "%",
+      class: "pointerCell",
+      html: n
     });
     if ($("#pointerCell" + currentRowId).length == 0) {
       $('#' + currentRowId).append(pointerCell);
@@ -705,22 +890,32 @@ function drawGrid() { // 2 Calls by addToClickList, $(document).ready
       if (!tableMade) {
         $('#' + currentRowId).append($("<td/>", {
           id: "box_" + n + "_" + m,
-          style: "width:" + boxPercent + "%",
-          class: "gridBox"
+          style: "width:" + boxPercentWidth + "%",
+          class: "sgridBox"
         }));
         if (m == columns - 1) {
+          //extra row for numbers
+          // $('#' + currentRowId).append($("<td/>", {
+          //       id: "rowNumber_" + n,
+          //       class: "rowNumber",
+          //       style: "width:" + boxPercentWidth + "%",
+          //       html:n
+          //     }));
           $('#' + currentRowId).append($("<td/>", {
             id: "erase_" + n,
             class: "strobeBtn",
-            style: "visibility: hidden"
+            style: "visibility: hidden",
+            style: "width:" + boxPercentWidth + "%",
           }));
-          $("#" + "erase_" + n).click(function() {
+          $("#" + "erase_" + n).on("click", function() {
             $("." + this.id.split("_")[1]).remove();
             state.pointsLayer = -1;
             checkPointCount(state.currentRegion);
             drawGrid();
 
           })
+
+$(window).on("keypress",evt=>{state.op=1-state.op})
         }
 
       } else if (m < $("." + n + '.' + state.currentRegion).length) {
@@ -782,6 +977,7 @@ function updatePoints(layer) { // 2 Call by DrawGrid, Index.html
 
 function changePic(i) {
   $('#brainPic')[0].src = state.brainType + "/layerImages/" + i + ".jpg";
+  //$("#pic_layer_"+i).css("visibility", "visible");
 }
 
 function drawWrongClicks() {
@@ -804,7 +1000,6 @@ function drawWrongClicks() {
   state.scaleFactor = state.imageWidth / canvasWidth;
 
 }
-
 
 
 
@@ -874,7 +1069,7 @@ function drawPoly(layerIndex, polyIndex, curPoly) {
     opacity: state.drawOp,
     // opacity: true,
     groups: ["group" + layerIndex],
-    fillStyle: 'purple',
+    fillStyle: 'orange',
     click: function(e) {
 
       addToClickList(e._eventX, e._eventY, true);
@@ -886,10 +1081,13 @@ function drawPoly(layerIndex, polyIndex, curPoly) {
     obj['y' + (p / 2 + 1)] = curPoly[p + 1] / state.scaleFactor;
   }
   $('canvas').drawLine(obj);
-
 };
 
-
+function getPixelTotals(question) {
+  $.each(question, function(index, value) {
+    state.questionAreas[index] = value;
+  });
+}
 
 
 function addToClickList(ex, ey, isCorrect) { // 2 calls from canvasClearing, drawPoly
@@ -899,6 +1097,7 @@ function addToClickList(ex, ey, isCorrect) { // 2 calls from canvasClearing, dra
   var h = parseFloat($("#stage").height());
   var percentX = ex / w * 100 + fudgeX;
   var percentY = ey / h * 100 + fudgeY;
+  // console.log(percentX, percentY);
   var cols = state.globalQuestion[state.currentQuestionNum].pointsPerLayer;
   //alert(ey);
   //var state.currentLayer = $("#sliderDiv").slider("value");
@@ -920,7 +1119,6 @@ function addToClickList(ex, ey, isCorrect) { // 2 calls from canvasClearing, dra
   var availableSpace = 0;
   for (i = 0; i < cols; i++) {
     if ($("#point_" + state.currentLayer + "_" + i).length == 0) {
-      console.log(i);
       availableSpace = i;
       break;
     }
@@ -1016,7 +1214,7 @@ function checkPointCount(region) {
       unbindAll(true);
       setTimeout(function() {
         state.currentLayer = state.totalLayers;
-        state.drawOp = 0.3;
+        state.drawOp = 0.4;
         playbackTheatre(state.currentRegion);
       }, 125); //waits half a second
     })
@@ -1029,18 +1227,19 @@ function loadPlayerButtons() {
     id: "buttonBank",
     style: "z-index:10"
   })
-  var buttonPausePlayer = $("<button/>", {
+  var buttonPausePlayer = $("<img/>", {
     id: "buttonPausePlayer"
   });
-  var buttonPrevPlayer = $("<button/>", {
+  var buttonPrevPlayer = $("<img/>", {
     id: "buttonPrevPlayer"
   });
-  var buttonNextPlayer = $("<button/>", {
+  var buttonNextPlayer = $("<img/>", {
     id: "buttonNextPlayer"
   });
-  buttonPausePlayer.html("&#10074&#10074");
-  buttonPrevPlayer.html("&larr;");
-  buttonNextPlayer.html("&rarr;");
+  buttonPausePlayer.attr("src", "images/pause.png");
+  //buttonPausePlayer.html("&#10074&#10074");
+  buttonPrevPlayer.attr("src", "images/prev.png");
+  buttonNextPlayer.attr("src", "images/next.png");
 
   buttonBank.append(buttonPrevPlayer);
   buttonBank.append(buttonPausePlayer);
@@ -1053,6 +1252,10 @@ function loadPlayerButtons() {
 
 
 
+}
+function pausePicture(status) {
+  if (status)$("#buttonPausePlayer").attr("src", "images/play.png");
+  else $("#buttonPausePlayer").attr("src", "images/pause.png");
 }
 
 
@@ -1077,11 +1280,10 @@ function toggleStatic(b) {
 
 }
 
-
-
 function playbackTheatre(theRegion) {
   unbindAll(true);
   state.playback = true;
+  var playingLayer = false;
   $("#playbackControls").css("pointerEvents", "auto");
   $(".questionSelectBtn").css("filter", "grayScale(15)");
   $(".questionSelectBtn").css("pointerEvents", "none");
@@ -1090,35 +1292,12 @@ function playbackTheatre(theRegion) {
   //$("#buttonPausePlayer, #buttonNextPlayer,  #buttonPrevPlayer").off();
 
   $("#playbackControls").css("visibility", "visible");
-  document.getElementById("buttonPausePlayer").innerHTML = "&#10074&#10074";
+  // document.getElementById("buttonPausePlayer").innerHTML = "&#10074&#10074";
+  pausePicture(false);
   console.log("Loading playback theatre")
   var totalAfterBurnerScore = 0;
   var zScore = 0;
-
-  if (state.firstPause) {
-    $("#buttonPausePlayer").on("click", function() {
-      pausePlayback();
-    });
-    $("#buttonNextPlayer").on("click", function() {
-      state.currentLayer--;
-      playResults();
-    });
-    $("#buttonPrevPlayer").on("click", function() {
-      updateWidgets(state.currentLayer + 1);
-    });
-    $("#restartToggle").on('click', function() {
-      if (state.pause == false) {
-        pausePlayback();
-      }
-    });
-    $("#infoToggle").on('click', function() {
-      if (state.pause == false) {
-        pausePlayback();
-      }
-    });
-    state.firstPause = false;
-  }
-
+  pauseHandlers(true);
   var correctBounds = [];
   var cs = $("." + theRegion);
   $("#helpText").empty();
@@ -1139,7 +1318,7 @@ function playbackTheatre(theRegion) {
 
   burnerbar.progressbar({
     value: false,
-    max: 150,
+    max: 15,
     change: function() {
 
     },
@@ -1157,25 +1336,77 @@ function playbackTheatre(theRegion) {
 
   function pausePlayback() {
     state.pause = !state.pause;
+    pausePicture(state.pause);
     if (state.pause == true) {
-      document.getElementById("buttonPausePlayer").innerHTML = "&#9658";
       if ($("#playbackControls").css("visibility") == "hidden") return;
       $("#buttonPrevPlayer").css("visibility", "visible");
       $("#buttonNextPlayer").css("visibility", "visible");
     } else {
-      document.getElementById("buttonPausePlayer").innerHTML = "&#10074&#10074";
       $("#buttonPrevPlayer").css("visibility", "hidden");
       $("#buttonNextPlayer").css("visibility", "hidden");
-      window.requestAnimationFrame(playResults);
+      if (!playingLayer) {//prevents stacking of playresult calls when pausing and advancing layers
+        window.requestAnimationFrame(playResults);
+      }
     }
+  }
+  function pauseHandlers(status) {
+    $("buttonPrevPlayer, #buttonNextPlayer, #buttonPausePlayer").off();
+    $("#restartToggle").off('click', function() {
+        if (state.pause == false) {
+          pausePlayback();
+        }
+      });
+      $("#infoToggle").off('click', function() {
+        if (state.pause == false) {
+          pausePlayback();
+        }
+      });
+      if (status) {
+        $("#buttonPausePlayer").on("click", function() {
+          pausePlayback();
+        });
+        $("#buttonNextPlayer").on("click", function() {
+          state.currentLayer--;
+          playResults();
+        });
+        $("#buttonPrevPlayer").on("click", function() {
+          updateWidgets(state.currentLayer + 1);
+        });
+        $("#restartToggle").on('click', function() {
+            if (state.pause == false) {
+              pausePlayback();
+            }
+          });
+          $("#infoToggle").on('click', function() {
+            if (state.pause == false) {
+              pausePlayback();
+            }
+          });
+      }
+
   }
 
 
 
 
-
-
+  var currentTime = 0;
+  var oldTime = 0;
   function playResults() {
+    currentTime = new Date().getTime();
+    if (currentTime<oldTime+timeOutTime) { //timeoutTime is global const
+      window.requestAnimationFrame(playResults);
+      return;
+    }
+    else {
+      oldTime = currentTime;
+      playingLayer = true;
+    }
+
+
+    if (!state.playback) return;
+    //Turned off so users cannot skip over layer while color points is still calculating.
+    $("#buttonNextPlayer").off("click");
+    $("#buttonPrevPlayer").off("click");
     if ($(".picked").length == 0 && state.currentLayer == 0) {
 
 
@@ -1186,14 +1417,21 @@ function playbackTheatre(theRegion) {
       state.lastLayer = null;
       //console.log("Afterburner: "+totalAfterBurnerScore);
       totalAfterBurnerScore /= state.requiredLayers;
-      if (state.lastLayer) {
+      if (state.requiredLayers == 1 && totalAfterBurnerScore != 0) { //If there was only one layer for the question, automatically give a full score of 5 for zBonus if layer is correct.
+        zScore = 5;
+      } else if (state.requiredLayers > 1) { //prevents divide by zero error. User is automatically given 5 points if only 1 layer.
         zScore /= state.requiredLayers - 1;
       }
-      else { //If there was only one layer for the question, automatically give a full score of 5 for zBonus.
-        zScore = 5;
+      if (totalAfterBurnerScore == 0) {
+        var progressbar = $("#progressbar");
+        var val = progressbar.progressbar("value") || 0;
+        progressbar.progressbar("value", 0.1);
       }
-      burnBar((totalAfterBurnerScore + zScore)); //fills meter at rate in which 15% bonus is a full bar.
+
+      console.log(totalAfterBurnerScore,zScore,totalAfterBurnerScore+zScore);
+      pauseHandlers(false);
       endModal(cs, totalAfterBurnerScore + zScore);
+      burnBar((totalAfterBurnerScore + zScore)); //fills meter at rate in which 15% bonus is a full bar.
       state.playback = false;
       console.log("Playback ended");
 
@@ -1205,28 +1443,44 @@ function playbackTheatre(theRegion) {
 
       updateWidgets(state.currentLayer);
       if ($("." + state.currentLayer + ".picked").length == 0) {
-        setTimeout(function() {
-          if (!state.pause) {
-            state.currentLayer--;
-            window.requestAnimationFrame(playResults);
+        $("#buttonNextPlayer").on("click", function() {
+          state.currentLayer--;
+          playResults();
+        });
+        $("#buttonPrevPlayer").on("click", function() {
+          updateWidgets(state.currentLayer + 1);
+        });
+        playingLayer = false;
+        if (!state.pause) {
+          state.currentLayer--;
+          window.requestAnimationFrame(playResults);
           }
-        }, timeOutTime);
 
 
       } else {
         setTimeout(function() {
           colorPoints(state.currentLayer).then(
             function(val) {
+              $("#buttonNextPlayer").on("click", function() {
+                state.currentLayer--;
+                playResults();
+              });
+              $("#buttonPrevPlayer").on("click", function() {
+                updateWidgets(state.currentLayer + 1);
+              });
               retValue = val;
-              console.log("ColorPoints returned: " + retValue);
               afterBurner(state.currentLayer).then(function(ab) {
-                console.log(state.lastLayer);
+                //Z Distance bonus is only given if all points on that layer are correct
                 if (ab != 0) {
                   zScore += zBonus(state.currentLayer, state.lastLayer);
+                  //console.log("Z: " + zScore);
                 }
                 state.lastLayer = state.currentLayer
                 totalAfterBurnerScore += ab;
-                window.requestAnimationFrame(playResults);
+                playingLayer = false;
+                if (!state.pause) {
+                  window.requestAnimationFrame(playResults);
+                }
               });
 
 
@@ -1280,11 +1534,9 @@ function playbackTheatre(theRegion) {
 
       }
       if ($("." + state.currentLayer + ".picked").length != 0) {
-        console.log("calling color");
         setTimeout(colorPoint, timeOutTime * 10);
       } else {
         deferred.resolve(returnValue);
-
       }
 
       return deferred;
@@ -1312,17 +1564,13 @@ function bumpBar() {
 }
 
 function burnBar(c) {
-  c = c * 7.25 //fills meter at rate in which 15% bonus is a full bar.
   var burnerbar = $("#burnerbar");
   burnerbarValue = burnerbar.find(".ui-progressbar-value");
-  burnerbarValue.css({
-    "background": '#' + Math.floor(Math.random() * 16777215).toString(16)
-  });
   var val = burnerbar.progressbar("value") || 0;
   var i = 0;
   var bar = setInterval(function() {
-    i++;
-    if (val + i > c * 1.5) clearInterval(bar);
+    i += .1;
+    if (val + i > c) clearInterval(bar);
     burnerbar.progressbar("value", val + i);
   }, 15);
 }
@@ -1341,13 +1589,10 @@ function burnBar(c) {
 
 
 function zBonus(current, last) {
-  if(!last) return 0; //if no previous layer exists
-  console.log("in Z");
+  if (!last) return 0; //if no previous layer exists
   max = zMaxDistance();
-  console.log(max);
   if (zMaxDistance() > (last - current)) { //the reason it is last-current instead of vice versa is because the layer numbers descend, starting from the max layer number (bottom is 1);
     var zScore = 5 * (((last - current) / zMaxDistance()));
-    console.log("Z: " + zScore);
     return zScore;
   } else return 5; //otherwise return a full score.
 
@@ -1362,51 +1607,38 @@ function zBonus(current, last) {
 // 4) Multiply by ten to get percent out of 10.
 function afterBurner(layer) {
   var dfd = jQuery.Deferred();
-  //console.log("running afterburner");
-  var dist = 0;
-  requiredPoints = state.totalReqPoints / state.requiredLayers;
-  var divider = 0;
   var pointArray = $("." + layer + "[iscorrect='true']");
-  if (pointArray.length < state.totalReqPoints / state.requiredLayers) {
+  if (pointArray.length<state.totalReqPoints/state.requiredLayers) {
     dfd.resolve(0);
     return dfd;
   }
+  var dist = 0;
+  var divider = pointArray.length*pointArray.length;
   for (i = 0; i < pointArray.length; i++) {
     var x1 = parseFloat($(pointArray[i]).css("left"));
     var y1 = parseFloat($(pointArray[i]).css("top"));
-    for (j = i + 1; j < pointArray.length; j++) {
+    for (j = 0; j < pointArray.length; j++) {
       var x2 = parseFloat($(pointArray[j]).css("left"));
       var y2 = parseFloat($(pointArray[j]).css("top"));
-      dist += Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-      divider++;
+      dist+=Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
     }
   }
-  console.log("Divider:" + divider);
-  var avgDist = (dist / divider) * state.scaleFactor; //gets average distance between points
-  console.log("Avg dist:" + avgDist);
-  console.log("Max:" + state.maxAvgDistances[layer]);
-  var returnScore;
-  if (avgDist > state.maxAvgDistances[layer]) returnScore = 10;
-  else returnScore = 12 * (1 - Math.abs((avgDist - state.maxAvgDistances[layer]) / state.maxAvgDistances[layer]));
-  //^^even though the score maxes out at 10, the a multiplier of 12 is used to make the game easier.
-  returnScore = (returnScore > 10) ? 10 : returnScore;
-  console.log(returnScore);
-
-
-
-
+  dist=(dist/divider)*state.scaleFactor;
+  var questionDistance = state.questionDistances[layer];
+  if (dist>questionDistance) {
+    returnScore = 10;
+  }
+  else {
+  returnScore = 11-10*Math.abs((dist-questionDistance)/questionDistance); //use an eleven multiplier to make it easier to acheive the max distance bonus
+  }
+  returnScore = (returnScore > 10) ? 10.00 : returnScore;
+  // console.log(returnScore);
   dfd.resolve(returnScore);
   return dfd;
 }
 
-
-
-function stripUnderscores() {
-  //var spacedRegion = state.currentRegion("_"g, / /);
-  //console.log(spacedRegion);
-}
-
 function endModal(cs, ab) {
+  state.pause = false;
   var t = cs.length;
   $(".questionSelectBtn").css("pointerEvents", "auto");
   $("#playbackControls").css("visibility", "hidden");
@@ -1425,10 +1657,12 @@ function endModal(cs, ab) {
   ab = Math.round(ab);
   var finalValue = barTotal + ab;
 
-  stripUnderscores();
+  var scoreText = $("<h3/>", {id: "scoreText"}).html("Score:");
+  var spreadText = $("<h3/>", {id: "spreadText"}).html("Spread Bonus:");
   var modal = $("<div/>", {
     id: "modal"
   });
+  modal.append([scoreText,spreadText]);
   var divInModal = $("<div/>").append($("<h2/>").html("Results: "));
   var scoreText = $("<p/>").html("Correct: " + barTotal + "%");
   var afterburnerText = $("<p/>").html("Distance <br /> &nbsp;Bonus: <br/>" + ab + "%");
@@ -1445,6 +1679,7 @@ function endModal(cs, ab) {
     id: "rp",
     text: "Replay Answer"
   });
+
   divInModal.append([scoreText, afterburnerText, finalText, nextBtn, replayBtn, taBtn]);
   modal.append(divInModal);
   $("#brainDisplay").append(modal);
@@ -1475,7 +1710,7 @@ function endModal(cs, ab) {
 
   //Function for clicking try again buttonNextPlayer
   $("#ta").on("click", function() {
-    $('#modal').remove();
+    cleanUpModal();
     resetQuestionState();
     console.log("Trying again");
     loadCurrentQuestion();
@@ -1489,12 +1724,16 @@ function endModal(cs, ab) {
   $("#questionSelect").css("pointerEvents", "inherit");
   //resizeWindow();
   //if (state.submitted == false) {
+  var questionToSave = state.which;
+  if (state.globalQuestion[state.currentQuestionNum].text) {
+    questionToSave = state.globalQuestion[state.currentQuestionNum].text; //if the question has text, save as that instead.
+  }
   $.ajax({
     type: "POST",
     url: "save.php",
     data: {
       "brain": state.brainType,
-      "question": state.which,
+      "question": questionToSave,
       "score": barTotal,
       "afterburner": ab
     }
@@ -1566,20 +1805,15 @@ function resizeWindow() {
   state.canvaswidthglobal = parseFloat($("#brainDisplay").css("width"));
   var stageWidth = $(window).width();
   var stageHeight = $(window).height();
-  console.log(stageWidth,stageHeight);
   //If mobile device
-  if (stageWidth<screenMax[0] && stageHeight <screenMax[1]) {
+  if (stageWidth < screenMax[0] && stageHeight < screenMax[1]) {
     $("#preloader").html($("<h4/>", {
       "style": "font-Size : 10rem",
       "text": "Rotate to Resume"
     }));
     mobilePotraitBlocker(true);
-  }
-
-
-
-  else {
-      $('#preloader').delay(200).fadeOut('slow'); //remove preloader
+  } else {
+    $('#preloader').delay(200).fadeOut('slow'); //remove preloader
   }
 
   // If the window aspect ratio >=  screen aspect, fix height and set width based on height

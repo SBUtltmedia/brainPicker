@@ -1,16 +1,8 @@
-[	
+[
 
-
-	{
-		"requestLayers": 3,
-		"pointsPerLayer": 3,
-		"region": "area medial and caudal to the green point",
-		"selectionMarker":{"location":[295,251],"layers":[14,14]} 
-	}
-	,
 	{
 		"requestLayers": 2,
-		"pointsPerLayer": 2,
+		"pointsPerLayer": 1,
 		"region": "Spinal Cord"
 	}
 	,
@@ -22,9 +14,24 @@
 	,
 	{
 		"requestLayers": 3,
+		"pointsPerLayer": 2,
+		"region": "Parietal Lobe",
+		"text": "Lobe that contains the somatosensory cortex"
+	}
+	,
+	{
+		"requestLayers": 3,
 		"pointsPerLayer": 3,
 		"region": "Pons"
 	}
+	,
+	{
+		"requestLayers": 5,
+		"pointsPerLayer": 1,
+		"region": "Occipital Lobe",
+		"text": "Lobe that contains the visual cortex"
+	}
+
 	,
 	{
 		"requestLayers": 4,
@@ -32,21 +39,17 @@
 		"region": "Cerebellum"
 	}
 	,
+
 	{
-		"requestLayers": 3,
-		"pointsPerLayer": 3,
-		"region": "Lateral Ventricle"
-	}
-	,
-	{
-		"requestLayers": 3,
-		"pointsPerLayer": 3,
-		"region": "Midbrain"
+		"requestLayers": 5,
+		"pointsPerLayer": 4,
+		"region": "Temporal Lobe",
+		"text": "Lobe that contains the auditory cortex"
 	}
 	,
 	{
 		"requestLayers": 5,
-		"pointsPerLayer": 4,
+		"pointsPerLayer": 1,
 		"region": "Frontal Lobe"
 	}
 	,
@@ -59,14 +62,27 @@
 	{
 		"requestLayers": 5,
 		"pointsPerLayer": 4,
+		"region": "Frontal Lobe",
+		"text": "Lobe that contains the motor cortex"
+	}
+	,
+	{
+		"requestLayers": 5,
+		"pointsPerLayer": 1,
 		"region": "Parietal Lobe"
 	}
 	,
 	{
 		"requestLayers": 5,
-		"pointsPerLayer": 4,
+		"pointsPerLayer": 1,
 		"region": "Occipital Lobe"
+	},
+	{
+		"requestLayers": 3,
+		"pointsPerLayer": 3,
+		"region": "Midbrain"
 	}
+
 	,
 	{
 		"requestLayers": 1,
@@ -87,12 +103,6 @@
 	}
 	,
 	{
-		"requestLayers": 2,
-		"pointsPerLayer": 2,
-		"region": "Hypothalamus"
-	}
-	,
-	{
 		"requestLayers": 3,
 		"pointsPerLayer": 3,
 		"region": "Caudate Nucleus"
@@ -103,23 +113,21 @@
 		"pointsPerLayer": 3,
 		"region": "Putamen"
 	}
-	,
-	{
+
+,
+{
 		"requestLayers": 3,
 		"pointsPerLayer": 3,
-		"region": "Corpus Callosum"
+		"region": "Lateral Ventricle"
 	}
+
 	,
+
 	{
 		"requestLayers": 2,
 		"pointsPerLayer": 2,
 		"region": "Amygdala"
 	}
-	,
-	{
-		"requestLayers": 2,
-		"pointsPerLayer": 2,
-		"region": "Superior Colliculus"
-	}
-		
+
+
 ]
