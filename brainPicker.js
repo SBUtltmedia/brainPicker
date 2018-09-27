@@ -384,6 +384,7 @@ function showQuestionButtons() {
 
 
   $("#infoToggle,#infoClose").on("click", function() {
+
     var isVisible = $("#info").toggle().is(':visible');
     if ($("#playbackControls").css("visibility") == "visible") {
       if (isVisible) {
@@ -398,7 +399,7 @@ function showQuestionButtons() {
       else $("#rp, #ta, #n, #modal, #questionSelect, .questionSelectBtn").css("pointerEvents", "auto");
     }
     $("#info").css("pointerEvents", "auto");
-    //resizeWindow();
+    $(window).trigger("resize"); //this ensures the accordion is displaying properly.
   });
 
 

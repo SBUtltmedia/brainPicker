@@ -1,4 +1,4 @@
 *.log
-rawdata/*
+!rawdata/*
 admins.json
 node_modules
