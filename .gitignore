@@ -3,3 +3,4 @@ admins.json
 rawdata/*
 !rawdata/.gitignore
 node_modules
+scoreBlackList
