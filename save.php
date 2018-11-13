@@ -39,7 +39,10 @@ if ($oldTotalScore <= $totalScore)
  ");
  print("User high score object: ");
  print_r($highScoreObject);
- saveHighScores($highScoreObject, $brain, $question);
+ $privateUsers = file("scoreBlacklist", FILE_IGNORE_NEW_LINES);
+ if (!in_array($user, $privateUsers)) { //if the user does nopt wish to have their scores private
+   saveHighScores($highScoreObject, $brain, $question);
+ }
  return "{}";
 }
 return "{}";

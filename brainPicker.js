@@ -725,7 +725,7 @@ function loadCurrentQuestion() {
 
   $("#gridTable").remove();
   //MasterOpacity
-  state.drawOp = 0.5;
+  state.drawOp = 0.0;
   state.totalReqPoints = state.globalQuestion[state.currentQuestionNum].pointsPerLayer * state.globalQuestion[state.currentQuestionNum].requestLayers;
   //drawSlider(); // output
 
@@ -1427,6 +1427,11 @@ function playbackTheatre(theRegion) {
         var val = progressbar.progressbar("value") || 0;
         progressbar.progressbar("value", 0.1);
       }
+      if (state.totalReqPoints/state.requiredLayers==1) { //if there is only 1 point per layer, base the entire distance bonus on the zScore
+        totalAfterBurnerScore = 0;
+        zScore*=3;
+      }
+
 
       console.log(totalAfterBurnerScore,zScore,totalAfterBurnerScore+zScore);
       pauseHandlers(false);
@@ -1658,7 +1663,7 @@ function endModal(cs, ab) {
   var finalValue = barTotal + ab;
 
   var scoreText = $("<h3/>", {id: "scoreText"}).html("Score:");
-  var spreadText = $("<h3/>", {id: "spreadText"}).html("Spread Bonus:");
+  var spreadText = $("<h3/>", {id: "spreadText"}).html("Distance Bonus:");
   var modal = $("<div/>", {
     id: "modal"
   });
